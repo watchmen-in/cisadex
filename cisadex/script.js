@@ -43,7 +43,6 @@ function makeCard(item){
 }
 
 function renderAll(list = filtered){
-  const byCat = panels;
   panels.forEach(p => {
     const grid = p.querySelector('.grid');
     const cat = grid.dataset.category;
