@@ -1,0 +1,77 @@
+[
+  {
+    "id": "1",
+    "agency": "CISA",
+    "office_name": "Central Office",
+    "role_type": "Regional",
+    "city": "Washington",
+    "state": "DC",
+    "lat": 38.9072,
+    "lng": -77.0369,
+    "contact_public": {
+      "phone": "202-555-0100",
+      "email": "info@cisa.gov",
+      "website": "https://www.cisa.gov"
+    }
+  },
+  {
+    "id": "2",
+    "agency": "FBI",
+    "office_name": "New York Field Office",
+    "role_type": "Field",
+    "city": "New York",
+    "state": "NY",
+    "lat": 40.7128,
+    "lng": -74.0060,
+    "contact_public": {
+      "phone": "212-555-0110",
+      "email": "ny@fbi.gov",
+      "website": "https://www.fbi.gov"
+    }
+  },
+  {
+    "id": "3",
+    "agency": "US-CERT",
+    "office_name": "Pacific Division",
+    "role_type": "Regional",
+    "city": "San Francisco",
+    "state": "CA",
+    "lat": 37.7749,
+    "lng": -122.4194,
+    "contact_public": {
+      "phone": "415-555-0120",
+      "email": "pacific@us-cert.gov",
+      "website": "https://www.cisa.gov/uscert"
+    }
+  },
+  {
+    "id": "4",
+    "agency": "DHS",
+    "office_name": "Chicago Office",
+    "role_type": "Field",
+    "city": "Chicago",
+    "state": "IL",
+    "lat": 41.8781,
+    "lng": -87.6298,
+    "contact_public": {
+      "phone": "312-555-0130",
+      "email": "chicago@dhs.gov",
+      "website": "https://www.dhs.gov"
+    }
+  },
+  {
+    "id": "5",
+    "agency": "CISA",
+    "office_name": "Miami Office",
+    "role_type": "Field",
+    "city": "Miami",
+    "state": "FL",
+    "lat": 25.7617,
+    "lng": -80.1918,
+    "contact_public": {
+      "phone": "305-555-0140",
+      "email": "miami@cisa.gov",
+      "website": "https://www.cisa.gov"
+    }
+  }
+]
