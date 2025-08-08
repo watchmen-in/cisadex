@@ -1,0 +1,94 @@
+
+:root{
+  --bg:#0b1220;
+  --panel:#121a2a;
+  --text:#e7edf7;
+  --muted:#9fb0ce;
+  --accent:#7dd3fc;
+  --accent-2:#a78bfa;
+  --card:#0f1729;
+  --border:#213055;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji;
+  color:var(--text);
+  background:linear-gradient(180deg,#060b17, #0a1428 40%, #0b1220 100%);
+}
+.app-header{
+  display:flex;
+  gap:1rem;
+  align-items:center;
+  padding:1rem clamp(1rem, 3vw, 2rem);
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  backdrop-filter: blur(8px);
+  background:rgba(10,18,40,.8);
+  z-index:10;
+}
+.brand{display:flex; align-items:center; gap:.75rem}
+.logo{width:32px; height:32px}
+h1{font-size:1.2rem; margin:0; letter-spacing:.3px}
+#search{
+  margin-left:auto;
+  min-width:240px;
+  max-width:520px;
+  flex:1;
+  padding:.65rem .85rem;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
+}
+.tabs{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.5rem;
+  padding:.75rem clamp(1rem, 3vw, 2rem);
+  border-bottom:1px solid var(--border);
+}
+.tab{
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:.5rem .9rem;
+  border-radius:999px;
+  cursor:pointer;
+}
+.tab.active{outline:2px solid var(--accent)}
+#content{padding:1rem clamp(1rem, 3vw, 2rem) 2rem}
+.panel{display:none; animation:fade .2s ease-in}
+.panel.active{display:block}
+@keyframes fade{from{opacity:.2} to{opacity:1}}
+.grid{
+  display:grid;
+  gap:1rem;
+  grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+  margin-top:1rem;
+}
+.card{
+  display:block;
+  background:linear-gradient(180deg, #111a2d, #0d1526);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:1rem;
+  text-decoration:none;
+  color:var(--text);
+  min-height:110px;
+}
+.card:hover{border-color:var(--accent)}
+.card-title{font-weight:600; margin-bottom:.25rem}
+.card-meta{color:var(--muted); font-size:.92rem}
+.app-footer{
+  padding:1rem clamp(1rem, 3vw, 2rem);
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  display:flex;
+  justify-content:space-between;
+}
+@media (max-width:640px){
+  #search{min-width:140px}
+}

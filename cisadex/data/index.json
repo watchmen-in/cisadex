@@ -1,0 +1,141 @@
+{
+  "items": [
+    {
+      "title": "Report a Cyber Incident",
+      "category": "respond",
+      "url": "https://www.cisa.gov/report",
+      "meta": "24/7 Reporting \u2022 Shields Up",
+      "tags": [
+        "report",
+        "incident",
+        "shields up"
+      ]
+    },
+    {
+      "title": "Incident Response Playbook",
+      "category": "respond",
+      "url": "https://www.cisa.gov/resources-tools/resources/incident-response-playbook",
+      "meta": "Playbook \u2022 PDF",
+      "tags": [
+        "playbook",
+        "ir"
+      ]
+    },
+    {
+      "title": "Cyber Hygiene Services",
+      "category": "protect",
+      "url": "https://www.cisa.gov/cyber-hygiene-services",
+      "meta": "Free Scanning & Vulnerability Services",
+      "tags": [
+        "hygiene",
+        "vuln"
+      ]
+    },
+    {
+      "title": "Known Exploited Vulnerabilities (KEV) Catalog",
+      "category": "protect",
+      "url": "https://www.cisa.gov/kev",
+      "meta": "Authoritative KEV List",
+      "tags": [
+        "kev",
+        "vulnerabilities"
+      ]
+    },
+    {
+      "title": "ICS Advisories",
+      "category": "inform",
+      "url": "https://www.cisa.gov/news-events/ics-advisories",
+      "meta": "Industrial Control Systems",
+      "tags": [
+        "ics",
+        "advisory"
+      ]
+    },
+    {
+      "title": "National Cyber Awareness System",
+      "category": "inform",
+      "url": "https://www.cisa.gov/news-events/cybersecurity-advisories",
+      "meta": "Alerts & Advisories",
+      "tags": [
+        "alerts"
+      ]
+    },
+    {
+      "title": "JCDC (Joint Cyber Defense Collaborative)",
+      "category": "partner",
+      "url": "https://www.cisa.gov/jcdc",
+      "meta": "Public-Private Collaboration",
+      "tags": [
+        "jcdc",
+        "partner"
+      ]
+    },
+    {
+      "title": "Sector Coordinating Councils (SCC) & Government Coordinating Councils (GCC)",
+      "category": "partner",
+      "url": "https://www.cisa.gov/topics/critical-infrastructure-security-and-resilience/critical-infrastructure-sectors",
+      "meta": "Sector Partnership Model",
+      "tags": [
+        "scc",
+        "gcc",
+        "sectors"
+      ]
+    },
+    {
+      "title": "Cross-Sector Cybersecurity Performance Goals (CPGs)",
+      "category": "prepare",
+      "url": "https://www.cisa.gov/cpgs",
+      "meta": "Baseline Practices",
+      "tags": [
+        "cpg",
+        "prepare"
+      ]
+    },
+    {
+      "title": "Tabletop Exercise Packages (CTEP)",
+      "category": "prepare",
+      "url": "https://www.cisa.gov/resources-tools/resources/tabletop-exercise-packages",
+      "meta": "Exercises & Scenarios",
+      "tags": [
+        "exercise",
+        "ttex"
+      ]
+    },
+    {
+      "title": "About CISA",
+      "category": "about",
+      "url": "https://www.cisa.gov/about",
+      "meta": "Mission \u2022 Organization \u2022 Leadership",
+      "tags": [
+        "about"
+      ]
+    },
+    {
+      "title": "Vulnerability Disclosure Policy (VDP)",
+      "category": "protect",
+      "url": "https://www.cisa.gov/vulnerability-disclosure-policy",
+      "meta": "Coordinated VULN Disclosure",
+      "tags": [
+        "vdp"
+      ]
+    },
+    {
+      "title": "Ransomware Guidance",
+      "category": "prepare",
+      "url": "https://www.cisa.gov/stopransomware",
+      "meta": "Stop Ransomware",
+      "tags": [
+        "ransomware"
+      ]
+    },
+    {
+      "title": "Critical Infrastructure Sectors",
+      "category": "about",
+      "url": "https://www.cisa.gov/topics/critical-infrastructure-security-and-resilience/critical-infrastructure-sectors",
+      "meta": "16 Sectors Overview",
+      "tags": [
+        "sectors"
+      ]
+    }
+  ]
+}
