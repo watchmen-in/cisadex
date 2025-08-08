@@ -1,4 +1,11 @@
 export async function loadOffices() {
-  const res = await fetch('/data/offices.json');
-  return res.json();
+  try {
+    const res = await fetch('/data/offices.json');
+    if (!res.ok) {
+      return [];
+    }
+    return await res.json();
+  } catch (err) {
+    return [];
+  }
 }
