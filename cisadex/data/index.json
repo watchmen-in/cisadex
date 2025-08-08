@@ -4,137 +4,341 @@
       "title": "Report a Cyber Incident",
       "category": "respond",
       "url": "https://www.cisa.gov/report",
-      "meta": "24/7 Reporting \u2022 Shields Up",
+      "meta": "24/7 reporting portal for suspected intrusions, ransomware, or significant cyber incidents.",
       "tags": [
-        "report",
-        "incident",
-        "shields up"
+        "reporting",
+        "hotline",
+        "Shields Up",
+        "RS",
+        "GV"
       ]
     },
     {
-      "title": "Incident Response Playbook",
+      "title": "Federal Incident Response Playbook",
       "category": "respond",
-      "url": "https://www.cisa.gov/resources-tools/resources/incident-response-playbook",
-      "meta": "Playbook \u2022 PDF",
+      "url": "https://www.cisa.gov/resources-tools/resources/federal-incident-response-playbook",
+      "meta": "Coordinated federal playbook to guide incident response phases and partner coordination.",
       "tags": [
         "playbook",
-        "ir"
+        "coordination",
+        "RS",
+        "RC",
+        "GV"
       ]
     },
     {
-      "title": "Cyber Hygiene Services",
-      "category": "protect",
-      "url": "https://www.cisa.gov/cyber-hygiene-services",
-      "meta": "Free Scanning & Vulnerability Services",
+      "title": "Ransomware Response Checklist",
+      "category": "respond",
+      "url": "https://www.stopransomware.gov/response",
+      "meta": "Immediate steps for containment, eradication, and recovery after a ransomware event.",
       "tags": [
-        "hygiene",
-        "vuln"
+        "ransomware",
+        "checklist",
+        "RS",
+        "RC"
+      ]
+    },
+    {
+      "title": "ICS-CERT Incident Reporting",
+      "category": "respond",
+      "url": "https://www.cisa.gov/ics",
+      "meta": "Report OT/ICS incidents directly to CISA\u2019s ICS team for assistance.",
+      "tags": [
+        "ICS",
+        "OT",
+        "industrial",
+        "RS"
+      ]
+    },
+    {
+      "title": "Cybersecurity Performance Goals (CPGs)",
+      "category": "prepare",
+      "url": "https://www.cisa.gov/cpg",
+      "meta": "Baseline practices prioritized for risk reduction across critical infrastructure.",
+      "tags": [
+        "baseline",
+        "critical infrastructure",
+        "GV",
+        "ID",
+        "PR",
+        "DE",
+        "RS",
+        "RC"
+      ]
+    },
+    {
+      "title": "CISA Cyber Hygiene Services",
+      "category": "prepare",
+      "url": "https://www.cisa.gov/cyber-hygiene-services",
+      "meta": "Free scanning and vulnerability services to reduce common attack surface.",
+      "tags": [
+        "vuln-scanning",
+        "external",
+        "services",
+        "ID",
+        "DE",
+        "PR"
+      ]
+    },
+    {
+      "title": "Tabletop Exercise Packages (CTEP)",
+      "category": "prepare",
+      "url": "https://www.cisa.gov/resources-tools/resources/tabletop-exercises",
+      "meta": "Plug-and-play tabletop exercise materials for organizations to test readiness.",
+      "tags": [
+        "exercises",
+        "tabletop",
+        "GV",
+        "RS",
+        "RC"
+      ]
+    },
+    {
+      "title": "Infrastructure Dependency/Interdependency Planning",
+      "category": "prepare",
+      "url": "https://www.cisa.gov/resources-tools/resources/dependency-planning",
+      "meta": "Guidance to plan for cross-sector dependencies and continuity.",
+      "tags": [
+        "continuity",
+        "risk",
+        "dependencies",
+        "GV",
+        "ID",
+        "RC"
       ]
     },
     {
       "title": "Known Exploited Vulnerabilities (KEV) Catalog",
       "category": "protect",
       "url": "https://www.cisa.gov/kev",
-      "meta": "Authoritative KEV List",
+      "meta": "Authoritative list of CVEs known to be exploited in the wild; prioritize these first.",
       "tags": [
-        "kev",
-        "vulnerabilities"
+        "patching",
+        "prioritization",
+        "PR",
+        "DE",
+        "GV"
       ]
     },
     {
-      "title": "ICS Advisories",
-      "category": "inform",
-      "url": "https://www.cisa.gov/news-events/ics-advisories",
-      "meta": "Industrial Control Systems",
+      "title": "Shields Up",
+      "category": "protect",
+      "url": "https://www.cisa.gov/shields-up",
+      "meta": "Heightened security posture guidance and time-sensitive actions during elevated threat.",
       "tags": [
-        "ics",
-        "advisory"
+        "alerts",
+        "best-practices",
+        "PR",
+        "DE",
+        "GV"
       ]
     },
     {
-      "title": "National Cyber Awareness System",
+      "title": "Stop Ransomware Guidance Center",
+      "category": "protect",
+      "url": "https://www.stopransomware.gov/",
+      "meta": "Best practices to prevent, respond to, and recover from ransomware incidents.",
+      "tags": [
+        "ransomware",
+        "hardening",
+        "PR",
+        "DE",
+        "RC"
+      ]
+    },
+    {
+      "title": "Secure by Design / Default Principles",
+      "category": "protect",
+      "url": "https://www.cisa.gov/securebydesign",
+      "meta": "Vendor-focused practices and buyer checklists to drive safer products.",
+      "tags": [
+        "supply-chain",
+        "vendors",
+        "products",
+        "GV",
+        "PR"
+      ]
+    },
+    {
+      "title": "CISA Alerts & Joint Cybersecurity Advisories",
       "category": "inform",
       "url": "https://www.cisa.gov/news-events/cybersecurity-advisories",
-      "meta": "Alerts & Advisories",
+      "meta": "Time-sensitive alerts and joint advisories with partners on active threats.",
       "tags": [
-        "alerts"
+        "alerts",
+        "advisories",
+        "DE",
+        "GV"
       ]
     },
     {
-      "title": "JCDC (Joint Cyber Defense Collaborative)",
+      "title": "ICS Advisories (ICSA)",
+      "category": "inform",
+      "url": "https://www.cisa.gov/ics/advisories",
+      "meta": "Vulnerability notices and mitigations for industrial control systems.",
+      "tags": [
+        "ICS",
+        "OT",
+        "vulnerabilities",
+        "DE",
+        "PR"
+      ]
+    },
+    {
+      "title": "Top Routinely Exploited Vulnerabilities",
+      "category": "inform",
+      "url": "https://www.cisa.gov/resources-tools/reports/routinely-exploited-vulnerabilities",
+      "meta": "Annual look at the CVEs most exploited by threat actors, with mitigations.",
+      "tags": [
+        "trends",
+        "vulnerabilities",
+        "DE",
+        "GV",
+        "PR"
+      ]
+    },
+    {
+      "title": "Emergency Directives & Binding Operational Directives",
+      "category": "inform",
+      "url": "https://www.cisa.gov/directives",
+      "meta": "Directives for federal agencies; useful benchmarks for industry practices.",
+      "tags": [
+        "ED",
+        "BOD",
+        "federal",
+        "GV",
+        "PR",
+        "DE"
+      ]
+    },
+    {
+      "title": "CISA Training & Exercises Catalog",
+      "category": "learn",
+      "url": "https://www.cisa.gov/training-exercises",
+      "meta": "Cybersecurity courses, labs, and exercises offered by CISA.",
+      "tags": [
+        "training",
+        "courses",
+        "exercises",
+        "GV",
+        "PR",
+        "DE",
+        "RS"
+      ]
+    },
+    {
+      "title": "ICS Security Training (INL/ICS-Range programs linkouts)",
+      "category": "learn",
+      "url": "https://www.cisa.gov/ics/training",
+      "meta": "Foundational and advanced training for OT/ICS defenders.",
+      "tags": [
+        "ICS",
+        "OT",
+        "training",
+        "PR",
+        "DE",
+        "RS"
+      ]
+    },
+    {
+      "title": "Phishing & Social Engineering Awareness",
+      "category": "learn",
+      "url": "https://www.cisa.gov/resources-tools/resources/phishing-awareness",
+      "meta": "End-user training resources and materials to reduce social engineering risk.",
+      "tags": [
+        "awareness",
+        "end-user",
+        "PR",
+        "GV"
+      ]
+    },
+    {
+      "title": "Incident Response Tabletop Library",
+      "category": "learn",
+      "url": "https://www.cisa.gov/resources-tools/resources/incident-response-tabletops",
+      "meta": "Scenario materials to practice IR decision-making and communications.",
+      "tags": [
+        "IR",
+        "tabletop",
+        "RS",
+        "RC",
+        "GV"
+      ]
+    },
+    {
+      "title": "Join the Joint Cyber Defense Collaborative (JCDC)",
       "category": "partner",
       "url": "https://www.cisa.gov/jcdc",
-      "meta": "Public-Private Collaboration",
+      "meta": "Information on how to engage with JCDC for joint planning and operations.",
       "tags": [
-        "jcdc",
-        "partner"
+        "public-private",
+        "planning",
+        "GV",
+        "DE",
+        "RS"
       ]
     },
     {
-      "title": "Sector Coordinating Councils (SCC) & Government Coordinating Councils (GCC)",
+      "title": "Sector Councils (SCC/GCC) Overview",
       "category": "partner",
-      "url": "https://www.cisa.gov/topics/critical-infrastructure-security-and-resilience/critical-infrastructure-sectors",
-      "meta": "Sector Partnership Model",
+      "url": "https://www.cisa.gov/partner-councils",
+      "meta": "How Sector Coordinating Councils and Government Coordinating Councils work with CISA.",
       "tags": [
-        "scc",
-        "gcc",
-        "sectors"
+        "SCC",
+        "GCC",
+        "partnership",
+        "GV"
       ]
     },
     {
-      "title": "Cross-Sector Cybersecurity Performance Goals (CPGs)",
-      "category": "prepare",
-      "url": "https://www.cisa.gov/cpgs",
-      "meta": "Baseline Practices",
+      "title": "Information Sharing Programs (AIS/MS-ISAC/E-ISAC linkouts)",
+      "category": "partner",
+      "url": "https://www.cisa.gov/information-sharing",
+      "meta": "Mechanisms for automated and curated cyber threat info sharing.",
       "tags": [
-        "cpg",
-        "prepare"
-      ]
-    },
-    {
-      "title": "Tabletop Exercise Packages (CTEP)",
-      "category": "prepare",
-      "url": "https://www.cisa.gov/resources-tools/resources/tabletop-exercise-packages",
-      "meta": "Exercises & Scenarios",
-      "tags": [
-        "exercise",
-        "ttex"
+        "threat intel",
+        "ISAC",
+        "AIS",
+        "DE",
+        "GV",
+        "RS"
       ]
     },
     {
       "title": "About CISA",
       "category": "about",
       "url": "https://www.cisa.gov/about",
-      "meta": "Mission \u2022 Organization \u2022 Leadership",
+      "meta": "Agency mission, authorities, programs, and organization.",
       "tags": [
-        "about"
+        "mission",
+        "organization",
+        "GV"
       ]
     },
     {
-      "title": "Vulnerability Disclosure Policy (VDP)",
-      "category": "protect",
-      "url": "https://www.cisa.gov/vulnerability-disclosure-policy",
-      "meta": "Coordinated VULN Disclosure",
-      "tags": [
-        "vdp"
-      ]
-    },
-    {
-      "title": "Ransomware Guidance",
-      "category": "prepare",
-      "url": "https://www.cisa.gov/stopransomware",
-      "meta": "Stop Ransomware",
-      "tags": [
-        "ransomware"
-      ]
-    },
-    {
-      "title": "Critical Infrastructure Sectors",
+      "title": "Critical Infrastructure Sectors & SRMAs",
       "category": "about",
       "url": "https://www.cisa.gov/topics/critical-infrastructure-security-and-resilience/critical-infrastructure-sectors",
-      "meta": "16 Sectors Overview",
+      "meta": "The 16 sectors and their Sector Risk Management Agencies.",
       "tags": [
-        "sectors"
+        "sectors",
+        "SRMA",
+        "GV"
+      ]
+    },
+    {
+      "title": "Publications & Guidance Library",
+      "category": "about",
+      "url": "https://www.cisa.gov/resources-tools",
+      "meta": "Central library of CISA guidance, tools, checklists, and reports.",
+      "tags": [
+        "library",
+        "guidance",
+        "GV",
+        "PR",
+        "DE",
+        "RS",
+        "RC"
       ]
     }
   ]
