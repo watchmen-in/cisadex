@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Federal Field Presence Map</title>
+  <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
+  <link rel="stylesheet" href="map.css" />
+</head>
+<body>
+  <div id="map"></div>
+  <div id="filters">
+    <input id="search" type="search" placeholder="Search city, state, ZIP" aria-label="Search" />
+    <label>Agency<select id="agency-filter" multiple></select></label>
+    <label>Role<select id="role-filter" multiple></select></label>
+    <label>Sector<select id="sector-filter" multiple></select></label>
+    <label>Region<select id="region-filter" multiple></select></label>
+  </div>
+  <div id="details" class="details"></div>
+
+  <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
+  <script src="map.js"></script>
+</body>
+</html>
