@@ -27,6 +27,22 @@ async function load(){
   }
 }
 
+async function loadRss(){
+  try{
+    const res = await fetch('https://www.cisa.gov/rss-feed.xml');
+    const text = await res.text();
+    const doc = new DOMParser().parseFromString(text, 'application/xml');
+    const items = [...doc.querySelectorAll('item')].map(item => ({
+      title: item.querySelector('title')?.textContent || '',
+      url: item.querySelector('link')?.textContent || '',
+      date: item.querySelector('pubDate')?.textContent || ''
+    }));
+    renderPublications(items.slice(0, 10));
+  }catch(e){
+    console.error(e);
+  }
+}
+
 function makeCard(item){
   const node = tpl.content.firstElementChild.cloneNode(true);
   node.href = item.url;
@@ -39,9 +55,32 @@ function renderAll(list = filtered){
   const byCat = panels;
   panels.forEach(p => {
     const grid = p.querySelector('.grid');
+    if(!grid) return;
     const cat = grid.dataset.category;
     grid.innerHTML = '';
     list.filter(x => x.category === cat).forEach(x => grid.appendChild(makeCard(x)));
+  });
+}
+
+function renderPublications(list){
+  const feed = document.getElementById('publications-feed');
+  if(!feed) return;
+  feed.innerHTML = '';
+  list.forEach(item => {
+    const a = document.createElement('a');
+    a.className = 'feed-item';
+    a.href = item.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    const title = document.createElement('div');
+    title.className = 'title';
+    title.textContent = item.title;
+    const date = document.createElement('div');
+    date.className = 'date';
+    date.textContent = item.date ? new Date(item.date).toLocaleDateString() : '';
+    a.appendChild(title);
+    a.appendChild(date);
+    feed.appendChild(a);
   });
 }
 
@@ -57,3 +96,4 @@ function onSearch(q){
 search.addEventListener('input', (e)=> onSearch(e.target.value));
 
 load();
+loadRss();

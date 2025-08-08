@@ -82,6 +82,25 @@ h1{font-size:1.2rem; margin:0; letter-spacing:.3px}
 .card:hover{border-color:var(--accent)}
 .card-title{font-weight:600; margin-bottom:.25rem}
 .card-meta{color:var(--muted); font-size:.92rem}
+
+.feed{
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+  margin-top:1rem;
+}
+.feed-item{
+  display:block;
+  padding:.75rem 1rem;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:10px;
+  text-decoration:none;
+  color:var(--text);
+}
+.feed-item:hover{border-color:var(--accent)}
+.feed-item .title{font-weight:600}
+.feed-item .date{color:var(--muted); font-size:.85rem}
 .app-footer{
   padding:1rem clamp(1rem, 3vw, 2rem);
   border-top:1px solid var(--border);
