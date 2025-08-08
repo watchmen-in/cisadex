@@ -1,0 +1,125 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+    "type": "Feature",
+    "geometry": {"type": "Point", "coordinates": [-75.1652, 39.9526]},
+    "properties": {
+      "id": "cisa-philadelphia",
+      "agency": "CISA",
+      "sub_agency": "",
+      "office_name": "CISA Region 3 Office",
+      "role_type": "Regional Office",
+      "sectors": ["Cross-Sector"],
+      "address": "1234 Market St",
+      "city": "Philadelphia",
+      "state": "PA",
+      "postal_code": "19107",
+      "lat": 39.9526,
+      "lng": -75.1652,
+      "region": "CISA Region 3",
+      "coverage": {"counties": [], "states": ["PA", "DE", "MD", "DC", "VA", "WV"]},
+      "contact_public": {"phone": "", "email": "", "website": "https://www.cisa.gov"},
+      "data_source": "Sample",
+      "last_verified_utc": "2025-08-08T00:00:00Z",
+      "notes_public": "Demo data"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {"type": "Point", "coordinates": [-87.6298, 41.8781]},
+    "properties": {
+      "id": "fbi-chicago",
+      "agency": "FBI",
+      "sub_agency": "",
+      "office_name": "FBI Chicago Field Office",
+      "role_type": "Field Office",
+      "sectors": ["Cross-Sector"],
+      "address": "2111 W Roosevelt Rd",
+      "city": "Chicago",
+      "state": "IL",
+      "postal_code": "60608",
+      "lat": 41.8781,
+      "lng": -87.6298,
+      "region": "FBI Chicago",
+      "coverage": {"counties": [], "states": ["IL"]},
+      "contact_public": {"phone": "(312) 421-6700", "email": "", "website": "https://www.fbi.gov/contact-us/field-offices/chicago"},
+      "data_source": "Sample",
+      "last_verified_utc": "2025-08-08T00:00:00Z",
+      "notes_public": "Demo data"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {"type": "Point", "coordinates": [-84.255, 35.93]},
+    "properties": {
+      "id": "ornl",
+      "agency": "DOE",
+      "sub_agency": "National Lab",
+      "office_name": "Oak Ridge National Laboratory",
+      "role_type": "National Laboratory",
+      "sectors": ["Energy"],
+      "address": "1 Bethel Valley Rd",
+      "city": "Oak Ridge",
+      "state": "TN",
+      "postal_code": "37830",
+      "lat": 35.93,
+      "lng": -84.255,
+      "region": "DOE",
+      "coverage": {"counties": [], "states": ["TN"]},
+      "contact_public": {"phone": "", "email": "", "website": "https://www.ornl.gov"},
+      "data_source": "Sample",
+      "last_verified_utc": "2025-08-08T00:00:00Z",
+      "notes_public": "Demo data"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {"type": "Point", "coordinates": [-118.2437, 34.0522]},
+    "properties": {
+      "id": "tsa-losangeles",
+      "agency": "TSA",
+      "sub_agency": "",
+      "office_name": "TSA Los Angeles Field Office",
+      "role_type": "Field Office",
+      "sectors": ["Transportation"],
+      "address": "Los Angeles, CA",
+      "city": "Los Angeles",
+      "state": "CA",
+      "postal_code": "90045",
+      "lat": 34.0522,
+      "lng": -118.2437,
+      "region": "TSA Western",
+      "coverage": {"counties": [], "states": ["CA"]},
+      "contact_public": {"phone": "", "email": "", "website": "https://www.tsa.gov"},
+      "data_source": "Sample",
+      "last_verified_utc": "2025-08-08T00:00:00Z",
+      "notes_public": "Demo data"
+    }
+  },
+  {
+    "type": "Feature",
+    "geometry": {"type": "Point", "coordinates": [-122.3321, 47.6062]},
+    "properties": {
+      "id": "epa-seattle",
+      "agency": "EPA",
+      "sub_agency": "",
+      "office_name": "EPA Region 10 Office",
+      "role_type": "Regional Office",
+      "sectors": ["Water"],
+      "address": "1200 Sixth Ave",
+      "city": "Seattle",
+      "state": "WA",
+      "postal_code": "98101",
+      "lat": 47.6062,
+      "lng": -122.3321,
+      "region": "EPA Region 10",
+      "coverage": {"counties": [], "states": ["WA", "OR", "ID", "AK"]},
+      "contact_public": {"phone": "", "email": "", "website": "https://www.epa.gov"},
+      "data_source": "Sample",
+      "last_verified_utc": "2025-08-08T00:00:00Z",
+      "notes_public": "Demo data"
+    }
+  }
+ ]
+}
