@@ -1,4 +1,3 @@
-
 const tabs = document.querySelectorAll('.tab');
 const panels = document.querySelectorAll('.panel');
 const search = document.getElementById('search');
@@ -32,6 +31,7 @@ function makeCard(item){
   node.href = item.url;
   node.querySelector('.card-title').textContent = item.title;
   node.querySelector('.card-meta').textContent = item.meta ?? item.category;
+  node.classList.add(`pillar-${item.pillar || item.category}`);
   return node;
 }
 

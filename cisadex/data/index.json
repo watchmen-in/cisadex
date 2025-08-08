@@ -11,7 +11,8 @@
         "Shields Up",
         "RS",
         "GV"
-      ]
+      ],
+      "pillar": "respond"
     },
     {
       "title": "Federal Incident Response Playbook",
@@ -24,7 +25,8 @@
         "RS",
         "RC",
         "GV"
-      ]
+      ],
+      "pillar": "respond"
     },
     {
       "title": "Ransomware Response Checklist",
@@ -36,19 +38,21 @@
         "checklist",
         "RS",
         "RC"
-      ]
+      ],
+      "pillar": "respond"
     },
     {
       "title": "ICS-CERT Incident Reporting",
       "category": "respond",
       "url": "https://www.cisa.gov/ics",
-      "meta": "Report OT/ICS incidents directly to CISA\u2019s ICS team for assistance.",
+      "meta": "Report OT/ICS incidents directly to CISA’s ICS team for assistance.",
       "tags": [
         "ICS",
         "OT",
         "industrial",
         "RS"
-      ]
+      ],
+      "pillar": "respond"
     },
     {
       "title": "Cybersecurity Performance Goals (CPGs)",
@@ -64,7 +68,8 @@
         "DE",
         "RS",
         "RC"
-      ]
+      ],
+      "pillar": "prepare"
     },
     {
       "title": "CISA Cyber Hygiene Services",
@@ -78,7 +83,8 @@
         "ID",
         "DE",
         "PR"
-      ]
+      ],
+      "pillar": "prepare"
     },
     {
       "title": "Tabletop Exercise Packages (CTEP)",
@@ -91,7 +97,8 @@
         "GV",
         "RS",
         "RC"
-      ]
+      ],
+      "pillar": "prepare"
     },
     {
       "title": "Infrastructure Dependency/Interdependency Planning",
@@ -105,7 +112,8 @@
         "GV",
         "ID",
         "RC"
-      ]
+      ],
+      "pillar": "prepare"
     },
     {
       "title": "Known Exploited Vulnerabilities (KEV) Catalog",
@@ -118,7 +126,8 @@
         "PR",
         "DE",
         "GV"
-      ]
+      ],
+      "pillar": "protect"
     },
     {
       "title": "Shields Up",
@@ -131,7 +140,8 @@
         "PR",
         "DE",
         "GV"
-      ]
+      ],
+      "pillar": "protect"
     },
     {
       "title": "Stop Ransomware Guidance Center",
@@ -144,7 +154,8 @@
         "PR",
         "DE",
         "RC"
-      ]
+      ],
+      "pillar": "protect"
     },
     {
       "title": "Secure by Design / Default Principles",
@@ -157,7 +168,8 @@
         "products",
         "GV",
         "PR"
-      ]
+      ],
+      "pillar": "protect"
     },
     {
       "title": "CISA Alerts & Joint Cybersecurity Advisories",
@@ -169,7 +181,8 @@
         "advisories",
         "DE",
         "GV"
-      ]
+      ],
+      "pillar": "inform"
     },
     {
       "title": "ICS Advisories (ICSA)",
@@ -182,7 +195,8 @@
         "vulnerabilities",
         "DE",
         "PR"
-      ]
+      ],
+      "pillar": "inform"
     },
     {
       "title": "Top Routinely Exploited Vulnerabilities",
@@ -195,7 +209,8 @@
         "DE",
         "GV",
         "PR"
-      ]
+      ],
+      "pillar": "inform"
     },
     {
       "title": "Emergency Directives & Binding Operational Directives",
@@ -209,7 +224,8 @@
         "GV",
         "PR",
         "DE"
-      ]
+      ],
+      "pillar": "inform"
     },
     {
       "title": "CISA Training & Exercises Catalog",
@@ -224,7 +240,8 @@
         "PR",
         "DE",
         "RS"
-      ]
+      ],
+      "pillar": "learn"
     },
     {
       "title": "ICS Security Training (INL/ICS-Range programs linkouts)",
@@ -238,7 +255,8 @@
         "PR",
         "DE",
         "RS"
-      ]
+      ],
+      "pillar": "learn"
     },
     {
       "title": "Phishing & Social Engineering Awareness",
@@ -250,7 +268,8 @@
         "end-user",
         "PR",
         "GV"
-      ]
+      ],
+      "pillar": "learn"
     },
     {
       "title": "Incident Response Tabletop Library",
@@ -263,7 +282,8 @@
         "RS",
         "RC",
         "GV"
-      ]
+      ],
+      "pillar": "learn"
     },
     {
       "title": "Join the Joint Cyber Defense Collaborative (JCDC)",
@@ -276,7 +296,8 @@
         "GV",
         "DE",
         "RS"
-      ]
+      ],
+      "pillar": "partner"
     },
     {
       "title": "Sector Councils (SCC/GCC) Overview",
@@ -288,7 +309,8 @@
         "GCC",
         "partnership",
         "GV"
-      ]
+      ],
+      "pillar": "partner"
     },
     {
       "title": "Information Sharing Programs (AIS/MS-ISAC/E-ISAC linkouts)",
@@ -302,7 +324,8 @@
         "DE",
         "GV",
         "RS"
-      ]
+      ],
+      "pillar": "partner"
     },
     {
       "title": "About CISA",
@@ -313,7 +336,8 @@
         "mission",
         "organization",
         "GV"
-      ]
+      ],
+      "pillar": "about"
     },
     {
       "title": "Critical Infrastructure Sectors & SRMAs",
@@ -324,7 +348,8 @@
         "sectors",
         "SRMA",
         "GV"
-      ]
+      ],
+      "pillar": "about"
     },
     {
       "title": "Publications & Guidance Library",
@@ -339,7 +364,8 @@
         "DE",
         "RS",
         "RC"
-      ]
+      ],
+      "pillar": "about"
     }
   ]
 }
