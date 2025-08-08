@@ -13,7 +13,6 @@
       <img src="assets/cisa.svg" alt="CISA" class="logo" />
       <h1>CISA Navigator</h1>
     </div>
-    <input id="search" type="search" placeholder="Search CISA (programs, sectors, SCC/GCC, JCDC, docs)..." aria-label="Search" />
   </header>
 
   <nav class="tabs" role="tablist" aria-label="Primary">
@@ -28,6 +27,60 @@
   </nav>
 
   <main id="content">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-copy">
+        <h1>CISA Navigator</h1>
+        <p>Explore CISA’s services, sectors, and guidance—organized by mission outcomes and NIST CSF 2.0 functions.</p>
+        <div class="hero-actions">
+          <input id="globalSearch" class="input" type="search" placeholder="Search CISA content…" />
+          <button id="searchBtn" class="btn primary">Search</button>
+        </div>
+        <div class="chip-row" id="csfChips">
+          <button class="chip" data-csf="ID">Identify</button>
+          <button class="chip" data-csf="PR">Protect</button>
+          <button class="chip" data-csf="DE">Detect</button>
+          <button class="chip" data-csf="RS">Respond</button>
+          <button class="chip" data-csf="RC">Recover</button>
+          <button class="chip" data-csf="GV">Govern</button>
+        </div>
+      </div>
+      <div class="hero-art">
+        <img src="assets/cisa.svg" alt="CISA" />
+      </div>
+    </section>
+
+    <!-- SECTORS SHOWCASE -->
+    <section class="panel active">
+      <header class="panel-head">
+        <h2>Critical Infrastructure Sectors</h2>
+        <a class="link" href="https://www.cisa.gov/topics/critical-infrastructure-security-and-resilience/critical-infrastructure-sectors" target="_blank">All Sectors</a>
+      </header>
+      <div id="sectorsGrid" class="tile-grid sectors"></div>
+    </section>
+
+    <!-- SERVICES QUICK ACCESS -->
+    <section class="panel active">
+      <header class="panel-head">
+        <h2>Popular CISA Services</h2>
+        <a class="link" href="https://www.cisa.gov/resources-tools" target="_blank">Browse Library</a>
+      </header>
+      <div id="servicesGrid" class="tile-grid services"></div>
+    </section>
+
+    <!-- LIVE FEED -->
+    <section class="panel active">
+      <header class="panel-head">
+        <h2>Latest from CISA</h2>
+        <div class="feed-tabs">
+          <button class="tab active" data-feed="news">News</button>
+          <button class="tab" data-feed="alerts">Advisories & Alerts</button>
+          <button class="tab" data-feed="updates">CISA Updates</button>
+        </div>
+      </header>
+      <ul id="rssList" class="rss-list"></ul>
+    </section>
+
     <section id="respond" class="panel active" tabindex="0" aria-labelledby="tab-respond">
       <h2>Respond</h2>
       <p>Incident response, reporting, and on-call resources.</p>
