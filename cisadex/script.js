@@ -8,8 +8,17 @@ let DATA = [];
 let filtered = [];
 
 function setActive(id){
-  tabs.forEach(t => t.classList.toggle('active', t.dataset.panel === id));
-  panels.forEach(p => p.classList.toggle('active', p.id === id));
+  tabs.forEach(t => {
+    const active = t.dataset.panel === id;
+    t.classList.toggle('active', active);
+    t.setAttribute('aria-selected', active);
+    t.setAttribute('tabindex', active ? '0' : '-1');
+  });
+  panels.forEach(p => {
+    const isActive = p.id === id;
+    p.classList.toggle('active', isActive);
+    p.toggleAttribute('hidden', !isActive);
+  });
 }
 
 tabs.forEach(t => t.addEventListener('click', () => setActive(t.dataset.panel)));

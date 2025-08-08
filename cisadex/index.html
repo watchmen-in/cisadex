@@ -13,57 +13,78 @@
       <img src="assets/cisa.svg" alt="CISA" class="logo" />
       <h1>CISA Navigator</h1>
     </div>
-    <input id="search" type="search" placeholder="Search CISA (programs, sectors, SCC/GCC, JCDC, docs)..." aria-label="Search" />
+    <input
+      id="search"
+      type="search"
+      placeholder="Search CISA (programs, sectors, SCC/GCC, JCDC, docs)..."
+      aria-label="Search"
+    />
   </header>
 
+  <section class="hero" aria-labelledby="hero-heading">
+    <h2 id="hero-heading" class="sr-only">Featured Resources</h2>
+    <a href="https://www.cisa.gov/report" class="card" target="_blank" rel="noopener">
+      <div class="card-title">Report a Cyber Incident</div>
+      <div class="card-meta">24/7 portal for suspected intrusions or ransomware incidents.</div>
+    </a>
+    <a href="https://www.cisa.gov/cyber-hygiene-services" class="card" target="_blank" rel="noopener">
+      <div class="card-title">Cyber Hygiene Services</div>
+      <div class="card-meta">Free vulnerability scanning and mitigation resources.</div>
+    </a>
+    <a href="https://www.cisa.gov/training-exercises" class="card" target="_blank" rel="noopener">
+      <div class="card-title">Training & Exercises</div>
+      <div class="card-meta">Courses and exercises to build cybersecurity skills.</div>
+    </a>
+  </section>
+
   <nav class="tabs" role="tablist" aria-label="Primary">
-    <button class="tab active" data-panel="respond">Respond</button>
-    <button class="tab" data-panel="prepare">Prepare</button>
-    <button class="tab" data-panel="protect">Protect</button>
-    <button class="tab" data-panel="inform">Inform</button>
-    <button class="tab" data-panel="learn">Learn</button>
-    <button class="tab" data-panel="partner">Partner</button>
-    <button class="tab" data-panel="about">About CISA</button>
+    <button class="tab active" id="tab-respond" role="tab" data-panel="respond" aria-controls="respond" aria-selected="true" tabindex="0">Respond</button>
+    <button class="tab" id="tab-prepare" role="tab" data-panel="prepare" aria-controls="prepare" aria-selected="false" tabindex="-1">Prepare</button>
+    <button class="tab" id="tab-protect" role="tab" data-panel="protect" aria-controls="protect" aria-selected="false" tabindex="-1">Protect</button>
+    <button class="tab" id="tab-inform" role="tab" data-panel="inform" aria-controls="inform" aria-selected="false" tabindex="-1">Inform</button>
+    <button class="tab" id="tab-learn" role="tab" data-panel="learn" aria-controls="learn" aria-selected="false" tabindex="-1">Learn</button>
+    <button class="tab" id="tab-partner" role="tab" data-panel="partner" aria-controls="partner" aria-selected="false" tabindex="-1">Partner</button>
+    <button class="tab" id="tab-about" role="tab" data-panel="about" aria-controls="about" aria-selected="false" tabindex="-1">About CISA</button>
   </nav>
 
   <main id="content">
-    <section id="respond" class="panel active" tabindex="0" aria-labelledby="tab-respond">
+    <section id="respond" class="panel active" role="tabpanel" tabindex="0" aria-labelledby="tab-respond">
       <h2>Respond</h2>
       <p>Incident response, reporting, and on-call resources.</p>
       <div class="grid" data-category="respond"></div>
     </section>
 
-    <section id="prepare" class="panel" tabindex="0" aria-labelledby="tab-prepare">
+    <section id="prepare" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-prepare" hidden>
       <h2>Prepare</h2>
       <p>Guides, playbooks, exercises, and critical infrastructure resilience.</p>
       <div class="grid" data-category="prepare"></div>
     </section>
 
-    <section id="protect" class="panel" tabindex="0" aria-labelledby="tab-protect">
+    <section id="protect" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-protect" hidden>
       <h2>Protect</h2>
       <p>Cyber hygiene services, vulnerability management, KEV catalog, advisories.</p>
       <div class="grid" data-category="protect"></div>
     </section>
 
-    <section id="inform" class="panel" tabindex="0" aria-labelledby="tab-inform">
+    <section id="inform" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-inform" hidden>
       <h2>Inform</h2>
       <p>Alerts, advisories, blog posts, press releases, ICS/OT advisories.</p>
       <div class="grid" data-category="inform"></div>
     </section>
 
-    <section id="learn" class="panel" tabindex="0" aria-labelledby="tab-learn">
+    <section id="learn" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-learn" hidden>
       <h2>Learn</h2>
       <p>Training courses, awareness materials, and tabletop exercises.</p>
       <div class="grid" data-category="learn"></div>
     </section>
 
-    <section id="partner" class="panel" tabindex="0" aria-labelledby="tab-partner">
+    <section id="partner" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-partner" hidden>
       <h2>Partner</h2>
       <p>JCDC, SCC/GCC, ISACs/ISAOs, and public-private programs.</p>
       <div class="grid" data-category="partner"></div>
     </section>
 
-    <section id="about" class="panel" tabindex="0" aria-labelledby="tab-about">
+    <section id="about" class="panel" role="tabpanel" tabindex="0" aria-labelledby="tab-about" hidden>
       <h2>About CISA</h2>
       <p>What CISA is, how it’s organized, and where to go next.</p>
       <div class="grid" data-category="about"></div>
