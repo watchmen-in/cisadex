@@ -1,0 +1,26 @@
+[
+  {
+    "agency": "CISA",
+    "count": 10
+  },
+  {
+    "agency": "FEMA",
+    "count": 2
+  },
+  {
+    "agency": "EPA",
+    "count": 2
+  },
+  {
+    "agency": "DOE",
+    "count": 5
+  },
+  {
+    "agency": "FBI",
+    "count": 4
+  },
+  {
+    "agency": "Fusion Center",
+    "count": 6
+  }
+]

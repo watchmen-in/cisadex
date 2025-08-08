@@ -1,0 +1,524 @@
+[
+  {
+    "id": "CISA-R1",
+    "agency": "CISA",
+    "office_name": "CISA Region 1 Office",
+    "city": "Boston",
+    "state": "MA",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "CISA-R2",
+    "agency": "CISA",
+    "office_name": "CISA Region 2 Office",
+    "city": "New York",
+    "state": "NY",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "CISA-R3",
+    "agency": "CISA",
+    "office_name": "CISA Region 3 Office",
+    "city": "Philadelphia",
+    "state": "PA",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "CISA-R4",
+    "agency": "CISA",
+    "office_name": "CISA Region 4 Office",
+    "city": "Atlanta",
+    "state": "GA",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "CISA-R5",
+    "agency": "CISA",
+    "office_name": "CISA Region 5 Office",
+    "city": "Chicago",
+    "state": "IL",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "CISA-R6",
+    "agency": "CISA",
+    "office_name": "CISA Region 6 Office",
+    "city": "Denton",
+    "state": "TX",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "CISA-R7",
+    "agency": "CISA",
+    "office_name": "CISA Region 7 Office",
+    "city": "Kansas City",
+    "state": "MO",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "CISA-R8",
+    "agency": "CISA",
+    "office_name": "CISA Region 8 Office",
+    "city": "Denver",
+    "state": "CO",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "CISA-R9",
+    "agency": "CISA",
+    "office_name": "CISA Region 9 Office",
+    "city": "Oakland",
+    "state": "CA",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "CISA-R10",
+    "agency": "CISA",
+    "office_name": "CISA Region 10 Office",
+    "city": "Bothell",
+    "state": "WA",
+    "lat": null,
+    "lng": null,
+    "icon": "cisa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "cybersecurity",
+      "infrastructure_protection",
+      "outreach"
+    ]
+  },
+  {
+    "id": "FEMA-R1",
+    "agency": "FEMA",
+    "office_name": "FEMA Region I",
+    "city": "Boston",
+    "state": "MA",
+    "lat": null,
+    "lng": null,
+    "icon": "fema",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "emergency_management",
+      "coordination",
+      "grants"
+    ]
+  },
+  {
+    "id": "FEMA-R2",
+    "agency": "FEMA",
+    "office_name": "FEMA Region II",
+    "city": "New York",
+    "state": "NY",
+    "lat": null,
+    "lng": null,
+    "icon": "fema",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "emergency_management",
+      "coordination",
+      "grants"
+    ]
+  },
+  {
+    "id": "EPA-R7",
+    "agency": "EPA",
+    "office_name": "EPA Region 7",
+    "city": "Lenexa",
+    "state": "KS",
+    "lat": null,
+    "lng": null,
+    "icon": "epa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "regulation",
+      "water_sector_support",
+      "emergency_response"
+    ]
+  },
+  {
+    "id": "EPA-R8",
+    "agency": "EPA",
+    "office_name": "EPA Region 8",
+    "city": "Denver",
+    "state": "CO",
+    "lat": null,
+    "lng": null,
+    "icon": "epa",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "regulation",
+      "water_sector_support",
+      "emergency_response"
+    ]
+  },
+  {
+    "id": "DOE-INL",
+    "agency": "DOE",
+    "office_name": "Idaho National Laboratory",
+    "city": "Idaho Falls",
+    "state": "ID",
+    "lat": null,
+    "lng": null,
+    "icon": "doe",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "research",
+      "energy_sector_support",
+      "ot_ics_security"
+    ]
+  },
+  {
+    "id": "DOE-ORNL",
+    "agency": "DOE",
+    "office_name": "Oak Ridge National Laboratory",
+    "city": "Oak Ridge",
+    "state": "TN",
+    "lat": null,
+    "lng": null,
+    "icon": "doe",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "research",
+      "energy_sector_support",
+      "ot_ics_security"
+    ]
+  },
+  {
+    "id": "DOE-PNNL",
+    "agency": "DOE",
+    "office_name": "Pacific Northwest National Laboratory",
+    "city": "Richland",
+    "state": "WA",
+    "lat": null,
+    "lng": null,
+    "icon": "doe",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "research",
+      "energy_sector_support",
+      "ot_ics_security"
+    ]
+  },
+  {
+    "id": "DOE-NREL",
+    "agency": "DOE",
+    "office_name": "National Renewable Energy Laboratory",
+    "city": "Golden",
+    "state": "CO",
+    "lat": null,
+    "lng": null,
+    "icon": "doe",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "research",
+      "energy_sector_support",
+      "ot_ics_security"
+    ]
+  },
+  {
+    "id": "DOE-SNL",
+    "agency": "DOE",
+    "office_name": "Sandia National Laboratories",
+    "city": "Albuquerque",
+    "state": "NM",
+    "lat": null,
+    "lng": null,
+    "icon": "doe",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "research",
+      "energy_sector_support",
+      "ot_ics_security"
+    ]
+  },
+  {
+    "id": "FBI-ALB",
+    "agency": "FBI",
+    "office_name": "FBI Albany Field Office",
+    "city": "Albany",
+    "state": "NY",
+    "lat": null,
+    "lng": null,
+    "icon": "fbi",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "law_enforcement",
+      "cyber_investigation",
+      "incident_response"
+    ]
+  },
+  {
+    "id": "FBI-MIA",
+    "agency": "FBI",
+    "office_name": "FBI Miami Field Office",
+    "city": "Miramar",
+    "state": "FL",
+    "lat": null,
+    "lng": null,
+    "icon": "fbi",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "law_enforcement",
+      "cyber_investigation",
+      "incident_response"
+    ]
+  },
+  {
+    "id": "FBI-MIL",
+    "agency": "FBI",
+    "office_name": "FBI Milwaukee Field Office",
+    "city": "Milwaukee",
+    "state": "WI",
+    "lat": null,
+    "lng": null,
+    "icon": "fbi",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "law_enforcement",
+      "cyber_investigation",
+      "incident_response"
+    ]
+  },
+  {
+    "id": "FBI-MIN",
+    "agency": "FBI",
+    "office_name": "FBI Minneapolis Field Office",
+    "city": "Brooklyn Center",
+    "state": "MN",
+    "lat": null,
+    "lng": null,
+    "icon": "fbi",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "law_enforcement",
+      "cyber_investigation",
+      "incident_response"
+    ]
+  },
+  {
+    "id": "FC-FL-PRI",
+    "agency": "Fusion Center",
+    "office_name": "Florida Fusion Center (Primary)",
+    "city": "Tallahassee",
+    "state": "FL",
+    "lat": null,
+    "lng": null,
+    "icon": "fusion",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "intelligence",
+      "information_sharing",
+      "all_hazards"
+    ]
+  },
+  {
+    "id": "FC-FL-CFIX",
+    "agency": "Fusion Center",
+    "office_name": "Central Florida Intelligence Exchange (Recognized)",
+    "city": "Orlando",
+    "state": "FL",
+    "lat": null,
+    "lng": null,
+    "icon": "fusion",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "intelligence",
+      "information_sharing",
+      "all_hazards"
+    ]
+  },
+  {
+    "id": "FC-FL-SEFC",
+    "agency": "Fusion Center",
+    "office_name": "Southeast Florida Fusion Center (Recognized)",
+    "city": "Miami",
+    "state": "FL",
+    "lat": null,
+    "lng": null,
+    "icon": "fusion",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "intelligence",
+      "information_sharing",
+      "all_hazards"
+    ]
+  },
+  {
+    "id": "FC-GA-GISAC",
+    "agency": "Fusion Center",
+    "office_name": "Georgia Information Sharing & Analysis Center (GISAC)",
+    "city": "Atlanta",
+    "state": "GA",
+    "lat": null,
+    "lng": null,
+    "icon": "fusion",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "intelligence",
+      "information_sharing",
+      "all_hazards"
+    ]
+  },
+  {
+    "id": "FC-GU-MAR",
+    "agency": "Fusion Center",
+    "office_name": "Mariana Regional Fusion Center (Guam)",
+    "city": "Hag\u00e5t\u00f1a",
+    "state": "GU",
+    "lat": null,
+    "lng": null,
+    "icon": "fusion",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "intelligence",
+      "information_sharing",
+      "all_hazards"
+    ]
+  },
+  {
+    "id": "FC-DC-DCFC",
+    "agency": "Fusion Center",
+    "office_name": "DC Fusion Center",
+    "city": "Washington",
+    "state": "DC",
+    "lat": null,
+    "lng": null,
+    "icon": "fusion",
+    "priority": 3,
+    "last_verified": "2025-08-08",
+    "sectors": [],
+    "functions": [
+      "intelligence",
+      "information_sharing",
+      "all_hazards"
+    ]
+  }
+]
