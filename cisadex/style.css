@@ -80,6 +80,14 @@ h1{font-size:1.2rem; margin:0; letter-spacing:.3px}
   min-height:110px;
 }
 .card:hover{border-color:var(--accent)}
+
+.pillar-respond{border-left:4px solid #ef4444;}
+.pillar-prepare{border-left:4px solid #f59e0b;}
+.pillar-protect{border-left:4px solid #10b981;}
+.pillar-inform{border-left:4px solid #3b82f6;}
+.pillar-learn{border-left:4px solid #8b5cf6;}
+.pillar-partner{border-left:4px solid #ec4899;}
+.pillar-about{border-left:4px solid #6b7280;}
 .card-title{font-weight:600; margin-bottom:.25rem}
 .card-meta{color:var(--muted); font-size:.92rem}
 .app-footer{
