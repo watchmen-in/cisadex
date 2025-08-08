@@ -30,6 +30,13 @@ async function load(){
 function makeCard(item){
   const node = tpl.content.firstElementChild.cloneNode(true);
   node.href = item.url;
+  if(item.icon){
+    const img = document.createElement('img');
+    img.src = `assets/${item.icon}`;
+    img.alt = '';
+    img.className = 'card-icon';
+    node.appendChild(img);
+  }
   node.querySelector('.card-title').textContent = item.title;
   node.querySelector('.card-meta').textContent = item.meta ?? item.category;
   return node;
