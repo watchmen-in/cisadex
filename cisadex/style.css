@@ -57,8 +57,16 @@ h1{font-size:1.2rem; margin:0; letter-spacing:.3px}
   padding:.5rem .9rem;
   border-radius:999px;
   cursor:pointer;
+  transition:background-color .2s ease, color .2s ease;
 }
-.tab.active{outline:2px solid var(--accent)}
+.tab:hover{
+  background:var(--accent);
+  color:var(--bg);
+}
+.tab.active{
+  background:var(--accent);
+  color:var(--bg);
+}
 #content{padding:1rem clamp(1rem, 3vw, 2rem) 2rem}
 .panel{display:none; animation:fade .2s ease-in}
 .panel.active{display:block}
@@ -69,6 +77,13 @@ h1{font-size:1.2rem; margin:0; letter-spacing:.3px}
   grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
   margin-top:1rem;
 }
+.hero{
+  display:grid;
+  gap:1rem;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+  padding:2rem clamp(1rem, 3vw, 2rem);
+}
+.hero .card{min-height:140px}
 .card{
   display:block;
   background:linear-gradient(180deg, #111a2d, #0d1526);
@@ -78,8 +93,13 @@ h1{font-size:1.2rem; margin:0; letter-spacing:.3px}
   text-decoration:none;
   color:var(--text);
   min-height:110px;
+  transition:transform .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
-.card:hover{border-color:var(--accent)}
+.card:hover{
+  border-color:var(--accent);
+  transform:translateY(-4px);
+  box-shadow:0 4px 12px rgba(0,0,0,.4);
+}
 .card-title{font-weight:600; margin-bottom:.25rem}
 .card-meta{color:var(--muted); font-size:.92rem}
 .app-footer{
@@ -88,6 +108,10 @@ h1{font-size:1.2rem; margin:0; letter-spacing:.3px}
   color:var(--muted);
   display:flex;
   justify-content:space-between;
+}
+@media (max-width:768px){
+  .hero{grid-template-columns:1fr}
+  .tabs{overflow-x:auto}
 }
 @media (max-width:640px){
   #search{min-width:140px}
