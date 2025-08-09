@@ -9,6 +9,7 @@ export default function Header() {
         <nav className="hidden sm:flex items-center gap-6 text-sm text-t2">
           <a href="/" className="hover:text-t1 focus-ring">Home</a>
           <a href="/dashboard" className="hover:text-t1 focus-ring">Dashboard</a>
+          <a href="/dashboard#feeds" className="hover:text-t1 focus-ring">OSINT Feeds</a>
           <a href="/dashboard#resources" className="hover:text-t1 focus-ring">Resource Hub</a>
         </nav>
         <button
@@ -23,6 +24,7 @@ export default function Header() {
         <nav className="sm:hidden px-4 pb-4 flex flex-col gap-2 text-sm text-t2">
           <a href="/" className="hover:text-t1 focus-ring" onClick={() => setOpen(false)}>Home</a>
           <a href="/dashboard" className="hover:text-t1 focus-ring" onClick={() => setOpen(false)}>Dashboard</a>
+          <a href="/dashboard#feeds" className="hover:text-t1 focus-ring" onClick={() => setOpen(false)}>OSINT Feeds</a>
           <a href="/dashboard#resources" className="hover:text-t1 focus-ring" onClick={() => setOpen(false)}>Resource Hub</a>
         </nav>
       )}
