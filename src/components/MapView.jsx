@@ -3,7 +3,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 function coerceCoords(d) {
-  const lon = Number(d?.lon ?? d?.longitude);
+  const lon = Number(d?.lon ?? d?.lng ?? d?.longitude ?? d?.long);
   const lat = Number(d?.lat ?? d?.latitude);
   if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
   if (lon < -180 || lon > 180 || lat < -90 || lat > 90) return null;

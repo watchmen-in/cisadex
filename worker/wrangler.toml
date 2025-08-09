@@ -11,6 +11,7 @@ database_name = "cisadex-ti"
  # TODO: replace with real D1 database ID after running `wrangler d1 create cisadex-ti`
  database_id = "5da7e67b-d0d0-4e5e-b87b-bcbdfb12368e"
 
+
 [[kv_namespaces]]
 binding = "CACHE"
 id = "REPLACE_WITH_YOUR_KV_ID"
