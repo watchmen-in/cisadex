@@ -1,41 +1,38 @@
+function Chip({ active, label, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`focus-ring px-3 py-1.5 rounded-full border text-sm ${active ? 'bg-brand text-black border-transparent' : 'border-b1 text-t2 hover:text-t1'}`}
+    >
+      {label}
+    </button>
+  );
+}
+
 export default function FilterPanel({ agencies = [], roles = [], filters, onChange }) {
   const toggle = (type, value) => {
     const set = new Set(filters[type]);
-    if (set.has(value)) {
-      set.delete(value);
-    } else {
-      set.add(value);
-    }
+    if (set.has(value)) set.delete(value); else set.add(value);
     onChange({ ...filters, [type]: Array.from(set) });
   };
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h3 className="font-bold mb-2">Agency</h3>
-        {agencies.map((a) => (
-          <label key={a} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={filters.agency.includes(a)}
-              onChange={() => toggle('agency', a)}
-            />
-            <span>{a}</span>
-          </label>
-        ))}
+    <div className="space-y-6">
+      <div className="space-y-2 border-b border-b1 pb-4">
+        <h3 className="text-xs uppercase tracking-wide text-t2">Agency</h3>
+        <div className="flex flex-wrap gap-2">
+          {agencies.map((a) => (
+            <Chip key={a} label={a} active={filters.agency.includes(a)} onClick={() => toggle('agency', a)} />
+          ))}
+        </div>
       </div>
-      <div>
-        <h3 className="font-bold mb-2">Role</h3>
-        {roles.map((r) => (
-          <label key={r} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={filters.role_type.includes(r)}
-              onChange={() => toggle('role_type', r)}
-            />
-            <span>{r}</span>
-          </label>
-        ))}
+      <div className="space-y-2">
+        <h3 className="text-xs uppercase tracking-wide text-t2">Role</h3>
+        <div className="flex flex-wrap gap-2">
+          {roles.map((r) => (
+            <Chip key={r} label={r} active={filters.role_type.includes(r)} onClick={() => toggle('role_type', r)} />
+          ))}
+        </div>
       </div>
     </div>
   );

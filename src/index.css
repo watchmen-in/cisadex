@@ -1,13 +1,13 @@
+@import "./styles/tokens.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body, #root {
-  height: 100%;
-}
-
-#map,
-.map-container {
-  height: 100vh;
-  width: 100%;
-}
+:root { color-scheme: dark; }
+html, body, #root { height: 100%; background: var(--bg-0); color: var(--text-1); }
+* { box-sizing: border-box; }
+a { color: var(--brand); }
+.focus-ring:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* Fluid type */
+:root { --step-0: clamp(14px, 1.2vw, 16px); --step-1: clamp(18px, 1.6vw, 20px); }

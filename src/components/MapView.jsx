@@ -19,12 +19,6 @@ export default function MapView({ data = [], loading = false }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
 
-  // Debug: see what arrives
-  useEffect(() => {
-    console.log("[MapView] data length:", Array.isArray(data) ? data.length : "n/a", data?.slice?.(0,3));
-  }, [data]);
-
-  // Create map once
   useEffect(() => {
     if (!containerRef.current) return;
     const map = new maplibregl.Map({
@@ -37,7 +31,6 @@ export default function MapView({ data = [], loading = false }) {
     return () => { try { map.remove(); } catch {} mapRef.current = null; };
   }, []);
 
-  // Add/update source+layer after style ready
   useEffect(() => {
     const map = mapRef.current;
     if (!map || loading) return;
@@ -68,10 +61,10 @@ export default function MapView({ data = [], loading = false }) {
               source: srcId,
               paint: {
                 "circle-radius": 6,
-                "circle-color": "#ff0000",
+                "circle-color": "#00d0ff",
                 "circle-opacity": 0.9,
-                "circle-stroke-color": "#111",
-                "circle-stroke-width": 1
+                "circle-stroke-color": "#0b0f14",
+                "circle-stroke-width": 1.5
               }
             });
           }
@@ -79,7 +72,6 @@ export default function MapView({ data = [], loading = false }) {
           existing.setData(geojson);
         }
 
-        // Fit bounds only when we have points
         if (features.length > 0) {
           const lons = features.map(f => f.geometry.coordinates[0]);
           const lats = features.map(f => f.geometry.coordinates[1]);
@@ -91,7 +83,6 @@ export default function MapView({ data = [], loading = false }) {
         }
       } catch (e) {
         console.error("[MapView] update failed:", e);
-        // swallow to avoid ErrorBoundary crash
       }
     })();
 
@@ -99,8 +90,8 @@ export default function MapView({ data = [], loading = false }) {
   }, [data, loading]);
 
   return (
-    <div className="map-container" style={{ height: "100vh", width: "100%" }}>
-      <div ref={containerRef} style={{ height: "100%", width: "100%" }} />
+    <div className="w-full h-[100vh] md:h-[calc(100vh-56px)]">
+      <div ref={containerRef} className="w-full h-full" />
     </div>
   );
 }

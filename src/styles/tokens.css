@@ -1,0 +1,12 @@
+:root {
+  --bg-0: #0b0f14;      /* page background (near-black blue) */
+  --bg-1: #10151c;      /* elevated panels */
+  --bg-2: #17202a;      /* higher elevation / popovers */
+  --text-1: #e6edf3;    /* primary text */
+  --text-2: #9fb0c0;    /* secondary text */
+  --border-1: #24303d;  /* subtle borders */
+  --brand: #00d0ff;     /* cyan accent */
+  --accent: #7a5cff;    /* purple alt accent */
+  --focus: #77ffe1;     /* focus ring */
+  --ok: #2ecc71; --warn: #f39c12; --err: #e74c3c;
+}
