@@ -11,26 +11,23 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    // Log to console and any service you like
     console.error("[ErrorBoundary]", error, info);
     this.setState({ info });
   }
 
   render() {
     if (this.state.hasError) {
-      if (import.meta.env.MODE !== "production") {
-        return (
-          <div style={{ padding: 24, fontFamily: "system-ui" }}>
-            <h1>Something went wrong.</h1>
-            <pre style={{ whiteSpace: "pre-wrap" }}>
+      // TEMP: show details even in production to debug
+      return (
+        <div style={{ padding: 24, fontFamily: "system-ui" }}>
+          <h1>Something went wrong.</h1>
+          <pre style={{ whiteSpace: "pre-wrap" }}>
 {String(this.state.error)}
 {"\n\n"}
 {this.state.info?.componentStack || ""}
-            </pre>
-          </div>
-        );
-      }
-      return <h1>Something went wrong.</h1>;
+          </pre>
+        </div>
+      );
     }
     return this.props.children;
   }
