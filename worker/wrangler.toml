@@ -1,0 +1,22 @@
+name = "cisadex-ti-worker"
+main = "src/index.mjs"
+compatibility_date = "2025-08-08"
+
+[triggers]
+crons = ["*/15 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "cisadex-ti"
+database_id = "REPLACE_WITH_YOUR_D1_ID"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "REPLACE_WITH_YOUR_KV_ID"
+
+[[queues.producers]]
+binding = "ENRICH_QUEUE"
+queue = "enrich-queue"
+
+[[queues.consumers]]
+queue = "enrich-queue"

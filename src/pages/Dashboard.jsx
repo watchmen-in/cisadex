@@ -6,12 +6,14 @@ import FilterPanel from "../components/FilterPanel";
 import MapView from "../components/MapView";
 import RssPanel from "../components/RssPanel";
 import ResourcePanel from "../components/ResourcePanel";
+import FeedList from "../components/Feeds/FeedList";
 import { loadOffices } from "../utils/dataLoader";
 
 function TabBar({ tab, onChange }) {
   const tabs = [
     { id: "map", label: "Map" },
     { id: "rss", label: "RSS" },
+    { id: "feeds", label: "Feeds" },
     { id: "resources", label: "Resources" },
   ];
   return (
@@ -108,6 +110,7 @@ export default function Dashboard() {
                   </div>
                 )}
                 {tab === "rss" && <RssPanel />}
+                {tab === "feeds" && <FeedList filters={{}} />}
                 {tab === "resources" && <ResourcePanel />}
               </div>
             </div>
