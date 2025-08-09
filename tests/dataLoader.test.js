@@ -14,6 +14,22 @@ test('loadOffices returns parsed JSON', async () => {
   expect(data).toEqual(mockData);
 });
 
+test('loadOffices uses BASE_URL for fetch path', async () => {
+  const fetchMock = vi.fn(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve([]),
+    })
+  );
+  global.fetch = fetchMock;
+
+  await loadOffices();
+
+  expect(fetchMock).toHaveBeenCalledWith(
+    `${import.meta.env.BASE_URL}data/offices.json`
+  );
+});
+
 test('loadOffices returns empty array on fetch failure', async () => {
   global.fetch = vi.fn(() => Promise.reject(new Error('Network error')));
   const data = await loadOffices();
