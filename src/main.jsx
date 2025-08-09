@@ -5,6 +5,7 @@ import './index.css';
 import Home from './pages/Home';
 import Links from './pages/Links';
 import Navbar from './components/Navbar';
+import ErrorBoundary from './components/ErrorBoundary';
 
 function App() {
   return (
@@ -22,4 +23,8 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>
+);
