@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CISAdex Entity",
+  "type": "object",
+  "required": [
+    "id","agency","office_name","role_type",
+    "city","state","lat","lng",
+    "contact_public","sectors","functions","last_verified","priority"
+  ],
+  "properties": {
+    "id": { "type":"string", "pattern":"^[A-Za-z0-9._:-]+$" },
+    "agency": { "type":"string" },
+    "office_name": { "type":"string" },
+    "role_type": { "type":"string" },
+    "address": { "type":"string" },
+    "city": { "type":"string" },
+    "state": { "type":"string", "minLength":2, "maxLength":2 },
+    "zip": { "type":"string" },
+    "lat": { "type":"number", "minimum":-90, "maximum":90 },
+    "lng": { "type":"number", "minimum":-180, "maximum":180 },
+    "contact_public": {
+      "type":"object",
+      "required":["website"],
+      "properties": {
+        "phone": { "type":"string" },
+        "email": { "type":"string" },
+        "website": { "type":"string", "format":"uri" }
+      }
+    },
+    "sectors": { "type":"array", "items": { "type":"string" }, "minItems":1 },
+    "functions": { "type":"array", "items": { "type":"string" }, "minItems":1 },
+    "last_verified": { "type":"string", "format":"date" },
+    "priority": { "type":"integer", "minimum":0 },
+    "county_fips": { "type":"string" },
+    "icon": { "type":"string" },
+    "icon_set": { "type":"string" },
+    "icon_src": { "type":"string" },
+    "icon_hint": { "type":"string" },
+    "notes": { "type":"string" },
+    "aor_notes": { "type":"string" },
+    "source_url": { "type":"string", "format":"uri" },
+    "verification_method": { "type":"string", "enum":["manual","scraped","api","other"] }
+  },
+  "additionalProperties": false
+}

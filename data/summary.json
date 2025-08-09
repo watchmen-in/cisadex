@@ -1,0 +1,47 @@
+[
+  {
+    "id": "fbi-bos",
+    "agency": "FBI",
+    "office_name": "Boston Field Office",
+    "role_type": "Field Office",
+    "city": "Boston",
+    "state": "MA",
+    "lat": 42.361145,
+    "lng": -71.057083,
+    "contact_public": {"website": "https://www.fbi.gov/contact-us/field-offices/boston"},
+    "sectors": ["Law Enforcement"],
+    "functions": ["IR"],
+    "last_verified": "2024-01-15",
+    "priority": 1
+  },
+  {
+    "id": "fema-ny",
+    "agency": "FEMA",
+    "office_name": "Region II",
+    "role_type": "Regional Office",
+    "city": "New York",
+    "state": "NY",
+    "lat": 40.7128,
+    "lng": -74.006,
+    "contact_public": {"website": "https://www.fema.gov"},
+    "sectors": ["Cross-sector"],
+    "functions": ["Regulator"],
+    "last_verified": "2024-02-10",
+    "priority": 2
+  },
+  {
+    "id": "epa-water",
+    "agency": "EPA",
+    "office_name": "Water Division",
+    "role_type": "Division",
+    "city": "Washington",
+    "state": "DC",
+    "lat": 38.8951,
+    "lng": -77.0364,
+    "contact_public": {"website": "https://www.epa.gov"},
+    "sectors": ["Water"],
+    "functions": ["Research"],
+    "last_verified": "2024-03-20",
+    "priority": 0
+  }
+]

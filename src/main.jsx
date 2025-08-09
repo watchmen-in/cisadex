@@ -2,8 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "maplibre-gl/dist/maplibre-gl.css";
-import Splash from "./pages/Splash";
-import Dashboard from "./pages/Dashboard";
+import Home from "./pages/Home";
+import Browse from "./pages/Browse";
+import EntityPage from "./pages/EntityPage";
+import Compare from "./pages/Compare";
+import AboutData from "./pages/AboutData";
 import "./index.css";
 import ErrorBoundary from "./components/ErrorBoundary";
 
@@ -12,8 +15,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter basename="/">
       <ErrorBoundary>
         <Routes>
-          <Route path="/" element={<Splash />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/browse" element={<Browse />} />
+          <Route path="/entity/:id" element={<EntityPage />} />
+          <Route path="/compare" element={<Compare />} />
+          <Route path="/about" element={<AboutData />} />
         </Routes>
       </ErrorBoundary>
     </BrowserRouter>
