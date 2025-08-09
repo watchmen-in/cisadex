@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
 
 export default function MapView({ data = [] }) {
   const mapContainer = useRef(null);
@@ -131,5 +130,5 @@ export default function MapView({ data = [] }) {
     });
   }, [data]);
 
-  return <div ref={mapContainer} className="w-full h-full" />;
+  return <div ref={mapContainer} className="map-container" />;
 }

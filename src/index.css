@@ -5,3 +5,9 @@
 html, body, #root {
   height: 100%;
 }
+
+#map,
+.map-container {
+  height: 100vh;
+  width: 100%;
+}
