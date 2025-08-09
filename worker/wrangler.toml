@@ -8,7 +8,7 @@ crons = ["*/15 * * * *"]
 [[d1_databases]]
 binding = "DB"
 database_name = "cisadex-ti"
-database_id = "REPLACE_WITH_YOUR_D1_ID"
+database_id = "01e39ad4-00ea-4398-9d58-00e70df9d6f5"
 
 [[kv_namespaces]]
 binding = "CACHE"
