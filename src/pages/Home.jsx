@@ -7,6 +7,7 @@ import { loadOffices } from '../utils/dataLoader';
 
 export default function Home() {
   const [offices, setOffices] = useState([]);
+  // Defaults: show everything until user picks something
   const [filters, setFilters] = useState({ agency: [], role_type: [] });
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
@@ -18,18 +19,18 @@ export default function Home() {
     });
   }, []);
 
-  const agencies = useMemo(() => [...new Set(offices.map((o) => o.agency))], [offices]);
-  const roles = useMemo(() => [...new Set(offices.map((o) => o.role_type))], [offices]);
+  const agencies = useMemo(() => [...new Set(offices.map(o => o.agency))], [offices]);
+  const roles = useMemo(() => [...new Set(offices.map(o => o.role_type))], [offices]);
 
-  const filteredData = useMemo(
-    () =>
-      offices.filter(
-        (o) =>
-          (filters.agency.length === 0 || filters.agency.includes(o.agency)) &&
-          (filters.role_type.length === 0 || filters.role_type.includes(o.role_type))
-      ),
-    [offices, filters]
-  );
+  const filteredData = useMemo(() => {
+    const agencyActive = filters.agency.length > 0;
+    const roleActive = filters.role_type.length > 0;
+    return offices.filter(o => {
+      const okAgency = !agencyActive || filters.agency.includes(o.agency);
+      const okRole = !roleActive || filters.role_type.includes(o.role_type);
+      return okAgency && okRole;
+    });
+  }, [offices, filters]);
 
   if (loading) {
     return <div className="flex items-center justify-center h-full">Loading map...</div>;
