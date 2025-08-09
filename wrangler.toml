@@ -6,7 +6,7 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "cisadex-ti"
-database_id = "REPLACE_WITH_YOUR_D1_ID"
+database_id = "5da7e67b-d0d0-4e5e-b87b-bcbdfb12368e"
 
 # (Optional if APIs need CACHE)
 
