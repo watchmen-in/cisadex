@@ -65,7 +65,35 @@ npm run build
   * For MapLibre maps, import the CSS:
 
     ```ts
-    import "maplibre-gl/dist/maplibre-gl.css";
-    ```
+   import "maplibre-gl/dist/maplibre-gl.css";
+   ```
   * Ensure map containers have a height in CSS (e.g., `height: 100vh`).
+
+## Atlas
+
+The Atlas surfaces include a splash Home page, a Browse view with map and results, and detailed entity pages.
+
+### Map style
+
+The default map style uses a light basemap. To override, set `VITE_MAP_STYLE_URL` in your environment.
+
+### Data
+
+Place `summary.json` and `offices.json` in the `data/` directory at the project root. `summary.json` should match `schema/entity.schema.json`.
+Utility `src/utils/validateEntity.ts` performs basic schema validation.
+
+### URL state
+
+Browse deep‑links store state in the query string:
+
+```
+?z=5&c=-98.5,39.8&b=-125,24,-66,49&f={"sectors":["Water"]}&s=ENTITY_ID
+```
+
+### Keyboard shortcuts
+
+* `/` – focus global search
+* `f` – toggle filters
+* `ArrowUp`/`ArrowDown` – navigate results
+* `Enter` – open selected result
 
