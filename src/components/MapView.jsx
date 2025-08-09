@@ -2,11 +2,15 @@ import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
+function isValidCoord(d) {
+  const lon = Number(d?.lon), lat = Number(d?.lat);
+  return Number.isFinite(lon) && Number.isFinite(lat) && lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90;
+}
+
 async function waitForStyle(map) {
   if (map.isStyleLoaded?.()) return;
   await new Promise((resolve) => {
     const onIdle = () => { map.off("idle", onIdle); resolve(); };
-    // 'load' fires once; 'idle' ensures all style resources are ready
     map.once("load", () => map.once("idle", onIdle));
   });
 }
@@ -15,21 +19,25 @@ export default function MapView({ data = [], loading = false }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
 
-  // 1) Create/remove map
+  // Debug: see what arrives
+  useEffect(() => {
+    console.log("[MapView] data length:", Array.isArray(data) ? data.length : "n/a", data?.slice?.(0,3));
+  }, [data]);
+
+  // Create map once
   useEffect(() => {
     if (!containerRef.current) return;
     const map = new maplibregl.Map({
       container: containerRef.current,
       style: "https://demotiles.maplibre.org/style.json",
       center: [-98.5795, 39.8283],
-      zoom: 3,
+      zoom: 3
     });
     mapRef.current = map;
-
     return () => { try { map.remove(); } catch {} mapRef.current = null; };
   }, []);
 
-  // 2) Add or update data AFTER style is ready
+  // Add/update source+layer after style ready
   useEffect(() => {
     const map = mapRef.current;
     if (!map || loading) return;
@@ -40,53 +48,50 @@ export default function MapView({ data = [], loading = false }) {
         await waitForStyle(map);
         if (cancelled) return;
 
-        // Ensure source exists or (re)create it
+        const features = (Array.isArray(data) ? data : []).filter(isValidCoord).map(d => ({
+          type: "Feature",
+          geometry: { type: "Point", coordinates: [Number(d.lon), Number(d.lat)] },
+          properties: d
+        }));
+        const geojson = { type: "FeatureCollection", features };
+
         const srcId = "offices";
+        const layerId = "offices-circles";
+
         const existing = map.getSource?.(srcId);
-        const geojson = {
-          type: "FeatureCollection",
-          features: (data || []).map((d) => ({
-            type: "Feature",
-            geometry: { type: "Point", coordinates: [d.lon, d.lat] },
-            properties: d,
-          })),
-        };
-
         if (!existing) {
-          // First time: add source + layers
           map.addSource(srcId, { type: "geojson", data: geojson });
-
-          // Circle layer example
-          if (!map.getLayer("offices-circles")) {
+          if (!map.getLayer(layerId)) {
             map.addLayer({
-              id: "offices-circles",
+              id: layerId,
               type: "circle",
               source: srcId,
               paint: {
-                "circle-radius": 5,
-                "circle-color": "#0ea5e9",
-                "circle-opacity": 0.8,
-              },
+                "circle-radius": 6,
+                "circle-color": "#ff0000",
+                "circle-opacity": 0.9,
+                "circle-stroke-color": "#111",
+                "circle-stroke-width": 1
+              }
             });
           }
         } else {
-          // Subsequent updates: just set data
           existing.setData(geojson);
         }
 
-        // Fit bounds (only after style load & when we have points)
-        if (geojson.features.length > 0) {
-          const lons = geojson.features.map(f => f.geometry.coordinates[0]);
-          const lats = geojson.features.map(f => f.geometry.coordinates[1]);
+        // Fit bounds only when we have points
+        if (features.length > 0) {
+          const lons = features.map(f => f.geometry.coordinates[0]);
+          const lats = features.map(f => f.geometry.coordinates[1]);
           const west = Math.min(...lons), east = Math.max(...lons);
           const south = Math.min(...lats), north = Math.max(...lats);
-          if (isFinite(west) && isFinite(east) && isFinite(south) && isFinite(north)) {
+          if (Number.isFinite(west) && Number.isFinite(east) && Number.isFinite(south) && Number.isFinite(north)) {
             map.fitBounds([[west, south], [east, north]], { padding: 32, maxZoom: 10, duration: 0 });
           }
         }
       } catch (e) {
-        console.error("Map data/update failed:", e);
-        // Don’t rethrow; we’ve handled it so the app doesn’t white-screen
+        console.error("[MapView] update failed:", e);
+        // swallow to avoid ErrorBoundary crash
       }
     })();
 
