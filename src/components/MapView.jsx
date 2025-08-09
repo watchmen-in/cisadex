@@ -25,16 +25,19 @@ export default function MapView({ data = [] }) {
     const source = mapRef.current.getSource('offices');
     const geojson = {
       type: 'FeatureCollection',
-      features: data.map((o) => ({
-        type: 'Feature',
-        geometry: { type: 'Point', coordinates: [o.lng, o.lat] },
-        properties: {
-          ...o,
-          contact_public_phone: o.contact_public.phone,
-          contact_public_email: o.contact_public.email,
-          contact_public_website: o.contact_public.website,
-        },
-      })),
+      features: data.map((o) => {
+        const contact = o.contact_public || {};
+        return {
+          type: 'Feature',
+          geometry: { type: 'Point', coordinates: [o.lng, o.lat] },
+          properties: {
+            ...o,
+            contact_public_phone: contact.phone || '',
+            contact_public_email: contact.email || '',
+            contact_public_website: contact.website || '',
+          },
+        };
+      }),
     };
 
     if (source) {
