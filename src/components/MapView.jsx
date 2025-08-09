@@ -2,9 +2,12 @@ import { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 
-function isValidCoord(d) {
-  const lon = Number(d?.lon), lat = Number(d?.lat);
-  return Number.isFinite(lon) && Number.isFinite(lat) && lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90;
+function coerceCoords(d) {
+  const lon = Number(d?.lon ?? d?.lng ?? d?.longitude ?? d?.long);
+  const lat = Number(d?.lat ?? d?.latitude);
+  if (!Number.isFinite(lon) || !Number.isFinite(lat)) return null;
+  if (lon < -180 || lon > 180 || lat < -90 || lat > 90) return null;
+  return [lon, lat];
 }
 
 async function waitForStyle(map) {
@@ -41,11 +44,14 @@ export default function MapView({ data = [], loading = false }) {
         await waitForStyle(map);
         if (cancelled) return;
 
-        const features = (Array.isArray(data) ? data : []).filter(isValidCoord).map(d => ({
-          type: "Feature",
-          geometry: { type: "Point", coordinates: [Number(d.lon), Number(d.lat)] },
-          properties: d
-        }));
+        const features = (Array.isArray(data) ? data : [])
+          .map(d => {
+            const coords = coerceCoords(d);
+            return coords
+              ? { type: "Feature", geometry: { type: "Point", coordinates: coords }, properties: d }
+              : null;
+          })
+          .filter(Boolean);
         const geojson = { type: "FeatureCollection", features };
 
         const srcId = "offices";
@@ -71,6 +77,8 @@ export default function MapView({ data = [], loading = false }) {
         } else {
           existing.setData(geojson);
         }
+
+        console.log("[MapView] plotting", features.length, "features", features.slice(0, 3));
 
         if (features.length > 0) {
           const lons = features.map(f => f.geometry.coordinates[0]);
