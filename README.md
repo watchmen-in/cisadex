@@ -54,7 +54,7 @@ npm run build
    /*    /index.html   200
    ```
 
-   This ensures all routes serve `index.html` instead of returning 404, fixing blank pages on refresh.
+6. Ensure `base: "/"` is set in `vite.config.js` to avoid blank pages after deploy.
 
 ## Troubleshooting
 
@@ -68,15 +68,4 @@ npm run build
     import "maplibre-gl/dist/maplibre-gl.css";
     ```
   * Ensure map containers have a height in CSS (e.g., `height: 100vh`).
-
-````
-
----
-
-**Commit and push:**
-```bash
-git add README.md
-git commit -m "Resolve README.md merge conflict and add deployment & _redirects instructions"
-git push
-````
 
