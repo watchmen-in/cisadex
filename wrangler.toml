@@ -1,3 +1,4 @@
 name = "cisadex"
 compatibility_date = "2025-08-08"
 pages_build_output_dir = "dist"
+# compatibility_flags = ["nodejs_compat"]  # optional; safe to remove now

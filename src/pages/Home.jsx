@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import MapView from '../components/MapView';
 import FilterPanel from '../components/FilterPanel';
+// RssFeedPanel now fetches RSS feeds via a server-side function
 import RssFeedPanel from '../components/RssFeedPanel';
 import { loadOffices } from '../utils/dataLoader';
 
