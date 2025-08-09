@@ -1,0 +1,30 @@
+[
+  {"id":"cisa-current","name":"CISA Current Activity","type":"rss","url":"https://www.cisa.gov/uscert/ncas/current-activity.xml","source_type":"gov"},
+  {"id":"cisa-alerts","name":"CISA Alerts","type":"rss","url":"https://www.cisa.gov/uscert/ncas/alerts.xml","source_type":"gov"},
+  {"id":"cisa-ics","name":"CISA ICS Advisories","type":"rss","url":"https://www.cisa.gov/uscert/ics/advisories/ics-advisories.xml","source_type":"gov"},
+  {"id":"fbi-cyber","name":"FBI Cyber News","type":"rss","url":"https://www.fbi.gov/investigate/cyber/news/@@rss.xml","source_type":"gov"},
+  {"id":"ncsc-uk","name":"NCSC-UK News","type":"rss","url":"https://www.ncsc.gov.uk/api/1/services/v1/news.rss","source_type":"gov"},
+  {"id":"cert-eu","name":"CERT-EU News","type":"rss","url":"https://cert.europa.eu/publications/security-advisories/rss.xml","source_type":"gov"},
+
+  {"id":"msrc-blog","name":"Microsoft MSRC Blog","type":"rss","url":"https://msrc.microsoft.com/blog/feed/","source_type":"vendor"},
+  {"id":"oracle","name":"Oracle Security Alerts","type":"rss","url":"https://www.oracle.com/security-alerts/rss-blogs.xml","source_type":"vendor"},
+  {"id":"redhat","name":"Red Hat Security","type":"rss","url":"https://www.redhat.com/en/rss/solutions/security","source_type":"vendor"},
+  {"id":"cisco-psirt","name":"Cisco PSIRT Blog","type":"rss","url":"https://blogs.cisco.com/security/feed","source_type":"vendor"},
+  {"id":"vmware","name":"VMware Security","type":"rss","url":"https://blogs.vmware.com/security/feed/","source_type":"vendor"},
+  {"id":"paloalto-unit42","name":"Palo Alto Unit 42","type":"rss","url":"https://unit42.paloaltonetworks.com/feed/","source_type":"vendor"},
+  {"id":"fortinet","name":"Fortinet Blog","type":"rss","url":"https://www.fortinet.com/blog.rss","source_type":"vendor"},
+  {"id":"rapid7","name":"Rapid7 Blog","type":"rss","url":"https://www.rapid7.com/blog/rss/","source_type":"vendor"},
+  {"id":"tenable","name":"Tenable Blog","type":"rss","url":"https://www.tenable.com/blog/index.xml","source_type":"vendor"},
+  {"id":"qualys","name":"Qualys Blog","type":"rss","url":"https://blog.qualys.com/feed","source_type":"vendor"},
+
+  {"id":"talos","name":"Cisco Talos Intel","type":"rss","url":"https://blog.talosintelligence.com/feeds/posts/default?alt=rss","source_type":"research"},
+  {"id":"google-pz","name":"Google Project Zero","type":"rss","url":"https://googleprojectzero.blogspot.com/feeds/posts/default?alt=rss","source_type":"research"},
+  {"id":"mandiant","name":"Mandiant Blog","type":"rss","url":"https://www.mandiant.com/resources/blog.xml","source_type":"research"},
+  {"id":"crowdstrike","name":"CrowdStrike Blog","type":"rss","url":"https://www.crowdstrike.com/blog/feed/","source_type":"research"},
+  {"id":"sans-isc","name":"SANS Internet Storm Center","type":"rss","url":"https://isc.sans.edu/rssfeed.xml","source_type":"research"},
+
+  {"id":"krebsonsecurity","name":"Krebs on Security","type":"rss","url":"https://krebsonsecurity.com/feed/","source_type":"news"},
+  {"id":"darkreading","name":"Dark Reading","type":"rss","url":"https://www.darkreading.com/rss.xml","source_type":"news"},
+  {"id":"bleepingcomputer","name":"BleepingComputer","type":"rss","url":"https://www.bleepingcomputer.com/feed/","source_type":"news"},
+  {"id":"thehackernews","name":"The Hacker News","type":"rss","url":"https://feeds.feedburner.com/TheHackersNews","source_type":"news"}
+]

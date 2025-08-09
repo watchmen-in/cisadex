@@ -1,0 +1,8 @@
+{
+  "name": "cisadex-ti-worker",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "fast-xml-parser": "^4.4.0"
+  }
+}
