@@ -8,7 +8,8 @@ crons = ["*/15 * * * *"]
 [[d1_databases]]
 binding = "DB"
 database_name = "cisadex-ti"
-database_id = "01e39ad4-00ea-4398-9d58-00e70df9d6f5"
+ # TODO: replace with real D1 database ID after running `wrangler d1 create cisadex-ti`
+ database_id = "01e39ad4-00ea-4398-9d58-00e70df9d6f5"
 
 [[kv_namespaces]]
 binding = "CACHE"
