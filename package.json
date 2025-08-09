@@ -6,13 +6,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "test": "echo \"No tests specified\" && exit 0"
+    "preview": "vite preview --port 4173",
+    "test": "vitest run",
+    "deploy": "npm run build && wrangler pages publish dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "maplibre-gl": "^5.6.2",
     "react": "^19.1.1",
@@ -25,6 +29,7 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.4",
-    "vite": "^7.1.1"
+    "vite": "^7.1.1",
+    "vitest": "^3.2.4"
   }
 }
