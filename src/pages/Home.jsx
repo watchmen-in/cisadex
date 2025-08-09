@@ -60,7 +60,7 @@ export default function Home() {
           </div>
         )}
       </div>
-      <RssFeedPanel />
+    {/* <RssFeedPanel /> */}
     </div>
   );
 }
