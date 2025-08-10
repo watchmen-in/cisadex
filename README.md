@@ -48,21 +48,17 @@ npm run build
    ```
 3. Set the build output directory to `dist`.
 4. No environment variables are required by default.
-5. **For single-page app routing (React Router)**, create a `_redirects` file in the `public` directory (or at the repo root if you don’t have a `public` folder) with:
+5. Ensure `base: "/"` is set in `vite.config.js` to avoid blank pages after deploy.
 
-   ```
-   /*    /index.html   200
-   ```
+## Map style & CSP
 
-6. Ensure `base: "/"` is set in `vite.config.js` to avoid blank pages after deploy.
+- The map style is controlled by `VITE_MAP_STYLE_URL`. If unset, CISAdex falls back to the public MapLibre demo style:
+  `https://demotiles.maplibre.org/style.json`.
 
-## Basemap configuration
+- If you use MapTiler/Mapbox/Carto or another host, ensure your Pages Function sets CSP to allow those domains in:
+  `style-src`, `img-src`, and `connect-src`. See `functions/[[catchall]].ts`.
 
-The map uses Carto's dark‑matter GL style by default. Override this by setting the `VITE_MAP_STYLE_URL` environment variable.
-
-Demo style URLs may 404 or be blocked by CORS. If a style fails to load, the map will remain blank. Open the style URL directly to confirm it works.
-
-If the map is initially hidden (such as in tabs or drawers), call `map.resize()` after it becomes visible to prevent layout issues.
+- If the map renders inside a tab/drawer that’s initially hidden, call `map.resize()` when it becomes visible to avoid layout issues.
 
 ## Troubleshooting
 
