@@ -56,13 +56,11 @@ npm run build
 
 6. Ensure `base: "/"` is set in `vite.config.js` to avoid blank pages after deploy.
 
-## Basemap configuration
+## Basemap style & CSP
 
-The map uses Carto's dark‑matter GL style by default. Override this by setting the `VITE_MAP_STYLE_URL` environment variable.
-
-Demo style URLs may 404 or be blocked by CORS. If a style fails to load, the map will remain blank. Open the style URL directly to confirm it works.
-
-If the map is initially hidden (such as in tabs or drawers), call `map.resize()` after it becomes visible to prevent layout issues.
+* Set the basemap style via the `VITE_MAP_STYLE_URL` environment variable.
+* If the style requires tokens or uses other domains, update the Content-Security-Policy in `functions/[[catchall]].ts` to allow them.
+* If the map is initially hidden (such as in tabs or drawers), call `map.resize()` when it becomes visible to prevent layout issues.
 
 ## Troubleshooting
 
