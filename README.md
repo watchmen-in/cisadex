@@ -68,6 +68,7 @@ npm run build
    import "maplibre-gl/dist/maplibre-gl.css";
    ```
   * Ensure map containers have a height in CSS (e.g., `height: 100vh`).
+  * If a map is hidden when it mounts (tabs, drawers, etc.), call `map.resize()` after it becomes visible.
 
 ## Atlas
 
@@ -75,7 +76,7 @@ The Atlas surfaces include a splash Home page, a Browse view with map and result
 
 ### Map style
 
-The default map style uses a light basemap. To override, set `VITE_MAP_STYLE_URL` in your environment.
+The default map style uses a dark basemap from Carto. To override, set `VITE_MAP_STYLE_URL` in your environment (see `src/map/config.ts`). Demo style URLs may 404 or be blocked by CORS, resulting in style-load errors; use an accessible style URL of your own if needed.
 
 ### Data
 
