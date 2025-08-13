@@ -55,15 +55,28 @@ npm run build
 - The map style is controlled by `VITE_MAP_STYLE_URL`. If unset, CISAdex falls back to the public MapLibre demo style:
   `https://demotiles.maplibre.org/style.json`.
 
-- If you use MapTiler/Mapbox/Carto or another host, ensure your Pages Function sets CSP to allow those domains in:
-  `style-src`, `img-src`, and `connect-src`. See `functions/[[catchall]].ts`.
+### Basemap Style & Content Security Policy (CSP)
 
-- If the map renders inside a tab/drawer that’s initially hidden, call `map.resize()` when it becomes visible to avoid layout issues.
+- **Set the basemap style** via the `VITE_MAP_STYLE_URL` environment variable.  
+  If unset, CISAdex defaults to the public MapLibre demo style:  
+  [`https://demotiles.maplibre.org/style.json`](https://demotiles.maplibre.org/style.json)
+
+- **CSP Configuration**:  
+  If using MapTiler, Mapbox, Carto, or another hosting provider, ensure your Pages Function sets the Content Security Policy (CSP) to allow those domains in the following directives:
+  - `style-src`
+  - `img-src`
+  - `connect-src`  
+  See the file: `functions/[[catchall]].ts` for implementation details.
+
+- **Token or domain-specific styles**:  
+  If your map style requires access tokens or uses non-standard domains, be sure to **update your CSP policy** accordingly.
+
+- **Hidden tab rendering**:  
+  If the map is rendered inside a tab, drawer, or other element that is **initially hidden**, call `map.resize()` when it becomes visible to avoid layout issues.
 
 ## Troubleshooting
 
 * **Blank page after deploy**:
-
   * Set `base: "/"` in `vite.config.js` or `vite.config.ts`.
   * Verify `dist/` contains `index.html` after `npm run build`.
   * For MapLibre maps, import the CSS:

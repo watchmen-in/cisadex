@@ -9,6 +9,7 @@ export const onRequest: PagesFunction = async (ctx) => {
 
   // Try next (static asset or other route)
   let res = await next();
+
   const acceptsHTML =
     request.method === "GET" &&
     (request.headers.get("accept") || "").includes("text/html");
@@ -20,17 +21,30 @@ export const onRequest: PagesFunction = async (ctx) => {
 
   if (acceptsHTML) {
     const headers = new Headers(res.headers);
+
+    // Merged CSP from both branches
     const csp = [
       "default-src 'self'",
       "script-src 'self'",
-      "style-src 'self' 'unsafe-inline' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com",
+      // Allow inline styles and common basemap/style hosts
+      "style-src 'self' 'unsafe-inline' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://*.cartocdn.com https://api.maptiler.com https://*.tiles.mapbox.com",
+      // Images/fonts from self + data + blob + any https (tile sprites, glyphs, etc.)
       "img-src 'self' data: blob: https://*",
       "font-src 'self' data: https://*",
-      "connect-src 'self' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com",
-      "worker-src 'self' blob:",
+      // Tile/style/glyph/fetch endpoints used by various providers
+      "connect-src 'self' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://*.cartocdn.com https://*.tile.openstreetmap.org https://*.maptiler.com https://*.tiles.mapbox.com",
+      "worker-src 'self' blob:"
     ].join("; ");
+
     headers.set("Content-Security-Policy", csp);
-    return new Response(res.body, { ...res, headers });
+
+    // Return a new Response (don't spread Response objects)
+    return new Response(res.body, {
+      status: res.status,
+      statusText: res.statusText,
+      headers
+    });
   }
+
   return res;
 };
