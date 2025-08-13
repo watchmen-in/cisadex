@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import maplibregl, { Map } from 'maplibre-gl';
-import { STYLE_URL } from '../../map/config';
+import { getStyleUrl } from '../../lib/mapStyle';
 
 interface Props {
   entities: any[];
@@ -25,10 +25,10 @@ export default function AtlasMap({
     if (mapRef.current) return;
     if (!containerRef.current) return;
     const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: STYLE_URL,
-      center: [viewportState.longitude, viewportState.latitude],
-      zoom: viewportState.zoom,
+        container: containerRef.current,
+        style: getStyleUrl(),
+        center: [viewportState.longitude, viewportState.latitude],
+        zoom: viewportState.zoom,
     });
     mapRef.current = map;
 

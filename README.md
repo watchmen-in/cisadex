@@ -48,24 +48,35 @@ npm run build
    ```
 3. Set the build output directory to `dist`.
 4. No environment variables are required by default.
-5. **For single-page app routing (React Router)**, create a `_redirects` file in the `public` directory (or at the repo root if you don’t have a `public` folder) with:
+5. Ensure `base: "/"` is set in `vite.config.js` to avoid blank pages after deploy.
 
-   ```
-   /*    /index.html   200
-   ```
+## Map style & CSP
 
-6. Ensure `base: "/"` is set in `vite.config.js` to avoid blank pages after deploy.
+- The map style is controlled by `VITE_MAP_STYLE_URL`. If unset, CISAdex falls back to the public MapLibre demo style:
+  `https://demotiles.maplibre.org/style.json`.
 
-## Basemap style & CSP
+### Basemap Style & Content Security Policy (CSP)
 
-* Set the basemap style via the `VITE_MAP_STYLE_URL` environment variable.
-* If the style requires tokens or uses other domains, update the Content-Security-Policy in `functions/[[catchall]].ts` to allow them.
-* If the map is initially hidden (such as in tabs or drawers), call `map.resize()` when it becomes visible to prevent layout issues.
+- **Set the basemap style** via the `VITE_MAP_STYLE_URL` environment variable.  
+  If unset, CISAdex defaults to the public MapLibre demo style:  
+  [`https://demotiles.maplibre.org/style.json`](https://demotiles.maplibre.org/style.json)
+
+- **CSP Configuration**:  
+  If using MapTiler, Mapbox, Carto, or another hosting provider, ensure your Pages Function sets the Content Security Policy (CSP) to allow those domains in the following directives:
+  - `style-src`
+  - `img-src`
+  - `connect-src`  
+  See the file: `functions/[[catchall]].ts` for implementation details.
+
+- **Token or domain-specific styles**:  
+  If your map style requires access tokens or uses non-standard domains, be sure to **update your CSP policy** accordingly.
+
+- **Hidden tab rendering**:  
+  If the map is rendered inside a tab, drawer, or other element that is **initially hidden**, call `map.resize()` when it becomes visible to avoid layout issues.
 
 ## Troubleshooting
 
 * **Blank page after deploy**:
-
   * Set `base: "/"` in `vite.config.js` or `vite.config.ts`.
   * Verify `dist/` contains `index.html` after `npm run build`.
   * For MapLibre maps, import the CSS:

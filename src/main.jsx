@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "maplibre-gl/dist/maplibre-gl.css";
 import Home from "./pages/Home";
 import Browse from "./pages/Browse";
 import EntityPage from "./pages/EntityPage";
