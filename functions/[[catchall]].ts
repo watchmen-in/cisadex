@@ -2,14 +2,16 @@ export const onRequest: PagesFunction = async (ctx) => {
   const { request, next } = ctx;
   const url = new URL(request.url);
 
-  // Let APIs/Functions and assets resolve normally
-  if (url.pathname.startsWith("/api") || url.pathname.startsWith("/rss")) {
+  // Let Pages Functions/API and static assets resolve normally
+  if (
+    url.pathname.startsWith("/api") ||
+    url.pathname.startsWith("/rss")
+  ) {
     return next();
   }
 
-  // Try next (static asset or other route)
+  // Try next (static)
   let res = await next();
-
   const acceptsHTML =
     request.method === "GET" &&
     (request.headers.get("accept") || "").includes("text/html");
@@ -22,29 +24,20 @@ export const onRequest: PagesFunction = async (ctx) => {
   if (acceptsHTML) {
     const headers = new Headers(res.headers);
 
-    // Merged CSP from both branches
+    // Allow common basemap/style/tiles providers (tighten as needed)
     const csp = [
       "default-src 'self'",
       "script-src 'self'",
-      // Allow inline styles and common basemap/style hosts
-      "style-src 'self' 'unsafe-inline' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://*.cartocdn.com https://api.maptiler.com https://*.tiles.mapbox.com",
-      // Images/fonts from self + data + blob + any https (tile sprites, glyphs, etc.)
+      "style-src 'self' 'unsafe-inline' https://demotiles.maplibre.org https://*.cartocdn.com https://*.maptiler.com https://*.tiles.mapbox.com",
       "img-src 'self' data: blob: https://*",
       "font-src 'self' data: https://*",
-      // Tile/style/glyph/fetch endpoints used by various providers
-      "connect-src 'self' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://*.cartocdn.com https://*.tile.openstreetmap.org https://*.maptiler.com https://*.tiles.mapbox.com",
+      "connect-src 'self' https://demotiles.maplibre.org https://*.cartocdn.com https://*.maptiler.com https://*.tiles.mapbox.com https://*.openstreetmap.org",
       "worker-src 'self' blob:"
     ].join("; ");
-
     headers.set("Content-Security-Policy", csp);
 
-    // Return a new Response (don't spread Response objects)
-    return new Response(res.body, {
-      status: res.status,
-      statusText: res.statusText,
-      headers
-    });
+    return new Response(res.body, { ...res, headers });
   }
-
   return res;
+};
 };
