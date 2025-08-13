@@ -1,43 +1,53 @@
+// functions/[[catchall]].ts
 export const onRequest: PagesFunction = async (ctx) => {
   const { request, next } = ctx;
   const url = new URL(request.url);
 
-  // Let Pages Functions/API and static assets resolve normally
-  if (
-    url.pathname.startsWith("/api") ||
-    url.pathname.startsWith("/rss")
-  ) {
+  // Let APIs/Functions and assets resolve normally
+  if (url.pathname.startsWith("/api") || url.pathname.startsWith("/rss")) {
     return next();
   }
 
-  // Try next (static)
+  // Try to serve the requested asset/route first
   let res = await next();
+
+  // Only SPA-fallback for HTML navigations
   const acceptsHTML =
     request.method === "GET" &&
     (request.headers.get("accept") || "").includes("text/html");
 
-  // Fallback to SPA entry for client-routed paths
   if (res.status === 404 && acceptsHTML) {
+    // Serve the SPA entry for client-routed paths
     res = await fetch(new URL("/index.html", url.origin), request);
   }
 
+  // For HTML responses, set a CSP that allows your map host(s)
   if (acceptsHTML) {
     const headers = new Headers(res.headers);
 
-    // Allow common basemap/style/tiles providers (tighten as needed)
-const csp = [
-  "default-src 'self'",
-  "script-src 'self'",
-  "style-src 'self' 'unsafe-inline' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com https://*.tiles.mapbox.com",
-  "img-src 'self' data: blob: https://*",
-  "font-src 'self' data: https://*",
-  "connect-src 'self' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com https://*.tiles.mapbox.com",
-  "worker-src 'self' blob:"
-].join("; ");
-headers.set("Content-Security-Policy", csp);
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self'",
+      // allow inline styles and common basemap/style hosts (adjust as needed)
+      "style-src 'self' 'unsafe-inline' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com https://*.tiles.mapbox.com",
+      // allow raster/vector tiles, sprites, and data URIs
+      "img-src 'self' data: blob: https://*",
+      // allow font PBF/WOFF from hosts
+      "font-src 'self' data: https://*",
+      // allow the style.json and tiles endpoints to load
+      "connect-src 'self' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com https://*.tiles.mapbox.com",
+      // allow webworkers
+      "worker-src 'self' blob:"
+    ].join("; ");
 
-    return new Response(res.body, { ...res, headers });
+    headers.set("Content-Security-Policy", csp);
+
+    return new Response(res.body, {
+      status: res.status,
+      statusText: res.statusText,
+      headers
+    });
   }
+
   return res;
-};
 };
