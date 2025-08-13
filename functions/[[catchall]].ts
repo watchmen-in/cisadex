@@ -25,16 +25,16 @@ export const onRequest: PagesFunction = async (ctx) => {
     const headers = new Headers(res.headers);
 
     // Allow common basemap/style/tiles providers (tighten as needed)
-    const csp = [
-      "default-src 'self'",
-      "script-src 'self'",
-      "style-src 'self' 'unsafe-inline' https://demotiles.maplibre.org https://*.cartocdn.com https://*.maptiler.com https://*.tiles.mapbox.com",
-      "img-src 'self' data: blob: https://*",
-      "font-src 'self' data: https://*",
-      "connect-src 'self' https://demotiles.maplibre.org https://*.cartocdn.com https://*.maptiler.com https://*.tiles.mapbox.com https://*.openstreetmap.org",
-      "worker-src 'self' blob:"
-    ].join("; ");
-    headers.set("Content-Security-Policy", csp);
+   const csp = [
+  "default-src 'self'",
+  "script-src 'self'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https://*",
+  "connect-src 'self' https://demotiles.maplibre.org",
+  "font-src 'self' data: https://demotiles.maplibre.org https://*",
+  "worker-src 'self' blob:",
+].join("; ");
+headers.set("Content-Security-Policy", csp);
 
     return new Response(res.body, { ...res, headers });
   }
