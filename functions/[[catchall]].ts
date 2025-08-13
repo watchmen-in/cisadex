@@ -2,47 +2,39 @@ export const onRequest: PagesFunction = async (ctx) => {
   const { request, next } = ctx;
   const url = new URL(request.url);
 
-  // Let APIs and RSS pass
-  if (url.pathname.startsWith("/api") || url.pathname.startsWith("/rss")) {
-    return next();
-  }
-
-  // If the request targets a static file extension, don't SPA-fallback.
-  // Add types as needed (json, geojson, pbf, mvt, png, jpg, webp, svg, css, js, woff2, etc.)
-  const ext = url.pathname.split(".").pop()?.toLowerCase();
-  const staticExts = new Set([
-    "json","geojson","pbf","mvt","png","jpg","jpeg","webp","gif","svg",
-    "css","js","map","woff","woff2","ttf","otf","txt","ico"
-  ]);
-  if (ext && staticExts.has(ext)) {
-    return next();
-  }
-
-  // Try serving normally
-  let res = await next();
-
-  // HTML only?
   const acceptsHTML =
     request.method === "GET" &&
     (request.headers.get("accept") || "").includes("text/html");
 
-  // Fallback only for extensionless client routes
+  // 1) Always pass through APIs, RSS, and DATA (so JSON doesn’t get rewritten to index.html)
+  if (
+    url.pathname.startsWith("/api") ||
+    url.pathname.startsWith("/rss") ||
+    url.pathname.startsWith("/data")
+  ) {
+    return next();
+  }
+
+  // 2) Try static asset / normal route first
+  let res = await next();
+
+  // 3) For client-routed paths, fallback to SPA entry
   if (res.status === 404 && acceptsHTML) {
     res = await fetch(new URL("/index.html", url.origin), request);
   }
 
-  // (Optional) CSP — keep your existing domains in here
+  // 4) (Optional) add a CSP that allows your map style/tiles/fonts
   if (acceptsHTML) {
     const headers = new Headers(res.headers);
     const csp = [
       "default-src 'self'",
       "script-src 'self'",
-      // allow your basemap providers
-      "style-src 'self' 'unsafe-inline' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com",
+      // Allow external style JSON, sprites, glyphs, tiles, and images.
+      "style-src 'self' 'unsafe-inline' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com https://*.tiles.mapbox.com https://*.tile.openstreetmap.org",
       "img-src 'self' data: blob: https://*",
       "font-src 'self' data: https://*",
-      "connect-src 'self' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com",
-      "worker-src 'self' blob:"
+      "connect-src 'self' https://demotiles.maplibre.org https://basemaps.cartocdn.com https://api.maptiler.com https://*.tiles.mapbox.com https://*.tile.openstreetmap.org",
+      "worker-src 'self' blob:",
     ].join("; ");
     headers.set("Content-Security-Policy", csp);
     return new Response(res.body, { ...res, headers });
