@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import summary from '@/data/summary.json';
 
 interface Props {
   onSelect: (id: string) => void;
@@ -8,14 +9,8 @@ export default function SearchBox({ onSelect }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<any[]>([]);
-  const [summary, setSummary] = useState<any[]>([]);
   const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/summary.json`)
-      .then((r) => r.json())
-      .then(setSummary);
-  }, []);
+  const data = summary as any[];
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -44,7 +39,7 @@ export default function SearchBox({ onSelect }: Props) {
     }
     const q = query.toLowerCase();
     setResults(
-      summary.filter(
+      data.filter(
         (e) =>
           e.office_name.toLowerCase().includes(q) ||
           e.agency.toLowerCase().includes(q) ||
@@ -52,7 +47,7 @@ export default function SearchBox({ onSelect }: Props) {
       )
     );
     setActive(0);
-  }, [query, summary]);
+  }, [query, data]);
 
   return (
     <div className="relative w-full max-w-md">
