@@ -3,33 +3,34 @@ import MapView from '../components/MapView';
 import FilterPanel from '../components/FilterPanel';
 // RssFeedPanel now fetches RSS feeds via a server-side function
 // import RssFeedPanel from '../components/RssFeedPanel';
-import { loadOffices } from '../utils/dataLoader';
+import { loadEntities } from '../utils/dataLoader';
 
 export default function Home() {
-  const [offices, setOffices] = useState([]);
+  const [entities, setEntities] = useState([]);
+  // Defaults: show everything until user picks something
   const [filters, setFilters] = useState({ agency: [], role_type: [] });
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
 
   useEffect(() => {
-    loadOffices().then((data) => {
-      setOffices(data);
+    loadEntities().then((data) => {
+      setEntities(data);
       setLoading(false);
     });
   }, []);
 
-  const agencies = useMemo(() => [...new Set(offices.map((o) => o.agency))], [offices]);
-  const roles = useMemo(() => [...new Set(offices.map((o) => o.role_type))], [offices]);
+  const agencies = useMemo(() => [...new Set(entities.map(o => o.agency).filter(Boolean))], [entities]);
+  const roles = useMemo(() => [...new Set(entities.map(o => o.role_type).filter(Boolean))], [entities]);
 
-  const filteredData = useMemo(
-    () =>
-      offices.filter(
-        (o) =>
-          (filters.agency.length === 0 || filters.agency.includes(o.agency)) &&
-          (filters.role_type.length === 0 || filters.role_type.includes(o.role_type))
-      ),
-    [offices, filters]
-  );
+  const filteredData = useMemo(() => {
+    const agencyActive = filters.agency.length > 0;
+    const roleActive = filters.role_type.length > 0;
+    return entities.filter(o => {
+      const okAgency = !agencyActive || !o.agency || filters.agency.includes(o.agency);
+      const okRole = !roleActive || !o.role_type || filters.role_type.includes(o.role_type);
+      return okAgency && okRole;
+    });
+  }, [entities, filters]);
 
   if (loading) {
     return <div className="flex items-center justify-center h-full">Loading map...</div>;

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "a1",
+    "name": "Cybersecurity and Infrastructure Security Agency",
+    "lat": 38.8951,
+    "lng": -77.0364,
+    "website": "https://www.cisa.gov"
+  },
+  {
+    "id": "a2",
+    "name": "Federal Bureau of Investigation",
+    "lat": 38.8977,
+    "lng": -77.0365,
+    "website": "https://www.fbi.gov"
+  }
+]

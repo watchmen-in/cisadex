@@ -1,0 +1,16 @@
+[
+  {
+    "id": "i1",
+    "name": "Financial Services ISAC",
+    "lat": 38.905,
+    "lng": -77.042,
+    "website": "https://www.fsisac.com"
+  },
+  {
+    "id": "i2",
+    "name": "Electricity ISAC",
+    "lat": 38.8895,
+    "lng": -77.0353,
+    "website": "https://www.eisac.com"
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "l1",
+    "name": "Sandia National Laboratories",
+    "lat": 35.0522,
+    "lng": -106.541,
+    "website": "https://www.sandia.gov"
+  },
+  {
+    "id": "l2",
+    "name": "Los Alamos National Laboratory",
+    "lat": 35.844,
+    "lng": -106.287,
+    "website": "https://www.lanl.gov"
+  }
+]
