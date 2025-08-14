@@ -1,0 +1,3 @@
+# Optional redirect to temporarily land / on splash
+# Uncomment the following line to enable splash redirect
+#/\ /splash.html 200

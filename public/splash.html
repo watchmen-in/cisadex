@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CISAdex — Splash</title>
+  <meta name="theme-color" content="#0B0F17" />
+  <style>
+    :root{--bg:#0B0F17;--surface:#101826;--text:#E6EDF3;--muted:#A9B4C0;--accent:#22A2FF;--border:#1E2A3A}
+    *{box-sizing:border-box} html,body{height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    body{margin:0;overflow:hidden}
+    .hero{position:relative;inline-size:100%;block-size:100%}
+    .video-wrap{position:absolute;inset:0;overflow:hidden;background:radial-gradient(120% 120% at 50% 50%,#0b0f17 0%,#05070b 60%,#000 100%)}
+    .video-wrap video{position:absolute;inset:0;margin:auto;min-width:100%;min-height:100%;object-fit:cover;filter:contrast(1.03) saturate(1.05)}
+    .overlay-gradient{position:absolute;inset:0;background:
+      linear-gradient(to top,rgba(11,15,23,.85) 0%,rgba(11,15,23,.55) 35%,rgba(11,15,23,.25) 65%,rgba(11,15,23,.05) 100%),
+      radial-gradient(100% 100% at 50% 100%,rgba(0,0,0,.35),transparent 60%)}
+    .hud{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;padding:clamp(16px,3vw,48px)}
+    .brand-lockup{max-inline-size:1200px;inline-size:100%;display:grid;gap:clamp(12px,2.2vh,24px);justify-items:center;text-align:center}
+    .wordmark{font-weight:800;letter-spacing:.04em;font-size:clamp(28px,6vw,68px);line-height:1.05;text-transform:uppercase}
+    .tagline{color:var(--muted);font-size:clamp(14px,2.5vw,18px)}
+    .cta{pointer-events:auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .btn{appearance:none;border:1px solid var(--border);background:linear-gradient(180deg,#121a27,#0e1521);color:var(--text);padding:14px 18px;border-radius:10px;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}
+    .btn:hover{transform:translateY(-1px);border-color:#183045}
+    .btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(34,162,255,.35)}
+    .btn.primary{border-color:#184a67;box-shadow:inset 0 0 0 1px rgba(34,162,255,.25)}
+    .utility-bar{position:absolute;inset-inline:0;inset-block-end:0;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;color:var(--muted);backdrop-filter:blur(6px);background:linear-gradient(to top,rgba(0,0,0,.45),transparent)}
+    .link{color:var(--muted);text-decoration:none;border-bottom:1px dashed var(--border)}
+    @media (max-width:768px){.cta{gap:10px}}
+    @media (prefers-reduced-motion:reduce){.video-wrap video{animation:none;filter:none}}
+  </style>
+</head>
+<body>
+  <a class="link" href="#main" style="position:absolute;inset-inline-start:-9999px" id="skip">Skip to content</a>
+  <section class="hero" role="region" aria-label="CISAdex cinematic splash">
+    <div class="video-wrap" aria-hidden="true">
+      <!-- If using repo asset, keep this: -->
+      <video id="bgvid" muted playsinline autoplay loop preload="metadata"
+             poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==">
+        <source src="/assets/cisadex-splash.mp4" type="video/mp4">
+        <!-- If using CDN instead, replace with:
+        <source src="https://cdn.yourdomain.com/cisadex-splash.mp4" type="video/mp4">
+        -->
+      </video>
+      <div class="overlay-gradient"></div>
+    </div>
+    <div class="hud">
+      <div class="brand-lockup" id="main" tabindex="-1">
+        <div class="wordmark" aria-label="CISAdex">CISAdex</div>
+        <div class="tagline">Authoritative • Fast • Source-linked • Verifiable</div>
+        <div class="cta" role="group" aria-label="Primary actions">
+          <button class="btn primary" id="enterBtn" aria-label="Enter CISAdex (Enter)">Enter CISAdex ⏎</button>
+          <button class="btn" id="cmdkBtn" aria-label="Open command palette (Cmd/Ctrl+K)">Command-K ▱</button>
+        </div>
+      </div>
+    </div>
+    <div class="utility-bar">
+      <div><a class="link" href="/status.json" target="_blank" rel="noopener">Status</a> • <a class="link" href="/feeds/advisories.xml" target="_blank" rel="noopener">RSS</a></div>
+      <div><button class="btn" id="themeToggle">Theme</button></div>
+    </div>
+  </section>
+  <script>
+    const enterBtn=document.getElementById('enterBtn');
+    const themeBtn=document.getElementById('themeToggle');
+    const video=document.getElementById('bgvid');
+    function goHome(){document.body.style.transition='opacity .25s ease';document.body.style.opacity='0';setTimeout(()=>{window.location.href='/index.html'},180)}
+    enterBtn.addEventListener('click',goHome);
+    window.addEventListener('keydown',(e)=>{if(e.key==='Enter')goHome();const metaK=(e.key.toLowerCase()==='k'&&(e.metaKey||e.ctrlKey));if(metaK){e.preventDefault();openCmdK();}});
+    themeBtn.addEventListener('click',()=>{const html=document.documentElement;html.dataset.theme=html.dataset.theme==='dark'?'light':'dark';localStorage.setItem('theme',html.dataset.theme)});
+    const savedTheme=localStorage.getItem('theme'); if(savedTheme) document.documentElement.dataset.theme=savedTheme;
+    function openCmdK(){const choice=prompt('map, catalog, advisories, data, about');const map={map:'/map.html',catalog:'/catalog.html',advisories:'/advisories.html',data:'/data.html',about:'/about.html'};if(choice&&map[choice.trim().toLowerCase()])window.location.href=map[choice.trim().toLowerCase()];}
+    document.getElementById('cmdkBtn').addEventListener('click',openCmdK);
+    async function ensurePlay(){try{await video.play()}catch(_){}
+    }
+    if(document.visibilityState==='visible')ensurePlay();document.addEventListener('visibilitychange',ensurePlay);
+  </script>
+</body>
+</html>
