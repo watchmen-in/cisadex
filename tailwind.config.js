@@ -17,7 +17,6 @@ export default {
         text: "var(--text)",
         muted: "var(--muted)",
         border: "var(--border)",
-        accent2: "var(--accent)",
         focus: "var(--focus)",
         ok: "var(--ok)",
         warn: "var(--warn)",

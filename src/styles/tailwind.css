@@ -9,7 +9,8 @@
   --surface: #101826;
   --text: #E6EDF3;
   --muted: #A9B4C0;
-  --accent: #22A2FF;
+  --brand: #22A2FF;
+  --accent: #1FAD83;
   --border: #1E2A3A;
   color-scheme: dark;
 }
