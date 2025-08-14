@@ -1,10 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "./tokens.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Base palette (new) + bridge to legacy tokens */
 :root {
+  /* NEW base variables (from main) */
   --bg: #0B0F17;
   --surface: #101826;
   --text: #E6EDF3;
@@ -12,12 +15,35 @@
   --brand: #22A2FF;
   --accent: #1FAD83;
   --border: #1E2A3A;
+
+  /* Support vars used elsewhere */
+  --focus: var(--brand);
+  --ok: #16a34a;
+  --warn: #f59e0b;
+  --err: #ef4444;
+
+  /* BRIDGE legacy design tokens used by Tailwind config */
+  --bg-0: var(--bg);
+  --bg-1: var(--surface);
+  --bg-2: #0E1421; /* slightly deeper panel */
+  --text-1: var(--text);
+  --text-2: var(--muted);
+  --border-1: var(--border);
+
   color-scheme: dark;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
+
+code, pre { font-family: 'JetBrains Mono', monospace; }
 
 html, body, #root { height: 100%; background: var(--bg-0); color: var(--text-1); }
 * { box-sizing: border-box; }
 a { color: var(--brand); }
+.hover\:brighten:hover { filter: brightness(1.02); }
 .focus-ring:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
 /* Fluid type */
-:root { --step-0: clamp(14px, 1.2vw, 16px); --step-1: clamp(18px, 1.6vw, 20px); }
+:root {
+  --step-0: clamp(14px, 1.2vw, 16px);
+  --step-1: clamp(18px, 1.6vw, 20px);
+}
