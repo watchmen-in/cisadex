@@ -13,15 +13,17 @@ export default {
         b1: "var(--border-1)",
         brand: "var(--brand)",
         accent: "var(--accent)",
-        surface: "var(--surface)",
-        text: "var(--text)",
-        muted: "var(--muted)",
-        border: "var(--border)",
-        accent2: "var(--accent)",
         focus: "var(--focus)",
         ok: "var(--ok)",
         warn: "var(--warn)",
         err: "var(--err)",
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+      borderRadius: {
+        DEFAULT: '4px',
       },
       boxShadow: {
         'e1': "0 8px 24px rgba(0,0,0,.35)",

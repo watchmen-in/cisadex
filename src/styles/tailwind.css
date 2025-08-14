@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "./tokens.css";
 
 @tailwind base;
@@ -5,18 +6,18 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0B0F17;
-  --surface: #101826;
-  --text: #E6EDF3;
-  --muted: #A9B4C0;
-  --accent: #22A2FF;
-  --border: #1E2A3A;
   color-scheme: dark;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+code, pre {
+  font-family: 'JetBrains Mono', monospace;
 }
 
 html, body, #root { height: 100%; background: var(--bg-0); color: var(--text-1); }
 * { box-sizing: border-box; }
 a { color: var(--brand); }
+.hover\:brighten:hover { filter: brightness(1.02); }
 .focus-ring:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 /* Fluid type */
 :root { --step-0: clamp(14px, 1.2vw, 16px); --step-1: clamp(18px, 1.6vw, 20px); }
