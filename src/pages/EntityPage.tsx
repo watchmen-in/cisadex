@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import summary from '@/data/summary.json';
 
 export default function EntityPage() {
   const { id } = useParams();
   const [entity, setEntity] = useState<any | null>(null);
+  const data = summary as any[];
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/summary.json`)
-      .then((r) => r.json())
-      .then((data) => setEntity(data.find((e: any) => e.id === id)));
+    setEntity(data.find((e: any) => e.id === id));
   }, [id]);
 
   if (!entity) return <div className="p-4">Entity not found.</div>;

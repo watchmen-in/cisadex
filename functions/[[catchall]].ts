@@ -2,27 +2,36 @@ export const onRequest: PagesFunction = async (ctx) => {
   const { request, next } = ctx;
   const url = new URL(request.url);
 
-  // Let APIs, RSS, DATA, and ASSETS resolve normally
-  if (
-    url.pathname.startsWith("/api") ||
-    url.pathname.startsWith("/rss") ||
-    url.pathname.startsWith("/data") ||     // ✅ add this
-    url.pathname.startsWith("/assets")      // ✅ good to allow explicitly
-  ) {
+  // Let APIs/Functions and assets resolve
+  if (url.pathname.startsWith("/api") || url.pathname.startsWith("/rss")) {
     return next();
   }
 
-  // Try next (static asset or other route)
+  // Try static/asset first
   let res = await next();
+
   const acceptsHTML =
     request.method === "GET" &&
     (request.headers.get("accept") || "").includes("text/html");
 
-  // Fallback to SPA entry for client-routed paths
+  // SPA fallback
   if (res.status === 404 && acceptsHTML) {
     res = await fetch(new URL("/index.html", url.origin), request);
   }
 
-  // (keep your CSP here)
+  if (acceptsHTML) {
+    const headers = new Headers(res.headers);
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob:",
+      "connect-src 'self' https://demotiles.maplibre.org",
+      "font-src 'self' data: https://demotiles.maplibre.org",
+      "worker-src 'self' blob:"
+    ].join('; ');
+    headers.set("Content-Security-Policy", csp);
+    return new Response(res.body, { headers, status: res.status, statusText: res.statusText });
+  }
   return res;
 };

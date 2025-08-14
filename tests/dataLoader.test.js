@@ -1,37 +1,8 @@
 import { loadOffices } from '../src/utils/dataLoader.js';
-import { expect, test, vi } from 'vitest';
+import offices from '../src/data/offices.json';
+import { expect, test } from 'vitest';
 
-test('loadOffices returns parsed JSON', async () => {
-  const mockData = [{ id: 1, name: 'Office' }];
-  global.fetch = vi.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve(mockData),
-    })
-  );
-
+test('loadOffices returns offices data', async () => {
   const data = await loadOffices();
-  expect(data).toEqual(mockData);
-});
-
-test('loadOffices uses BASE_URL for fetch path', async () => {
-  const fetchMock = vi.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve([]),
-    })
-  );
-  global.fetch = fetchMock;
-
-  await loadOffices();
-
-  expect(fetchMock).toHaveBeenCalledWith(
-    `${import.meta.env.BASE_URL}data/offices.json`
-  );
-});
-
-test('loadOffices returns empty array on fetch failure', async () => {
-  global.fetch = vi.fn(() => Promise.reject(new Error('Network error')));
-  const data = await loadOffices();
-  expect(data).toEqual([]);
+  expect(data).toEqual(offices);
 });

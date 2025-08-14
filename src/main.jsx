@@ -6,7 +6,7 @@ import Browse from "./pages/Browse";
 import EntityPage from "./pages/EntityPage";
 import Compare from "./pages/Compare";
 import AboutData from "./pages/AboutData";
-import "./index.css";
+import "./styles/tailwind.css";
 import ErrorBoundary from "./components/ErrorBoundary";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
