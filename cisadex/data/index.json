@@ -1,6 +1,7 @@
 {
   "items": [
     {
+      "icon": "respond.svg",
       "title": "Report a Cyber Incident",
       "category": "respond",
       "url": "https://www.cisa.gov/report",
@@ -14,6 +15,7 @@
       ]
     },
     {
+      "icon": "respond.svg",
       "title": "Federal Incident Response Playbook",
       "category": "respond",
       "url": "https://www.cisa.gov/resources-tools/resources/federal-incident-response-playbook",
@@ -27,6 +29,7 @@
       ]
     },
     {
+      "icon": "respond.svg",
       "title": "Ransomware Response Checklist",
       "category": "respond",
       "url": "https://www.stopransomware.gov/response",
@@ -39,10 +42,11 @@
       ]
     },
     {
+      "icon": "respond.svg",
       "title": "ICS-CERT Incident Reporting",
       "category": "respond",
       "url": "https://www.cisa.gov/ics",
-      "meta": "Report OT/ICS incidents directly to CISA\u2019s ICS team for assistance.",
+      "meta": "Report OT/ICS incidents directly to CISA’s ICS team for assistance.",
       "tags": [
         "ICS",
         "OT",
@@ -51,6 +55,7 @@
       ]
     },
     {
+      "icon": "prepare.svg",
       "title": "Cybersecurity Performance Goals (CPGs)",
       "category": "prepare",
       "url": "https://www.cisa.gov/cpg",
@@ -67,6 +72,7 @@
       ]
     },
     {
+      "icon": "prepare.svg",
       "title": "CISA Cyber Hygiene Services",
       "category": "prepare",
       "url": "https://www.cisa.gov/cyber-hygiene-services",
@@ -81,6 +87,7 @@
       ]
     },
     {
+      "icon": "prepare.svg",
       "title": "Tabletop Exercise Packages (CTEP)",
       "category": "prepare",
       "url": "https://www.cisa.gov/resources-tools/resources/tabletop-exercises",
@@ -94,6 +101,7 @@
       ]
     },
     {
+      "icon": "prepare.svg",
       "title": "Infrastructure Dependency/Interdependency Planning",
       "category": "prepare",
       "url": "https://www.cisa.gov/resources-tools/resources/dependency-planning",
@@ -108,6 +116,7 @@
       ]
     },
     {
+      "icon": "protect.svg",
       "title": "Known Exploited Vulnerabilities (KEV) Catalog",
       "category": "protect",
       "url": "https://www.cisa.gov/kev",
@@ -121,6 +130,7 @@
       ]
     },
     {
+      "icon": "protect.svg",
       "title": "Shields Up",
       "category": "protect",
       "url": "https://www.cisa.gov/shields-up",
@@ -134,6 +144,7 @@
       ]
     },
     {
+      "icon": "protect.svg",
       "title": "Stop Ransomware Guidance Center",
       "category": "protect",
       "url": "https://www.stopransomware.gov/",
@@ -147,6 +158,7 @@
       ]
     },
     {
+      "icon": "protect.svg",
       "title": "Secure by Design / Default Principles",
       "category": "protect",
       "url": "https://www.cisa.gov/securebydesign",
@@ -160,6 +172,7 @@
       ]
     },
     {
+      "icon": "inform.svg",
       "title": "CISA Alerts & Joint Cybersecurity Advisories",
       "category": "inform",
       "url": "https://www.cisa.gov/news-events/cybersecurity-advisories",
@@ -172,6 +185,7 @@
       ]
     },
     {
+      "icon": "inform.svg",
       "title": "ICS Advisories (ICSA)",
       "category": "inform",
       "url": "https://www.cisa.gov/ics/advisories",
@@ -185,6 +199,7 @@
       ]
     },
     {
+      "icon": "inform.svg",
       "title": "Top Routinely Exploited Vulnerabilities",
       "category": "inform",
       "url": "https://www.cisa.gov/resources-tools/reports/routinely-exploited-vulnerabilities",
@@ -198,6 +213,7 @@
       ]
     },
     {
+      "icon": "inform.svg",
       "title": "Emergency Directives & Binding Operational Directives",
       "category": "inform",
       "url": "https://www.cisa.gov/directives",
@@ -212,6 +228,7 @@
       ]
     },
     {
+      "icon": "learn.svg",
       "title": "CISA Training & Exercises Catalog",
       "category": "learn",
       "url": "https://www.cisa.gov/training-exercises",
@@ -227,6 +244,7 @@
       ]
     },
     {
+      "icon": "learn.svg",
       "title": "ICS Security Training (INL/ICS-Range programs linkouts)",
       "category": "learn",
       "url": "https://www.cisa.gov/ics/training",
@@ -241,6 +259,7 @@
       ]
     },
     {
+      "icon": "learn.svg",
       "title": "Phishing & Social Engineering Awareness",
       "category": "learn",
       "url": "https://www.cisa.gov/resources-tools/resources/phishing-awareness",
@@ -253,6 +272,7 @@
       ]
     },
     {
+      "icon": "learn.svg",
       "title": "Incident Response Tabletop Library",
       "category": "learn",
       "url": "https://www.cisa.gov/resources-tools/resources/incident-response-tabletops",
@@ -266,6 +286,7 @@
       ]
     },
     {
+      "icon": "partner.svg",
       "title": "Join the Joint Cyber Defense Collaborative (JCDC)",
       "category": "partner",
       "url": "https://www.cisa.gov/jcdc",
@@ -279,6 +300,7 @@
       ]
     },
     {
+      "icon": "partner.svg",
       "title": "Sector Councils (SCC/GCC) Overview",
       "category": "partner",
       "url": "https://www.cisa.gov/partner-councils",
@@ -291,6 +313,7 @@
       ]
     },
     {
+      "icon": "partner.svg",
       "title": "Information Sharing Programs (AIS/MS-ISAC/E-ISAC linkouts)",
       "category": "partner",
       "url": "https://www.cisa.gov/information-sharing",
@@ -305,6 +328,7 @@
       ]
     },
     {
+      "icon": "about.svg",
       "title": "About CISA",
       "category": "about",
       "url": "https://www.cisa.gov/about",
@@ -316,6 +340,7 @@
       ]
     },
     {
+      "icon": "about.svg",
       "title": "Critical Infrastructure Sectors & SRMAs",
       "category": "about",
       "url": "https://www.cisa.gov/topics/critical-infrastructure-security-and-resilience/critical-infrastructure-sectors",
@@ -327,6 +352,7 @@
       ]
     },
     {
+      "icon": "about.svg",
       "title": "Publications & Guidance Library",
       "category": "about",
       "url": "https://www.cisa.gov/resources-tools",

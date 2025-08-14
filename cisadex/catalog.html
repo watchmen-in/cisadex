@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CISA Catalog</title>
+  <link rel="icon" href="assets/cisa.svg">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <img src="assets/cisa.svg" alt="CISA" class="logo" />
+      <h1>CISA Catalog</h1>
+    </div>
+    <input id="search" type="search" placeholder="Search CISA (programs, sectors, SCC/GCC, JCDC, docs)..." aria-label="Search" />
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Primary">
+    <button class="tab active" data-panel="respond">Respond</button>
+    <button class="tab" data-panel="prepare">Prepare</button>
+    <button class="tab" data-panel="protect">Protect</button>
+    <button class="tab" data-panel="inform">Inform</button>
+    <button class="tab" data-panel="learn">Learn</button>
+    <button class="tab" data-panel="partner">Partner</button>
+    <button class="tab" data-panel="about">About CISA</button>
+  </nav>
+
+  <main id="content">
+    <section id="respond" class="panel active" tabindex="0" aria-labelledby="tab-respond">
+      <h2>Respond</h2>
+      <p>Incident response, reporting, and on-call resources.</p>
+      <div class="grid" data-category="respond"></div>
+    </section>
+
+    <section id="prepare" class="panel" tabindex="0" aria-labelledby="tab-prepare">
+      <h2>Prepare</h2>
+      <p>Guides, playbooks, exercises, and critical infrastructure resilience.</p>
+      <div class="grid" data-category="prepare"></div>
+    </section>
+
+    <section id="protect" class="panel" tabindex="0" aria-labelledby="tab-protect">
+      <h2>Protect</h2>
+      <p>Cyber hygiene services, vulnerability management, KEV catalog, advisories.</p>
+      <div class="grid" data-category="protect"></div>
+    </section>
+
+    <section id="inform" class="panel" tabindex="0" aria-labelledby="tab-inform">
+      <h2>Inform</h2>
+      <p>Alerts, advisories, blog posts, press releases, ICS/OT advisories.</p>
+      <div class="grid" data-category="inform"></div>
+    </section>
+
+    <section id="learn" class="panel" tabindex="0" aria-labelledby="tab-learn">
+      <h2>Learn</h2>
+      <p>Training courses, awareness materials, and tabletop exercises.</p>
+      <div class="grid" data-category="learn"></div>
+    </section>
+
+    <section id="partner" class="panel" tabindex="0" aria-labelledby="tab-partner">
+      <h2>Partner</h2>
+      <p>JCDC, SCC/GCC, ISACs/ISAOs, and public-private programs.</p>
+      <div class="grid" data-category="partner"></div>
+    </section>
+
+    <section id="about" class="panel" tabindex="0" aria-labelledby="tab-about">
+      <h2>About CISA</h2>
+      <p>What CISA is, how it’s organized, and where to go next.</p>
+      <div class="grid" data-category="about"></div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span>Built for fast navigation of public CISA content.</span>
+    <span id="status"></span>
+  </footer>
+
+  <template id="card-template">
+    <a class="card" target="_blank" rel="noopener">
+      <div class="card-title"></div>
+      <div class="card-meta"></div>
+    </a>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>

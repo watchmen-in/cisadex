@@ -71,6 +71,7 @@ h1{font-size:1.2rem; margin:0; letter-spacing:.3px}
 }
 .card{
   display:block;
+  position:relative;
   background:linear-gradient(180deg, #111a2d, #0d1526);
   border:1px solid var(--border);
   border-radius:14px;
@@ -82,6 +83,13 @@ h1{font-size:1.2rem; margin:0; letter-spacing:.3px}
 .card:hover{border-color:var(--accent)}
 .card-title{font-weight:600; margin-bottom:.25rem}
 .card-meta{color:var(--muted); font-size:.92rem}
+.card-icon{
+  position:absolute;
+  top:1rem;
+  right:1rem;
+  width:32px;
+  height:32px;
+}
 .app-footer{
   padding:1rem clamp(1rem, 3vw, 2rem);
   border-top:1px solid var(--border);
