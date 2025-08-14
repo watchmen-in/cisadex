@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: "class",
-  content: ["./index.html","./src/**/*.{js,ts,jsx,tsx}"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
@@ -13,6 +13,10 @@ export default {
         b1: "var(--border-1)",
         brand: "var(--brand)",
         accent: "var(--accent)",
+        surface: "var(--surface)",
+        text: "var(--text)",
+        muted: "var(--muted)",
+        border: "var(--border)",
         focus: "var(--focus)",
         ok: "var(--ok)",
         warn: "var(--warn)",
@@ -26,10 +30,10 @@ export default {
         DEFAULT: '4px',
       },
       boxShadow: {
-        'e1': "0 8px 24px rgba(0,0,0,.35)",
-        'e2': "0 12px 32px rgba(0,0,0,.45)",
-      }
-    }
+        e1: "0 8px 24px rgba(0,0,0,.35)",
+        e2: "0 12px 32px rgba(0,0,0,.45)",
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 }
