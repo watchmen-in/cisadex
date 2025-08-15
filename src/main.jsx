@@ -12,7 +12,10 @@ import Advisories from "./pages/Advisories";
 import Research from "./pages/Research";
 import DataPortal from "./pages/DataPortal";
 import Feeds from "./pages/Feeds";
+import SimpleFeeds from "./pages/SimpleFeeds";
 import EnhancedDashboard from "./pages/EnhancedDashboard";
+import FeedsComparison from "./components/FeedsComparison";
+import FeedsImprovementSummary from "./components/FeedsImprovementSummary";
 import Splash from "./pages/Splash";
 import IncidentReport from "./pages/IncidentReport";
 import FederalInfrastructureMap from "./pages/FederalInfrastructureMap.tsx";
@@ -64,6 +67,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/research" element={<Navigate to="/dashboard#intelligence" replace />} />
             <Route path="/data" element={<Navigate to="/dashboard#intelligence" replace />} />
             <Route path="/feeds" element={<Feeds />} />
+            <Route path="/feeds-new" element={<SimpleFeeds />} />
+            <Route path="/feeds-comparison" element={<FeedsComparison />} />
+            <Route path="/feeds-summary" element={<FeedsImprovementSummary />} />
             <Route path="/threat-intelligence" element={<Feeds />} />
             <Route path="/federal-infrastructure" element={<FederalInfrastructureMap />} />
             <Route path="/report-incident" element={<IncidentReport />} />
