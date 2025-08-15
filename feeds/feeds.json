@@ -5,6 +5,8 @@
   {"id":"fbi-cyber","name":"FBI Cyber News","type":"rss","url":"https://www.fbi.gov/investigate/cyber/news/@@rss.xml","source_type":"gov"},
   {"id":"ncsc-uk","name":"NCSC-UK News","type":"rss","url":"https://www.ncsc.gov.uk/api/1/services/v1/news.rss","source_type":"gov"},
   {"id":"cert-eu","name":"CERT-EU News","type":"rss","url":"https://cert.europa.eu/publications/security-advisories/rss.xml","source_type":"gov"},
+  {"id":"cisa-kev","name":"CISA Known Exploited Vulnerabilities","type":"json","url":"https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json","source_type":"gov","priority":1,"parser":"kev"},
+  {"id":"nist-nvd","name":"NIST NVD Recent CVEs","type":"api","url":"https://services.nvd.nist.gov/rest/json/cves/2.0","source_type":"gov","priority":1,"parser":"nvd"},
 
   {"id":"msrc-blog","name":"Microsoft MSRC Blog","type":"rss","url":"https://msrc.microsoft.com/blog/feed/","source_type":"vendor"},
   {"id":"oracle","name":"Oracle Security Alerts","type":"rss","url":"https://www.oracle.com/security-alerts/rss-blogs.xml","source_type":"vendor"},

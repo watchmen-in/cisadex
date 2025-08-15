@@ -1,143 +1,63 @@
-// Comprehensive Cybersecurity Feed Manager
+// Unified Cybersecurity Feed Manager
 import { fetchWithProxy } from '../utils/feedProxy';
 
 export class CyberFeedManager {
   constructor() {
-    this.feeds = this.getAllFeeds();
+    this.feeds = [];
     this.cache = new Map();
     this.failedFeeds = new Set();
     this.lastUpdate = new Map();
+    this.loadFeeds();
   }
 
-  getAllFeeds() {
+  async loadFeeds() {
+    try {
+      const response = await fetch('/feeds/feeds.json');
+      const feedsConfig = await response.json();
+      
+      this.feeds = feedsConfig.map(feed => ({
+        id: feed.id,
+        name: feed.name,
+        url: feed.url,
+        type: feed.type?.toUpperCase() || 'RSS',
+        category: this.mapSourceType(feed.source_type),
+        priority: feed.priority || this.getDefaultPriority(feed.source_type),
+        refreshInterval: this.getRefreshInterval(feed.priority),
+        parser: feed.parser
+      }));
+    } catch (error) {
+      console.error('Failed to load feeds configuration:', error);
+      this.feeds = this.getDefaultFeeds();
+    }
+  }
+
+  mapSourceType(sourceType) {
+    const mapping = {
+      'gov': 'government',
+      'vendor': 'vendor', 
+      'research': 'threat_intel',
+      'news': 'news'
+    };
+    return mapping[sourceType] || 'other';
+  }
+
+  getDefaultPriority(sourceType) {
+    return sourceType === 'gov' ? 1 : sourceType === 'vendor' ? 2 : 3;
+  }
+
+  getRefreshInterval(priority) {
+    return priority === 1 ? 1800000 : 3600000; // 30min for priority 1, 1hr for others
+  }
+
+  getDefaultFeeds() {
     return [
-      // Government/CERT Feeds (High Priority)
       {
-        name: "CISA KEV",
-        url: "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json",
-        type: "JSON",
-        category: "government",
-        priority: 1,
-        refreshInterval: 3600000, // 1 hour
-        parser: "kev"
-      },
-      {
-        name: "CISA Cybersecurity Advisories",
-        url: "https://www.cisa.gov/cybersecurity-advisories/rss.xml",
-        type: "RSS",
-        category: "government",
+        id: 'cisa-current',
+        name: 'CISA Current Activity',
+        url: 'https://www.cisa.gov/uscert/ncas/current-activity.xml',
+        type: 'RSS',
+        category: 'government',
         priority: 1
-      },
-      {
-        name: "CISA ICS Advisories",
-        url: "https://www.cisa.gov/ics/advisories/ics-rss.xml",
-        type: "RSS",
-        category: "government",
-        priority: 1
-      },
-      {
-        name: "US-CERT Alerts",
-        url: "https://us-cert.cisa.gov/ncas/alerts.xml",
-        type: "RSS",
-        category: "government",
-        priority: 1
-      },
-      
-      // Vendor Security Advisories
-      {
-        name: "Microsoft MSRC",
-        url: "https://msrc.microsoft.com/update-guide/rss",
-        type: "RSS",
-        category: "vendor",
-        priority: 2
-      },
-      {
-        name: "Cisco PSIRT",
-        url: "https://tools.cisco.com/security/center/psirtrss20/CiscoSecurityAdvisory.xml",
-        type: "RSS",
-        category: "vendor",
-        priority: 2
-      },
-      
-      // Threat Intelligence & Research
-      {
-        name: "Cisco Talos Blog",
-        url: "https://blog.talosintelligence.com/feeds/posts/default",
-        type: "RSS",
-        category: "threat_intel",
-        priority: 2
-      },
-      {
-        name: "Unit 42 Research",
-        url: "https://unit42.paloaltonetworks.com/feed/",
-        type: "RSS",
-        category: "threat_intel",
-        priority: 2
-      },
-      {
-        name: "CrowdStrike Blog",
-        url: "https://www.crowdstrike.com/blog/feed/",
-        type: "RSS",
-        category: "threat_intel",
-        priority: 2
-      },
-      {
-        name: "Mandiant Blog",
-        url: "https://www.mandiant.com/resources/blog/rss.xml",
-        type: "RSS",
-        category: "threat_intel",
-        priority: 2
-      },
-      
-      // Cybersecurity News
-      {
-        name: "Krebs on Security",
-        url: "https://krebsonsecurity.com/feed/",
-        type: "RSS",
-        category: "news",
-        priority: 3
-      },
-      {
-        name: "The Hacker News",
-        url: "https://feeds.feedburner.com/TheHackersNews",
-        type: "RSS",
-        category: "news",
-        priority: 3
-      },
-      {
-        name: "SecurityWeek",
-        url: "https://feeds.feedburner.com/Securityweek",
-        type: "RSS",
-        category: "news",
-        priority: 3
-      },
-      {
-        name: "Dark Reading",
-        url: "https://www.darkreading.com/rss.xml",
-        type: "RSS",
-        category: "news",
-        priority: 3
-      },
-      {
-        name: "BleepingComputer",
-        url: "https://www.bleepingcomputer.com/feed/",
-        type: "RSS",
-        category: "news",
-        priority: 3
-      },
-      {
-        name: "Ars Technica Security",
-        url: "https://feeds.arstechnica.com/arstechnica/security",
-        type: "RSS",
-        category: "news",
-        priority: 3
-      },
-      {
-        name: "Threatpost",
-        url: "https://threatpost.com/feed/",
-        type: "RSS",
-        category: "news",
-        priority: 3
       }
     ];
   }
@@ -200,6 +120,11 @@ export class CyberFeedManager {
           return this.parseKEV(data, feed);
         }
         return this.parseJSON(data, feed);
+      case 'API':
+        if (feed.parser === 'nvd') {
+          return this.parseNVD(data, feed);
+        }
+        return this.parseJSON(data, feed);
       default:
         return [];
     }
@@ -260,6 +185,49 @@ export class CyberFeedManager {
       console.error(`Error parsing KEV data:`, error);
       return [];
     }
+  }
+
+  parseNVD(data, feed) {
+    try {
+      const vulnerabilities = data.vulnerabilities || [];
+      
+      return vulnerabilities.slice(0, 20).map(vuln => {
+        const cve = vuln.cve;
+        const cveId = cve.id;
+        const description = cve.descriptions?.find(d => d.lang === 'en')?.value || 'No description available';
+        const severity = this.extractNVDSeverity(cve.metrics);
+        
+        return {
+          id: `nvd-${cveId}`,
+          title: `${cveId}: ${description.substring(0, 100)}...`,
+          description: description.substring(0, 300),
+          link: `https://nvd.nist.gov/vuln/detail/${cveId}`,
+          date: new Date(cve.published),
+          source: feed.name,
+          category: feed.category,
+          cve: cveId,
+          severity: severity,
+          cvss: this.extractCVSS(cve.metrics)
+        };
+      });
+    } catch (error) {
+      console.error(`Error parsing NVD data:`, error);
+      return [];
+    }
+  }
+
+  extractNVDSeverity(metrics) {
+    if (metrics?.cvssMetricV31?.[0]?.cvssData?.baseScore >= 9.0) return 'CRITICAL';
+    if (metrics?.cvssMetricV31?.[0]?.cvssData?.baseScore >= 7.0) return 'HIGH';
+    if (metrics?.cvssMetricV31?.[0]?.cvssData?.baseScore >= 4.0) return 'MEDIUM';
+    if (metrics?.cvssMetricV31?.[0]?.cvssData?.baseScore >= 0.1) return 'LOW';
+    return null;
+  }
+
+  extractCVSS(metrics) {
+    return metrics?.cvssMetricV31?.[0]?.cvssData?.baseScore || 
+           metrics?.cvssMetricV30?.[0]?.cvssData?.baseScore || 
+           metrics?.cvssMetricV2?.[0]?.cvssData?.baseScore || null;
   }
 
   parseJSON(data, feed) {

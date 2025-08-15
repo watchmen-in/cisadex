@@ -51,22 +51,80 @@ function normalizeFeed(xmlObj, fallbackTitle) {
   return { title: fallbackTitle, items: [] };
 }
 
+async function loadFeedsConfig() {
+  try {
+    const response = await fetch('/feeds/feeds.json');
+    feedsConfig = await response.json();
+    return feedsConfig.filter(feed => feed.source_type === 'gov' && feed.type === 'rss').slice(0, 10);
+  } catch (error) {
+    console.error('Failed to load feeds config:', error);
+    return fallbackSources;
+  }
+}
+
 export const onRequestGet = async () => {
-  const results = await Promise.all(
+  const sources = await loadFeedsConfig();
+  
+  const results = await Promise.allSettled(
     sources.map(async (src) => {
       try {
-        const resp = await fetch(src.url, { headers: { "User-Agent": "cisadex/1.0" } });
-        if (!resp.ok) return { title: src.title, items: [] };
+        const headers = { 
+          "User-Agent": "CISAdx/2.0 (Federal Cybersecurity Dashboard)",
+          "Accept": "application/rss+xml, application/xml, text/xml, */*"
+        };
+        
+        const resp = await fetch(src.url, { 
+          headers,
+          timeout: 10000 // 10 second timeout
+        });
+        
+        if (!resp.ok) {
+          console.warn(`Failed to fetch ${src.name || src.title}: ${resp.status}`);
+          return { title: src.name || src.title, items: [], error: `HTTP ${resp.status}` };
+        }
+        
         const xml = await resp.text();
         const obj = parser.parse(xml);
-        return normalizeFeed(obj, src.title);
-      } catch {
-        return { title: src.title, items: [] };
+        const normalized = normalizeFeed(obj, src.name || src.title);
+        
+        return {
+          ...normalized,
+          source_id: src.id,
+          category: src.source_type,
+          priority: src.priority || 1,
+          last_updated: new Date().toISOString()
+        };
+      } catch (error) {
+        console.error(`Error processing ${src.name || src.title}:`, error);
+        return { 
+          title: src.name || src.title, 
+          items: [], 
+          error: error.message,
+          source_id: src.id
+        };
       }
     })
   );
 
-  return new Response(JSON.stringify(results), {
-    headers: { "content-type": "application/json" }
+  const processedResults = results
+    .filter(r => r.status === 'fulfilled')
+    .map(r => r.value)
+    .filter(feed => feed.items && feed.items.length > 0);
+
+  const healthInfo = {
+    total_feeds: sources.length,
+    successful_feeds: processedResults.length,
+    failed_feeds: sources.length - processedResults.length,
+    last_check: new Date().toISOString()
+  };
+
+  return new Response(JSON.stringify({
+    feeds: processedResults,
+    health: healthInfo
+  }), {
+    headers: { 
+      "content-type": "application/json",
+      "cache-control": "public, max-age=300" // 5 minute cache
+    }
   });
 };
