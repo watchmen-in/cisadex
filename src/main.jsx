@@ -20,15 +20,9 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
 import { setupCSPReporting } from "./utils/security";
 import { useSecurityInit } from "./hooks/useSecurityInit";
-import { monitoring } from "./utils/monitoring";
 
 // Initialize security features globally
 setupCSPReporting();
-
-// Expose monitoring globally for error boundary
-if (typeof window !== 'undefined') {
-  window.monitoring = monitoring;
-}
 
 // Security component wrapper
 function SecurityWrapper({ children }) {
