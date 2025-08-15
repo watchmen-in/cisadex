@@ -7,11 +7,18 @@ import MapView from "../components/MapView";
 import RssPanel from "../components/RssPanel";
 import ResourcePanel from "../components/ResourcePanel";
 import FeedList from "../components/Feeds/FeedList";
+import ThreatVisualization from "../components/ThreatIntelligence/ThreatVisualization";
+import IncidentDashboard from "../components/IncidentResponse/IncidentDashboard";
+import AdvancedSearch from "../components/Search/AdvancedSearch";
+import UserExperienceEnhancements from "../components/UI/UserExperienceEnhancements";
 import { loadOffices } from "../utils/dataLoader";
 
 function TabBar({ tab, onChange }) {
   const tabs = [
     { id: "map", label: "Map" },
+    { id: "threats", label: "Threat Intel" },
+    { id: "incidents", label: "Incidents" },
+    { id: "search", label: "Search" },
     { id: "rss", label: "RSS" },
     { id: "feeds", label: "Feeds" },
     { id: "resources", label: "Resources" },
@@ -109,6 +116,9 @@ export default function Dashboard() {
                     </div>
                   </div>
                 )}
+                {tab === "threats" && <div className="fade-enter"><ThreatVisualization /></div>}
+                {tab === "incidents" && <div className="fade-enter"><IncidentDashboard /></div>}
+                {tab === "search" && <div className="fade-enter"><AdvancedSearch /></div>}
                 {tab === "rss" && <div className="fade-enter"><RssPanel /></div>}
                 {tab === "feeds" && <div className="fade-enter"><FeedList filters={{}} /></div>}
                 {tab === "resources" && <div className="fade-enter"><ResourcePanel /></div>}
@@ -123,6 +133,7 @@ export default function Dashboard() {
       >
         Filters
       </button>
+      <UserExperienceEnhancements />
     </div>
   );
 }

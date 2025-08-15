@@ -1,5 +1,5 @@
 import { threatIntelCache, infrastructureCache, feedCache, ProgressiveDataLoader } from './cache';
-import { performance } from './performance';
+// Note: Using global performance API directly
 
 /**
  * Dashboard-specific performance optimization utilities
