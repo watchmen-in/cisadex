@@ -7,9 +7,12 @@ import FilterChips from '../components/filters/FilterChips';
 import useUrlState from '../hooks/useUrlState';
 import { Filters } from '../constants/taxonomy';
 import { validateEntities } from '../utils/validateEntity';
+import { fetchWithCache } from '../utils/cache';
 
 export default function Browse() {
   const [summary, setSummary] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [filters, setFilters] = useState<Filters>({});
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [drawerEntity, setDrawerEntity] = useState<any | null>(null);
@@ -21,14 +24,61 @@ export default function Browse() {
   const [showFilters, setShowFilters] = useState(true);
   const [urlState, setUrlState] = useUrlState();
 
-  // load data
+  // load data with caching and proper error handling
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/summary.json`)
-      .then((r) => r.json())
-      .then((data) => {
-        validateEntities(data);
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const data = await fetchWithCache<any[]>(
+          `${import.meta.env.BASE_URL}data/summary.json`,
+          {
+            cacheTtl: 10 * 60 * 1000, // Cache for 10 minutes
+            retries: 3,
+            retryDelay: 1000,
+          }
+        );
+        
+        if (!Array.isArray(data)) {
+          throw new Error('Invalid data format: expected array');
+        }
+        
+        const validation = validateEntities(data);
+        if (!validation.valid) {
+          if (import.meta.env.DEV) {
+            console.warn('Data validation warnings:', validation.errors);
+          } else {
+            // In production, log validation issues but don't fail
+            console.warn(`Data validation found ${validation.errors.length} issues`);
+          }
+        }
+        
         setSummary(data);
-      });
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to load data';
+        setError(errorMessage);
+        console.error('Data loading error:', err);
+        
+        // Attempt to use stale cache data as fallback
+        try {
+          const { cache } = await import('../utils/cache');
+          const cacheKey = `fetch:${import.meta.env.BASE_URL}data/summary.json:${JSON.stringify({})}`;
+          const staleData = cache.get<any[]>(cacheKey);
+          if (staleData) {
+            console.warn('Using stale cached data as fallback');
+            setSummary(staleData);
+            setError(`Using cached data: ${errorMessage}`);
+          }
+        } catch (cacheError) {
+          console.warn('Failed to retrieve fallback data:', cacheError);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, []);
 
   // apply URL state on first render
@@ -81,20 +131,89 @@ export default function Browse() {
     setDrawerEntity(ent || null);
   }, [selectedId, summary]);
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="h-screen flex flex-col">
+        <header className="p-2 shadow flex items-center gap-4">
+          <h1 className="font-semibold">CISAdex</h1>
+        </header>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+            <p className="text-gray-600">Loading cybersecurity data...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state with retry option
+  if (error) {
+    return (
+      <div className="h-screen flex flex-col">
+        <header className="p-2 shadow flex items-center gap-4">
+          <h1 className="font-semibold">CISAdex</h1>
+        </header>
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center max-w-md mx-auto p-6">
+            <div className="text-red-500 text-5xl mb-4">⚠️</div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">Failed to Load Data</h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
   <div className="h-screen flex flex-col">
-    <header className="p-2 shadow flex items-center gap-4">
+    <a href="#main-content" className="skip-link sr-only focus:not-sr-only">
+      Skip to main content
+    </a>
+    
+    <header className="p-2 shadow flex items-center gap-4" role="banner">
       <h1 className="font-semibold">CISAdex</h1>
-      <div className="flex-1"><SearchBox onSelect={(id) => setSelectedId(id)} /></div>
+      <div className="flex-1">
+        <SearchBox onSelect={(id) => setSelectedId(id)} />
+      </div>
+      <div className="text-sm text-gray-500" aria-live="polite">
+        {filtered.length} of {summary.length} entities
+      </div>
+      <button
+        onClick={() => setShowFilters(!showFilters)}
+        className="px-3 py-1 text-sm border rounded mobile-only focus:outline-none focus:ring-2 focus:ring-blue-500"
+        aria-label={showFilters ? 'Hide filters' : 'Show filters'}
+        aria-expanded={showFilters}
+      >
+        {showFilters ? 'Hide Filters' : 'Show Filters'}
+      </button>
     </header>
     <div className="flex flex-1 overflow-hidden">
       {showFilters && (
-        <aside className="w-64 border-r overflow-y-auto">
+        <aside 
+          className={`w-64 border-r overflow-y-auto ${showFilters ? 'mobile:absolute mobile:inset-0 mobile:z-10 mobile:bg-white' : ''}`}
+          role="complementary"
+          aria-label="Search filters"
+        >
           <FilterChips value={filters} onChange={setFilters} />
         </aside>
       )}
-      <main className="flex-1 grid md:grid-cols-2">
-        <div className="relative">
+      <main 
+        id="main-content"
+        className="flex-1 grid md:grid-cols-2" 
+        role="main"
+      >
+        <section 
+          className="relative"
+          aria-label="Interactive map view"
+        >
           <AtlasMap
             entities={filtered}
             selectedId={selectedId}
@@ -102,12 +221,14 @@ export default function Browse() {
             viewportState={viewport}
             onViewportChange={setViewport}
           />
-        </div>
-        <ResultsPane
-          entities={filtered}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-        />
+        </section>
+        <section aria-label="Search results">
+          <ResultsPane
+            entities={filtered}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+          />
+        </section>
       </main>
     </div>
     <DetailDrawer entity={drawerEntity} onClose={() => setSelectedId(undefined)} />
