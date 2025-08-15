@@ -60,24 +60,24 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <Route path="/splash" element={<Splash />} />
           <Route path="/dashboard" element={<EnhancedDashboard />} />
           <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/map" element={<Map />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/map" element={<Navigate to="/dashboard#map" replace />} />
             <Route path="/catalog" element={<Navigate to="/dashboard#resources" replace />} />
             <Route path="/advisories" element={<Navigate to="/dashboard#overview" replace />} />
             <Route path="/research" element={<Navigate to="/dashboard#intelligence" replace />} />
             <Route path="/data" element={<Navigate to="/dashboard#intelligence" replace />} />
-            <Route path="/feeds" element={<Feeds />} />
-            <Route path="/feeds-new" element={<SimpleFeeds />} />
-            <Route path="/feeds-comparison" element={<FeedsComparison />} />
-            <Route path="/feeds-summary" element={<FeedsImprovementSummary />} />
-            <Route path="/threat-intelligence" element={<Feeds />} />
-            <Route path="/federal-infrastructure" element={<FederalInfrastructureMap />} />
-            <Route path="/report-incident" element={<IncidentReport />} />
-            <Route path="/map-test" element={<MapTest />} />
+            <Route path="/feeds" element={<Navigate to="/dashboard#intelligence" replace />} />
+            <Route path="/feeds-new" element={<Navigate to="/dashboard#intelligence" replace />} />
+            <Route path="/feeds-comparison" element={<Navigate to="/dashboard#intelligence" replace />} />
+            <Route path="/feeds-summary" element={<Navigate to="/dashboard#intelligence" replace />} />
+            <Route path="/threat-intelligence" element={<Navigate to="/dashboard#overview" replace />} />
+            <Route path="/federal-infrastructure" element={<Navigate to="/dashboard#map" replace />} />
+            <Route path="/report-incident" element={<Navigate to="/dashboard#emergency" replace />} />
+            <Route path="/map-test" element={<Navigate to="/dashboard#map" replace />} />
             <Route path="/about" element={<AboutData />} />
-            <Route path="/browse" element={<Browse />} />
+            <Route path="/browse" element={<Navigate to="/dashboard#resources" replace />} />
             <Route path="/entity/:id" element={<EntityPage />} />
-            <Route path="/compare" element={<Compare />} />
+            <Route path="/compare" element={<Navigate to="/dashboard#resources" replace />} />
             {/* Fallback route for unknown paths */}
             <Route path="*" element={
               <div className="min-h-screen flex items-center justify-center bg-gray-50">

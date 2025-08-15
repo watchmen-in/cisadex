@@ -12,6 +12,7 @@ import EmergencyAccessibilityToolbar from "../components/accessibility/Emergency
 import ApiConnectionStatus from "../components/ApiConnectionStatus";
 import ThreatVisualization from "../components/ThreatIntelligence/ThreatVisualization";
 import IncidentDashboard from "../components/IncidentResponse/IncidentDashboard";
+import { CyberButton, CyberCard, CyberStatusIndicator, CyberTerminal } from "../components/cyberpunk";
 import { loadOffices } from "../utils/dataLoader";
 import useUrlState from "../hooks/useUrlState";
 import { 
@@ -29,28 +30,30 @@ import { ARIA_ROLES } from "../utils/accessibility";
 
 function TabBar({ tab, onChange }) {
   const tabs = [
-    { id: "overview", label: "Threat Intel", icon: "🚨" },
-    { id: "map", label: "Infrastructure", icon: "🗺️" },
-    { id: "intelligence", label: "Feeds", icon: "🔍" },
-    { id: "emergency", label: "Emergency", icon: "⚡" },
+    { id: "overview", label: "Threat Intelligence", icon: "🎯" },
+    { id: "map", label: "Infrastructure Map", icon: "🗺️" },
+    { id: "intelligence", label: "Data Feeds", icon: "📊" },
+    { id: "emergency", label: "Emergency Response", icon: "🚨" },
     { id: "resources", label: "Resources", icon: "📚" },
   ];
   
   return (
-    <div className="sticky top-14 z-10 bg-bg1 border-b border-b1">
+    <div className="sticky top-14 z-10 bg-surface-panel/95 border-b border-surface-border backdrop-blur-md data-scan-line">
       <div className="flex">
         {tabs.map((t) => (
           <button
             key={t.id}
             onClick={() => onChange(t.id)}
-            className={`flex-1 px-4 py-3 text-sm focus-ring tab-transition flex items-center justify-center gap-2 ${
-              tab === t.id
-                ? "text-brand border-b-2 border-brand bg-bg2/30"
-                : "text-t2 hover:text-t1 hover:bg-bg2/20"
-            }`}
+            className={`flex-1 px-4 py-3 text-sm focus-ring transition-all duration-200 
+                       flex items-center justify-center gap-2
+                       ${tab === t.id
+                         ? "text-command-blue border-b-2 border-command-blue bg-command-blue/10 font-medium"
+                         : "text-text-secondary hover:text-text-primary hover:bg-surface-accent/30 " +
+                           "border-b-2 border-transparent"
+                       }`}
           >
             <span className="text-base">{t.icon}</span>
-            <span>{t.label}</span>
+            <span className="font-medium">{t.label}</span>
           </button>
         ))}
       </div>
@@ -60,16 +63,33 @@ function TabBar({ tab, onChange }) {
 
 function ThreatLevelIndicator({ level, count }) {
   const levelConfig = {
-    critical: { color: 'text-red-600 bg-red-100 border-red-300', icon: '🚨', label: 'Critical' },
-    high: { color: 'text-orange-600 bg-orange-100 border-orange-300', icon: '⚠️', label: 'High' },
-    medium: { color: 'text-yellow-600 bg-yellow-100 border-yellow-300', icon: '⚡', label: 'Medium' },
-    low: { color: 'text-green-600 bg-green-100 border-green-300', icon: '✅', label: 'Low' }
+    critical: { 
+      color: 'text-command-red bg-command-red/10 border-command-red', 
+      icon: '🚨', 
+      label: 'Critical'
+    },
+    high: { 
+      color: 'text-command-orange bg-command-orange/10 border-command-orange', 
+      icon: '⚠️', 
+      label: 'High'
+    },
+    medium: { 
+      color: 'text-command-amber bg-command-amber/10 border-command-amber', 
+      icon: '⚡', 
+      label: 'Medium'
+    },
+    low: { 
+      color: 'text-command-green bg-command-green/10 border-command-green', 
+      icon: '✅', 
+      label: 'Low'
+    }
   };
   
   const config = levelConfig[level] || levelConfig.low;
   
   return (
-    <div className={`rounded-lg p-4 border-2 ${config.color} transition-all hover:shadow-md`}>
+    <div className={`command-panel rounded-lg p-4 border transition-all duration-200 
+                    hover:shadow-lg ${config.color}`}>
       <div className="flex items-center justify-between mb-2">
         <span className="text-2xl">{config.icon}</span>
         <div className="text-right">
@@ -883,7 +903,7 @@ export default function EnhancedDashboard() {
   }, [offices, legacyFilters]);
 
   return (
-    <div className="min-h-screen bg-bg0 text-t1">
+    <div className="min-h-screen bg-surface-dark text-text-primary">
       {/* Emergency Accessibility Toolbar */}
       <EmergencyAccessibilityToolbar position="top" />
       
@@ -955,7 +975,7 @@ export default function EnhancedDashboard() {
             </Sidebar>
           </div>
           <div className="col-span-12 md:col-span-9 lg:col-span-9 xl:col-span-10">
-            <div className="relative rounded-xl border border-b1 bg-bg1 shadow-e1 overflow-hidden">
+            <div className="relative command-panel rounded-xl overflow-hidden">
               <TabBar tab={tab} onChange={changeTab} />
               <div className="h-full">
                 {tab === "overview" && (
@@ -998,7 +1018,7 @@ export default function EnhancedDashboard() {
       </main>
       <button
         onClick={() => setOpen(true)}
-        className="focus-ring md:hidden fixed bottom-4 right-4 rounded-full px-4 py-2 bg-brand text-black font-medium shadow-e2"
+        className="focus-ring md:hidden fixed bottom-4 right-4 rounded px-4 py-2 bg-command-blue text-white font-medium shadow-lg hover:bg-command-blue/90 transition-colors"
       >
         Filters
       </button>

@@ -5,16 +5,43 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Base palette (new) + bridge to legacy tokens */
+/* Professional Dystopian Base Palette */
 :root {
-  /* NEW base variables (from main) */
-  --bg: #0B0F17;
-  --surface: #101826;
-  --text: #E6EDF3;
-  --muted: #A9B4C0;
-  --brand: #22A2FF;
-  --accent: #1FAD83;
-  --border: #1E2A3A;
+  /* Core Interface Colors */
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --brand: #1e3a8a;
+  --accent: #475569;
+  --border: #334155;
+  
+  /* Command Center Colors */
+  --command-blue: #1e3a8a;
+  --command-slate: #334155;
+  --command-steel: #475569;
+  --command-amber: #d97706;
+  --command-red: #dc2626;
+  --command-green: #16a34a;
+  --command-orange: #ea580c;
+  
+  /* Surface Colors */
+  --surface-dark: #0f172a;
+  --surface-darker: #020617;
+  --surface-panel: #1e293b;
+  --surface-border: #334155;
+  --surface-accent: #475569;
+  
+  /* Text Colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-inverse: #0f172a;
+  
+  /* Professional Glow Variables */
+  --status-glow: 0 0 3px currentColor;
+  --subtle-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --elevated-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 
   /* Support vars used elsewhere */
   --focus: var(--brand);
@@ -29,6 +56,10 @@
   --text-1: var(--text);
   --text-2: var(--muted);
   --border-1: var(--border);
+
+  /* Shadow definitions */
+  --shadow-e1: 0 8px 24px rgba(0,0,0,.35);
+  --shadow-e2: 0 12px 32px rgba(0,0,0,.45);
 
   color-scheme: dark;
   font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -54,7 +85,7 @@ a { color: var(--brand); }
 }
 
 .card-hover {
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
 }
 
 .card-hover:hover {
@@ -66,14 +97,647 @@ a { color: var(--brand); }
   transition: color 0.2s ease-out, border-color 0.2s ease-out;
 }
 
+/* Cybersecurity-themed animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(34, 162, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(34, 162, 255, 0.6);
+  }
+}
+
+@keyframes matrix-rain {
+  0% {
+    transform: translateY(-100vh);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+}
+
 .slide-enter {
-  animation: slideIn 0.3s ease-out;
+  animation: slideIn 0.5s ease-out;
 }
 
 .fade-enter {
-  animation: fadeIn 0.3s ease-out;
+  animation: fadeIn 0.4s ease-out;
 }
 
 .scale-enter {
-  animation: scaleIn 0.2s ease-out;
+  animation: scaleIn 0.3s ease-out;
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Professional Visual Effects */
+
+/* Subtle Grid Effects */
+.command-grid {
+  background-image: 
+    linear-gradient(rgba(51, 65, 85, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(51, 65, 85, 0.3) 1px, transparent 1px);
+  background-size: 24px 24px;
+  position: relative;
+}
+
+.command-grid-large {
+  background-image: 
+    linear-gradient(rgba(51, 65, 85, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(51, 65, 85, 0.2) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Professional Glow Effects */
+.status-glow-blue {
+  box-shadow: var(--status-glow);
+  border: 1px solid var(--command-blue);
+  background: rgba(30, 58, 138, 0.1);
+}
+
+.status-glow-green {
+  box-shadow: var(--status-glow);
+  border: 1px solid var(--command-green);
+  background: rgba(22, 163, 74, 0.1);
+}
+
+.status-glow-red {
+  box-shadow: var(--status-glow);
+  border: 1px solid var(--command-red);
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.command-text-blue {
+  color: var(--command-blue);
+  text-shadow: 0 0 2px rgba(30, 58, 138, 0.5);
+}
+
+.command-text-green {
+  color: var(--command-green);
+  text-shadow: 0 0 2px rgba(22, 163, 74, 0.5);
+}
+
+.command-text-red {
+  color: var(--command-red);
+  text-shadow: 0 0 2px rgba(220, 38, 38, 0.5);
+}
+
+/* Professional Panel Effects */
+.command-panel {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.9) 0%, 
+    rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid var(--surface-border);
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+
+.command-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(51, 65, 85, 0.5), 
+    transparent);
+  animation: dataScan 4s linear infinite;
+}
+
+/* Professional Scan Effects */
+.data-scan-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.data-scan-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--command-blue), 
+    transparent);
+  animation: dataScan 4s linear infinite;
+  opacity: 0.6;
+}
+
+/* Glitch Effects */
+.glitch-effect {
+  position: relative;
+  color: var(--neon-cyan);
+}
+
+.glitch-effect::before,
+.glitch-effect::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.glitch-effect::before {
+  animation: glitch 0.3s infinite;
+  color: var(--neon-magenta);
+  z-index: -1;
+}
+
+.glitch-effect::after {
+  animation: glitch 0.3s infinite reverse;
+  color: var(--neon-green);
+  z-index: -2;
+}
+
+.threat-indicator {
+  position: relative;
+  overflow: hidden;
+}
+
+.threat-indicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(239, 68, 68, 0.2),
+    transparent
+  );
+  animation: scan-line 2s ease-in-out infinite;
+}
+
+.security-badge {
+  position: relative;
+  background: linear-gradient(135deg, var(--brand) 0%, var(--accent) 100%);
+  background-clip: padding-box;
+  border: 1px solid transparent;
+}
+
+.security-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+/* Status indicators with animations */
+.status-online {
+  position: relative;
+}
+
+.status-online::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background: #16a34a;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.status-warning {
+  position: relative;
+}
+
+.status-warning::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background: #f59e0b;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.status-critical {
+  position: relative;
+}
+
+.status-critical::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* Loading states */
+.loading-dots {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.loading-dots::after {
+  content: '...';
+  animation: loading-dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes loading-dots {
+  0%, 20% {
+    color: rgba(255, 255, 255, 0);
+    text-shadow: 0.25em 0 0 rgba(255, 255, 255, 0), 0.5em 0 0 rgba(255, 255, 255, 0);
+  }
+  40% {
+    color: white;
+    text-shadow: 0.25em 0 0 rgba(255, 255, 255, 0), 0.5em 0 0 rgba(255, 255, 255, 0);
+  }
+  60% {
+    text-shadow: 0.25em 0 0 white, 0.5em 0 0 rgba(255, 255, 255, 0);
+  }
+  80%, 100% {
+    text-shadow: 0.25em 0 0 white, 0.5em 0 0 white;
+  }
+}
+
+/* Glitch effect for critical alerts */
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  animation: glitch-1 0.5s infinite;
+  color: #ff0000;
+  z-index: -1;
+}
+
+.glitch::after {
+  animation: glitch-2 0.5s infinite;
+  color: #00ffff;
+  z-index: -2;
+}
+
+@keyframes glitch-1 {
+  0% {
+    transform: none;
+    opacity: 1;
+  }
+  7% {
+    transform: skew(-0.5deg, -0.9deg);
+    opacity: 0.75;
+  }
+  10% {
+    transform: none;
+    opacity: 1;
+  }
+  27% {
+    transform: none;
+    opacity: 1;
+  }
+  30% {
+    transform: skew(0.8deg, -0.1deg);
+    opacity: 0.75;
+  }
+  35% {
+    transform: none;
+    opacity: 1;
+  }
+  52% {
+    transform: none;
+    opacity: 1;
+  }
+  55% {
+    transform: skew(-1deg, 0.2deg);
+    opacity: 0.75;
+  }
+  60% {
+    transform: none;
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes glitch-2 {
+  0% {
+    transform: none;
+    opacity: 0.25;
+  }
+  7% {
+    transform: translate(-2px, -3px);
+    opacity: 0.5;
+  }
+  10% {
+    transform: none;
+    opacity: 0.25;
+  }
+  27% {
+    transform: none;
+    opacity: 0.25;
+  }
+  30% {
+    transform: translate(-5px, -2px);
+    opacity: 0.5;
+  }
+  35% {
+    transform: none;
+    opacity: 0.25;
+  }
+  52% {
+    transform: none;
+    opacity: 0.25;
+  }
+  55% {
+    transform: translate(-5px, -1px);
+    opacity: 0.5;
+  }
+  60% {
+    transform: none;
+    opacity: 0.25;
+  }
+  100% {
+    transform: none;
+    opacity: 0.25;
+  }
+}
+
+/* Cyberpunk Component Styles */
+
+/* Neon Buttons */
+.btn-neon {
+  position: relative;
+  background: transparent;
+  border: 2px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  padding: 12px 24px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.btn-neon:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: var(--cyber-glow-primary);
+  transform: translateY(-2px);
+}
+
+.btn-neon:active {
+  transform: translateY(0);
+}
+
+.btn-neon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.4), transparent);
+  transition: left 0.5s;
+}
+
+.btn-neon:hover::before {
+  left: 100%;
+}
+
+/* Terminal Windows */
+.terminal-window {
+  background: var(--matrix-dark);
+  border: 1px solid var(--neon-green);
+  border-radius: 8px;
+  box-shadow: var(--cyber-glow-accent);
+  font-family: 'JetBrains Mono', monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-header {
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--matrix-dark);
+}
+
+.terminal-content {
+  padding: 16px;
+  color: var(--neon-green);
+  line-height: 1.5;
+  min-height: 200px;
+  position: relative;
+}
+
+/* Data Stream Effects */
+.data-stream {
+  position: relative;
+  overflow: hidden;
+}
+
+.data-stream::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50px;
+  width: 50px;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(0, 255, 255, 0.6), 
+    transparent);
+  animation: dataStream 15s linear infinite;
+}
+
+/* Floating Action Buttons */
+.fab-neon {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--matrix-dark);
+  border: 2px solid var(--neon-magenta);
+  color: var(--neon-magenta);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--cyber-glow-secondary);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.fab-neon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--neon-magenta), 0 0 40px var(--neon-magenta);
+}
+
+/* Status Indicators */
+.status-cyber {
+  position: relative;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.status-online {
+  background: rgba(57, 255, 20, 0.2);
+  border: 1px solid var(--neon-green);
+  color: var(--neon-green);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+}
+
+.status-warning {
+  background: rgba(255, 255, 0, 0.2);
+  border: 1px solid var(--neon-yellow);
+  color: var(--neon-yellow);
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.3);
+}
+
+.status-critical {
+  background: rgba(255, 0, 128, 0.2);
+  border: 1px solid var(--neon-magenta);
+  color: var(--neon-magenta);
+  box-shadow: 0 0 10px rgba(255, 0, 128, 0.3);
+  animation: neonPulse 1s ease-in-out infinite;
+}
+
+/* Line clamping utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--bg-1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-1);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--brand);
+}
+
+/* Responsive text */
+@media (max-width: 640px) {
+  .text-responsive-xl {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 641px) {
+  .text-responsive-xl {
+    font-size: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-responsive-xl {
+    font-size: 2.5rem;
+  }
 }
