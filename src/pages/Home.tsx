@@ -132,7 +132,7 @@ export default function Home() {
             <div className="space-y-2">
               <p className="text-sm text-gray-400 text-center">Agencies</p>
               <div className="flex gap-2 flex-wrap justify-center">
-                {['FBI', 'FEMA', 'DHS', 'CISA'].map((agency) => (
+                {['CISA', 'FBI', 'NSA', 'DHS', 'DOD', 'Secret Service'].map((agency) => (
                   <button
                     key={agency}
                     onClick={() => applyFilter('agencies', agency)}
@@ -150,7 +150,7 @@ export default function Home() {
             <div className="space-y-2">
               <p className="text-sm text-gray-400 text-center">Sectors</p>
               <div className="flex gap-2 flex-wrap justify-center">
-                {['Water', 'Law Enforcement', 'Energy', 'Transportation'].map((sector) => (
+                {['Critical Infrastructure', 'Financial Services', 'Healthcare', 'Energy', 'Defense', 'Communications'].map((sector) => (
                   <button
                     key={sector}
                     onClick={() => applyFilter('sectors', sector)}

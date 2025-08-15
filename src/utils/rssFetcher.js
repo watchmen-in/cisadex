@@ -97,7 +97,7 @@ export async function fetchFeeds() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-    const res = await fetch("/rss", {
+    const res = await fetch("/api/rss", {
       headers: {
         'Accept': 'application/json',
         'Cache-Control': 'no-cache'

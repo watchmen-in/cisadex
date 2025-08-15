@@ -21,19 +21,39 @@ export default function MapView({ data = [], loading = false }) {
   // 1) Init map
   useEffect(() => {
     if (!elRef.current) return;
+    
+    console.log('Initializing MapLibre GL map...');
+    
     const map = new maplibregl.Map({
       container: elRef.current,
       style: STYLE_URL,
       center: [-98.5795, 39.8283],
       zoom: 3
     });
+    
     mapRef.current = map;
 
-    // If hidden initially, ensure a resize after first load
-    map.once("load", () => map.resize());
+    // Add event listeners for debugging
+    map.on('load', () => {
+      console.log('Map loaded successfully');
+      map.resize();
+    });
+    
+    map.on('error', (e) => {
+      console.error('Map error:', e);
+    });
+    
+    map.on('styledata', () => {
+      console.log('Map style loaded');
+    });
 
     return () => {
-      try { map.remove(); } catch {}
+      try { 
+        console.log('Cleaning up map...');
+        map.remove(); 
+      } catch (e) {
+        console.warn('Error removing map:', e);
+      }
       mapRef.current = null;
     };
   }, []);
@@ -63,6 +83,44 @@ export default function MapView({ data = [], loading = false }) {
               "circle-stroke-width": 1.5
             }
           });
+          
+          // Add click interaction for office details
+          map.on('click', LAYER_ID, (e) => {
+            const office = e.features[0].properties;
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            
+            // Create popup content
+            const popupContent = `
+              <div class="p-3 min-w-[200px]">
+                <h3 class="font-semibold text-gray-900 mb-2">${office.office_name}</h3>
+                <div class="space-y-1 text-sm text-gray-600">
+                  <div><strong>Agency:</strong> ${office.agency}</div>
+                  <div><strong>Type:</strong> ${office.role_type}</div>
+                  <div><strong>Location:</strong> ${office.city}, ${office.state}</div>
+                  ${office.contact_public && office.contact_public !== 'null' ? `
+                    <div class="mt-2 pt-2 border-t border-gray-200">
+                      ${JSON.parse(office.contact_public).phone ? `<div><strong>Phone:</strong> ${JSON.parse(office.contact_public).phone}</div>` : ''}
+                      ${JSON.parse(office.contact_public).website ? `<div><a href="${JSON.parse(office.contact_public).website}" target="_blank" rel="noreferrer" class="text-blue-600 hover:underline">Visit Website →</a></div>` : ''}
+                    </div>
+                  ` : ''}
+                </div>
+              </div>
+            `;
+            
+            new maplibregl.Popup()
+              .setLngLat(coordinates)
+              .setHTML(popupContent)
+              .addTo(map);
+          });
+          
+          // Change cursor on hover
+          map.on('mouseenter', LAYER_ID, () => {
+            map.getCanvas().style.cursor = 'pointer';
+          });
+          
+          map.on('mouseleave', LAYER_ID, () => {
+            map.getCanvas().style.cursor = '';
+          });
         }
       } else {
         src.setData(geojson);
@@ -78,5 +136,5 @@ export default function MapView({ data = [], loading = false }) {
     }
   }, [data, loading]);
 
-  return <div ref={elRef} className="w-full h-[100vh]" />;
+  return <div ref={elRef} className="w-full" style={{ height: '600px' }} />;
 }
