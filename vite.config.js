@@ -67,11 +67,34 @@ export default defineConfig({
     warmup: {
       // Warm up frequently used files
       clientFiles: [
-        './src/App.tsx',
         './src/pages/*.{tsx,jsx}',
         './src/components/**/*.{tsx,jsx}',
         './src/utils/*.{ts,js}'
       ]
+    },
+    proxy: {
+      '/api/proxy-rss': {
+        target: 'http://localhost:5173',
+        changeOrigin: true,
+        configure: (proxy, options) => {
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            const url = req.url.replace('/api/proxy-rss?url=', '');
+            if (url) {
+              // For development, directly fetch the RSS feed
+              fetch(decodeURIComponent(url))
+                .then(response => response.text())
+                .then(data => {
+                  res.writeHead(200, { 'Content-Type': 'application/xml' });
+                  res.end(data);
+                })
+                .catch(error => {
+                  res.writeHead(500);
+                  res.end(JSON.stringify({ error: error.message }));
+                });
+            }
+          });
+        }
+      }
     }
   },
   // Enable experimental features for better performance

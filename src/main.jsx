@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Browse from "./pages/Browse";
 import EntityPage from "./pages/EntityPage";
@@ -12,7 +12,7 @@ import Advisories from "./pages/Advisories";
 import Research from "./pages/Research";
 import DataPortal from "./pages/DataPortal";
 import Feeds from "./pages/Feeds";
-import Dashboard from "./pages/Dashboard";
+import EnhancedDashboard from "./pages/EnhancedDashboard";
 import Splash from "./pages/Splash";
 import IncidentReport from "./pages/IncidentReport";
 import FederalInfrastructureMap from "./pages/FederalInfrastructureMap.tsx";
@@ -54,15 +54,15 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <SecurityWrapper>
           <Routes>
           <Route path="/splash" element={<Splash />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<EnhancedDashboard />} />
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/map" element={<Map />} />
-            <Route path="/catalog" element={<Catalog />} />
-            <Route path="/advisories" element={<Advisories />} />
-            <Route path="/research" element={<Research />} />
-            <Route path="/data" element={<DataPortal />} />
-            <Route path="/feeds" element={<Feeds />} />
+            <Route path="/catalog" element={<Navigate to="/dashboard#resources" replace />} />
+            <Route path="/advisories" element={<Navigate to="/dashboard#overview" replace />} />
+            <Route path="/research" element={<Navigate to="/dashboard#intelligence" replace />} />
+            <Route path="/data" element={<Navigate to="/dashboard#intelligence" replace />} />
+            <Route path="/feeds" element={<Navigate to="/dashboard#intelligence" replace />} />
             <Route path="/federal-infrastructure" element={<FederalInfrastructureMap />} />
             <Route path="/report-incident" element={<IncidentReport />} />
             <Route path="/about" element={<AboutData />} />

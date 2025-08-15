@@ -5,6 +5,7 @@ import SearchBox from '../components/map/SearchBox';
 export default function Home() {
   const navigate = useNavigate();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [videoError, setVideoError] = useState(false);
 
   // Monitor online status
   useEffect(() => {
@@ -42,9 +43,30 @@ export default function Home() {
   };
 
   return (
-    <div className="w-screen h-screen bg-gradient-to-b from-gray-900 to-black text-white flex flex-col">
+    <div className="w-screen h-screen bg-gradient-to-b from-gray-900 to-black text-white flex flex-col relative overflow-hidden">
+      {/* Video Background */}
+      {!videoError && (
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            onError={() => {
+              console.error('Video failed to load');
+              setVideoError(true);
+            }}
+          >
+            <source src="/assets/cisadex-splash.mp4" type="video/mp4" />
+            <source src="/cisadex-splash.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-900/70 via-gray-900/80 to-black"></div>
+        </div>
+      )}
+
       {/* Header */}
-      <header className="p-4 flex items-center justify-between">
+      <header className="p-4 flex items-center justify-between relative z-10">
         <h1 className="text-xl font-bold">CISAdex</h1>
         {!isOnline && (
           <div className="flex items-center gap-2 px-3 py-1 bg-yellow-600 rounded-full text-sm">
@@ -55,7 +77,7 @@ export default function Home() {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 flex flex-col items-center justify-center space-y-8 px-4">
+      <main className="flex-1 flex flex-col items-center justify-center space-y-8 px-4 relative z-10">
         {/* Hero section */}
         <div className="text-center max-w-4xl mx-auto">
           <h2 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">

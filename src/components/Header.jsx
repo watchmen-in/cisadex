@@ -12,11 +12,8 @@ export default function Header({ onSearch }) {
     { label: "Home", href: "/" },
     { label: "Dashboard", href: "/dashboard" },
     { label: "Map", href: "/map" },
-    { label: "Catalog", href: "/catalog" },
-    { label: "Advisories", href: "/advisories" },
-    { label: "Research", href: "/research" },
-    { label: "Data Portal", href: "/data" },
-    { label: "Feeds", href: "/feeds" },
+    { label: "Intelligence", href: "/dashboard#intelligence" },
+    { label: "Resources", href: "/dashboard#resources" },
     { label: "Report Incident", href: "/report-incident" },
     { label: "About", href: "/about" },
   ];
