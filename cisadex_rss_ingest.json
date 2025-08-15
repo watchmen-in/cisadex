@@ -1,0 +1,255 @@
+{
+  "name": "CISAdex \u2013 RSS ingest \u2192 normalize \u2192 enrich \u2192 POST /api/items",
+  "nodes": [
+    {
+      "id": "Cron_Trigger",
+      "name": "Cron: every 30 min",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [
+        260,
+        200
+      ],
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "unit": "minutes",
+              "value": 30
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "Feed_List",
+      "name": "Feed list (edit me)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [
+        480,
+        200
+      ],
+      "parameters": {
+        "functionCode": "const feeds = [\n  { source: \"CISA Advisories\", url: \"https://www.cisa.gov/news-events/cybersecurity-advisories.rss\" },\n  { source: \"CISA Alerts\", url: \"https://www.cisa.gov/news-events/alerts.rss\" },\n  { source: \"CISA Known Exploited Vulns (KEV)\", url: \"https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.xml\" },\n  { source: \"MSRC Blog\", url: \"https://msrc.microsoft.com/blog/feed/\" },\n  { source: \"Google TAG\", url: \"https://blog.google/threat-analysis-group/rss/\" },\n  { source: \"Krebs on Security\", url: \"https://krebsonsecurity.com/feed/\" },\n  { source: \"CISA Blog\", url: \"https://www.cisa.gov/news-events/blog.rss\" },\n  { source: \"US-CERT ICS\", url: \"https://www.cisa.gov/news-events/ics-advisories.rss\" },\n  { source: \"US-CERT Bulletins\", url: \"https://www.cisa.gov/news-events/bulletins.rss\" }\n];\nreturn feeds.map(f => ({ json: f }));"
+      }
+    },
+    {
+      "id": "Get_RSS_XML",
+      "name": "HTTP (fetch RSS XML)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        700,
+        200
+      ],
+      "parameters": {
+        "url": "={{$json.url}}",
+        "options": {
+          "timeout": 20000
+        },
+        "ignoreResponseCode": true
+      }
+    },
+    {
+      "id": "XML_to_JSON",
+      "name": "XML \u2192 JSON",
+      "type": "n8n-nodes-base.xml",
+      "typeVersion": 2,
+      "position": [
+        920,
+        200
+      ],
+      "parameters": {
+        "action": "xmlToJson",
+        "options": {
+          "mergeRptAttrs": true
+        },
+        "dataPropertyName": "data"
+      }
+    },
+    {
+      "id": "Normalize_Items",
+      "name": "Normalize items",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        200
+      ],
+      "parameters": {
+        "functionCode": "function text(v){return (Array.isArray(v)?v[0]:v)||\"\"}\nfunction dt(v){const d=new Date(v);return isNaN(d)?null:d.toISOString()}\nfunction hash(str){let h=2166136261>>>0;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return(h>>>0).toString(16)}\nconst out=[];const source=$json.source||'Unknown';\nconst feed=$json.data?.rss?.channel||$json.data?.feed||{};\nlet items=feed.item||feed.entry||[];if(!Array.isArray(items)) items=[items];\nfor(const it of items){\n  const title=text(it.title?.[0]?it.title[0]._text||it.title[0]:it.title?._text||it.title);\n  const link=text(it.link?.[0]?.href||it.link?.[0]||it.link?.href||it.link);\n  const pub=text(it.pubDate||it.published||it.updated);\n  const desc=text(it.description||it.summary||it.content||it['content:encoded']);\n  const publishedAt=dt(pub);\n  const summary=(desc||'').replace(/<[^>]+>/g,'').trim().slice(0,1000);\n  const lower=(title+' '+summary).toLowerCase();\n  const tags=[];\n  if(/cve-|cve\\d{4}-\\d{4,7}/.test(lower)) tags.push('cve');\n  if(/kev|known exploited/.test(lower)) tags.push('kev');\n  if(/ransom|locker|encrypt/.test(lower)) tags.push('ransomware');\n  if(/phish|spoof/.test(lower)) tags.push('phishing');\n  if(/ics|scada|ot\\b/.test(lower)) tags.push('ics');\n  const key=link||title;const contentHash=hash((key||'')+(publishedAt||''));\n  out.push({json:{source,title:title||'(no title)',link:link||null,publishedAt,summary,tags,contentHash}})\n}\nreturn out;"
+      }
+    },
+    {
+      "id": "Collect_All",
+      "name": "Merge all feeds",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        200
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "Dedupe_Memory",
+      "name": "Dedupe (memory scope)",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [
+        1580,
+        200
+      ],
+      "parameters": {
+        "functionCode": "const seen=new Set();const out=[];for(const item of items){const k=item.json.contentHash||item.json.link||item.json.title;if(!k) continue;if(seen.has(k)) continue;seen.add(k);out.push(item)}return out;"
+      }
+    },
+    {
+      "id": "POST_to_CISAdex",
+      "name": "HTTP POST \u2192 /api/items",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1800,
+        200
+      ],
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "headerAuth",
+        "headerAuth": {
+          "name": "X-API-Key",
+          "value": "YOUR_API_KEY_HERE"
+        },
+        "url": "https://cisadex.gator-bytes.com/api/items",
+        "method": "POST",
+        "jsonParameters": true,
+        "options": {
+          "timeout": 20000
+        },
+        "sendBinaryData": false,
+        "bodyParametersJson": "={\"source\":$json.source,\"title\":$json.title,\"link\":$json.link,\"publishedAt\":$json.publishedAt,\"summary\":$json.summary,\"tags\":$json.tags,\"hash\":$json.contentHash,\"type\":\"rss\"}"
+      }
+    },
+    {
+      "id": "On_Error",
+      "name": "Error \u2192 Console",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2020,
+        310
+      ]
+    }
+  ],
+  "connections": {
+    "Cron_Trigger": {
+      "main": [
+        [
+          {
+            "node": "Feed_List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Feed_List": {
+      "main": [
+        [
+          {
+            "node": "Get_RSS_XML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get_RSS_XML": {
+      "main": [
+        [
+          {
+            "node": "XML_to_JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "XML_to_JSON": {
+      "main": [
+        [
+          {
+            "node": "Normalize_Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize_Items": {
+      "main": [
+        [
+          {
+            "node": "Collect_All",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect_All": {
+      "main": [
+        [
+          {
+            "node": "Dedupe_Memory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dedupe_Memory": {
+      "main": [
+        [
+          {
+            "node": "POST_to_CISAdex",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST_to_CISAdex": {
+      "main": [
+        [
+          {
+            "node": "On_Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "error": [
+        [
+          {
+            "node": "On_Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "cisadex-rss-ingest"
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
