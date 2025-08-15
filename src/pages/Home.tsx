@@ -81,7 +81,7 @@ export default function Home() {
             />
           </div>
 
-          <div className="flex justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               className="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
               onClick={handleBrowseClick}
@@ -89,6 +89,13 @@ export default function Home() {
               aria-label="Browse interactive map of cybersecurity entities"
             >
               {isOnline ? 'Browse Interactive Map' : 'Map Unavailable (Offline)'}
+            </button>
+            <button
+              className="px-8 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+              onClick={() => navigate('/report-incident')}
+              aria-label="Report a cybersecurity incident"
+            >
+              🚨 Report Incident
             </button>
           </div>
         </div>

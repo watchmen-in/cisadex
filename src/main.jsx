@@ -14,6 +14,7 @@ import DataPortal from "./pages/DataPortal";
 import Feeds from "./pages/Feeds";
 import Dashboard from "./pages/Dashboard";
 import Splash from "./pages/Splash";
+import IncidentReport from "./pages/IncidentReport";
 import "./styles/tailwind.css";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
@@ -53,6 +54,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/research" element={<Research />} />
             <Route path="/data" element={<DataPortal />} />
             <Route path="/feeds" element={<Feeds />} />
+            <Route path="/report-incident" element={<IncidentReport />} />
             <Route path="/about" element={<AboutData />} />
             <Route path="/browse" element={<Browse />} />
             <Route path="/entity/:id" element={<EntityPage />} />
