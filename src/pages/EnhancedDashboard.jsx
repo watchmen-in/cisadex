@@ -7,6 +7,7 @@ import AdvancedFilterPanel from "../components/filters/AdvancedFilterPanel";
 import MapView from "../components/MapView";
 import ResourcePanel from "../components/ResourcePanel";
 import EnhancedFeedList from "../components/Feeds/EnhancedFeedList";
+import IntelligencePanelReplacement from "../components/IntelligencePanelReplacement";
 import EmergencyAccessibilityToolbar from "../components/accessibility/EmergencyAccessibilityToolbar";
 import { loadOffices } from "../utils/dataLoader";
 import useUrlState from "../hooks/useUrlState";
@@ -975,7 +976,7 @@ export default function EnhancedDashboard() {
                 )}
                 {tab === "intelligence" && (
                   <div className="fade-enter">
-                    <IntelligencePanel advancedFilters={advancedFilters} />
+                    <IntelligencePanelReplacement advancedFilters={advancedFilters} />
                   </div>
                 )}
                 {tab === "emergency" && (
