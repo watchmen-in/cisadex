@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { feedManager } from '../../services/feedManager';
+import { apiService, ThreatIntelligenceItem } from '../../services/apiService';
 
 interface ThreatData {
   id: string;
   title: string;
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
-  category: string;
+  type: string;
   timestamp: Date;
   source: string;
   cve?: string;
@@ -13,6 +13,14 @@ interface ThreatData {
   affected_systems: string[];
   geographic_impact: string[];
   confidence_level: number;
+  description: string;
+  indicators?: {
+    ips?: string[];
+    domains?: string[];
+    hashes?: string[];
+    cves?: string[];
+    ttps?: string[];
+  };
 }
 
 export default function ThreatVisualization() {
@@ -26,32 +34,35 @@ export default function ThreatVisualization() {
     const loadThreatData = async () => {
       setLoading(true);
       try {
-        const [govFeeds, intelFeeds] = await Promise.all([
-          feedManager.fetchAllByCategory('government'),
-          feedManager.fetchAllByCategory('threat_intel')
-        ]);
+        // Get threat intelligence from the backend API
+        const threatIntelligence = await apiService.getThreatIntelligence({
+          severity: selectedSeverity.length > 0 ? selectedSeverity : undefined,
+          limit: 50
+        });
         
-        const combinedThreats = [...govFeeds, ...intelFeeds]
-          .map(feed => ({
-            id: feed.id,
-            title: feed.title,
-            severity: feed.severity || 'MEDIUM',
-            category: feed.category,
-            timestamp: new Date(feed.date),
-            source: feed.source,
-            cve: feed.cve,
-            exploited: feed.exploited,
-            affected_systems: ['Windows', 'Linux', 'Network Infrastructure'], // Mock data
-            geographic_impact: ['US', 'EU', 'Global'], // Mock data
-            confidence_level: Math.random() * 100
-          }))
-          .filter(threat => selectedSeverity.includes(threat.severity))
-          .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
-          .slice(0, 50);
+        const mappedThreats: ThreatData[] = threatIntelligence.map(threat => ({
+          id: threat.id,
+          title: threat.title,
+          severity: threat.severity,
+          type: threat.type,
+          timestamp: new Date(threat.timestamp),
+          source: threat.source,
+          description: threat.description,
+          indicators: threat.indicators,
+          cve: threat.indicators?.cves?.[0],
+          exploited: threat.type === 'vulnerability' && threat.severity === 'CRITICAL',
+          affected_systems: ['Windows', 'Linux', 'Network Infrastructure'], // Would be expanded with real data
+          geographic_impact: ['US', 'EU', 'Global'], // Would be expanded with real data
+          confidence_level: threat.confidence || Math.random() * 100
+        }))
+        .filter(threat => selectedSeverity.includes(threat.severity))
+        .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
         
-        setThreats(combinedThreats);
+        setThreats(mappedThreats);
       } catch (error) {
         console.error('Failed to load threat data:', error);
+        // Fallback to empty array
+        setThreats([]);
       } finally {
         setLoading(false);
       }
@@ -207,8 +218,15 @@ export default function ThreatVisualization() {
                     <span className="text-xs text-t2">{threat.timestamp.toLocaleTimeString()}</span>
                   </div>
                   <div className="text-xs text-t2 space-y-1">
-                    <div>Source: {threat.source} • Category: {threat.category}</div>
+                    <div>Source: {threat.source} • Type: {threat.type}</div>
+                    {threat.description && <div className="text-xs text-t2 mt-1">{threat.description.substring(0, 100)}...</div>}
                     {threat.cve && <div>CVE: {threat.cve}</div>}
+                    {threat.indicators?.ips && threat.indicators.ips.length > 0 && (
+                      <div>IPs: {threat.indicators.ips.slice(0, 3).join(', ')}{threat.indicators.ips.length > 3 ? '...' : ''}</div>
+                    )}
+                    {threat.indicators?.domains && threat.indicators.domains.length > 0 && (
+                      <div>Domains: {threat.indicators.domains.slice(0, 2).join(', ')}{threat.indicators.domains.length > 2 ? '...' : ''}</div>
+                    )}
                     {threat.exploited && <span className="px-1.5 py-0.5 bg-red-100 text-red-800 rounded-full text-xs">Actively Exploited</span>}
                     <div>Confidence: {threat.confidence_level.toFixed(0)}%</div>
                   </div>

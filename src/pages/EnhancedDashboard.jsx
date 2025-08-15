@@ -9,6 +9,9 @@ import ResourcePanel from "../components/ResourcePanel";
 import EnhancedFeedList from "../components/Feeds/EnhancedFeedList";
 import IntelligencePanelReplacement from "../components/IntelligencePanelReplacement";
 import EmergencyAccessibilityToolbar from "../components/accessibility/EmergencyAccessibilityToolbar";
+import ApiConnectionStatus from "../components/ApiConnectionStatus";
+import ThreatVisualization from "../components/ThreatIntelligence/ThreatVisualization";
+import IncidentDashboard from "../components/IncidentResponse/IncidentDashboard";
 import { loadOffices } from "../utils/dataLoader";
 import useUrlState from "../hooks/useUrlState";
 import { 

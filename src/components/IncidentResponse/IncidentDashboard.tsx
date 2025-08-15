@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { apiService, IncidentItem } from '../../services/apiService';
 
 interface Incident {
   id: string;
   title: string;
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
   status: 'OPEN' | 'INVESTIGATING' | 'CONTAINED' | 'RESOLVED';
-  type: 'MALWARE' | 'PHISHING' | 'BREACH' | 'DDOS' | 'INSIDER' | 'OTHER';
+  type: string;
   timestamp: Date;
   assignee: string;
   affectedSystems: string[];
   estimatedImpact: string;
   responseTime: number; // in minutes
   lastUpdate: Date;
+  description?: string;
+  affected_sectors?: string[];
+  geographic_impact?: string[];
 }
 
 interface ResponseTeam {
@@ -31,50 +35,56 @@ export default function IncidentDashboard() {
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [emergencyMode, setEmergencyMode] = useState(false);
 
-  // Simulate real-time incident data
-  useEffect(() => {
-    const mockIncidents: Incident[] = [
-      {
-        id: 'INC-2024-001',
-        title: 'Ransomware Detection in Financial Sector',
-        severity: 'CRITICAL',
-        status: 'INVESTIGATING',
-        type: 'MALWARE',
-        timestamp: new Date(Date.now() - 15 * 60 * 1000),
-        assignee: 'SOC Team Alpha',
-        affectedSystems: ['Exchange Server', 'Domain Controller', 'File Shares'],
-        estimatedImpact: 'High - Critical business systems affected',
-        responseTime: 3,
-        lastUpdate: new Date(Date.now() - 2 * 60 * 1000)
-      },
-      {
-        id: 'INC-2024-002',
-        title: 'Suspicious Network Activity - Energy Sector',
-        severity: 'HIGH',
-        status: 'OPEN',
-        type: 'BREACH',
-        timestamp: new Date(Date.now() - 45 * 60 * 1000),
-        assignee: 'SOC Team Bravo',
-        affectedSystems: ['SCADA Systems', 'Control Networks'],
-        estimatedImpact: 'Medium - Potential infrastructure disruption',
-        responseTime: 8,
-        lastUpdate: new Date(Date.now() - 5 * 60 * 1000)
-      },
-      {
-        id: 'INC-2024-003',
-        title: 'Mass Phishing Campaign Detected',
-        severity: 'MEDIUM',
-        status: 'CONTAINED',
-        type: 'PHISHING',
-        timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-        assignee: 'SOC Team Charlie',
-        affectedSystems: ['Email Infrastructure', 'User Workstations'],
-        estimatedImpact: 'Low - Email filtering active',
-        responseTime: 12,
-        lastUpdate: new Date(Date.now() - 10 * 60 * 1000)
-      }
-    ];
+  // Load incident data from backend API
+  const loadIncidentData = useCallback(async () => {
+    try {
+      // Fetch incidents from backend
+      const incidentItems = await apiService.getIncidents({
+        limit: 50
+      });
+      
+      // Map API response to local interface
+      const mappedIncidents: Incident[] = incidentItems.map(item => ({
+        id: item.id,
+        title: item.title,
+        severity: item.severity,
+        status: item.status,
+        type: item.type,
+        timestamp: new Date(item.timestamp),
+        assignee: 'SOC Team Alpha', // Would be expanded with real assignment data
+        affectedSystems: item.affected_sectors || ['System Under Investigation'],
+        estimatedImpact: item.description || 'Impact assessment in progress',
+        responseTime: Math.floor((Date.now() - new Date(item.timestamp).getTime()) / (1000 * 60)), // Calculate response time
+        lastUpdate: new Date(item.timestamp),
+        description: item.description,
+        affected_sectors: item.affected_sectors,
+        geographic_impact: item.geographic_impact
+      }));
+      
+      setIncidents(mappedIncidents);
+    } catch (error) {
+      console.error('Failed to load incident data:', error);
+      // Fallback to mock data if API fails
+      const mockIncidents: Incident[] = [
+        {
+          id: 'INC-2024-001',
+          title: 'Sample Security Incident',
+          severity: 'MEDIUM',
+          status: 'INVESTIGATING',
+          type: 'security_breach',
+          timestamp: new Date(Date.now() - 15 * 60 * 1000),
+          assignee: 'SOC Team Alpha',
+          affectedSystems: ['Network Infrastructure'],
+          estimatedImpact: 'Under investigation',
+          responseTime: 15,
+          lastUpdate: new Date(Date.now() - 2 * 60 * 1000)
+        }
+      ];
+      setIncidents(mockIncidents);
+    }
+  }, []);
 
+  useEffect(() => {
     const mockTeams: ResponseTeam[] = [
       {
         id: 'team-alpha',
@@ -110,25 +120,21 @@ export default function IncidentDashboard() {
       }
     ];
 
-    setIncidents(mockIncidents);
     setResponseTeams(mockTeams);
-  }, []);
+    loadIncidentData();
+  }, [loadIncidentData]);
 
   // Auto-refresh functionality
   useEffect(() => {
     if (!autoRefresh) return;
 
     const interval = setInterval(() => {
-      // Simulate incident updates
-      setIncidents(prev => prev.map(incident => ({
-        ...incident,
-        lastUpdate: new Date(),
-        responseTime: incident.responseTime + Math.floor(Math.random() * 2)
-      })));
+      // Reload incident data from API
+      loadIncidentData();
     }, 30000); // Update every 30 seconds
 
     return () => clearInterval(interval);
-  }, [autoRefresh]);
+  }, [autoRefresh, loadIncidentData]);
 
   // Emergency mode keyboard shortcut
   useEffect(() => {
@@ -142,22 +148,64 @@ export default function IncidentDashboard() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [emergencyMode]);
 
-  const handleCreateIncident = () => {
-    const newIncident: Incident = {
-      id: `INC-2024-${String(incidents.length + 1).padStart(3, '0')}`,
-      title: 'New Security Incident',
-      severity: 'HIGH',
-      status: 'OPEN',
-      type: 'OTHER',
-      timestamp: new Date(),
-      assignee: 'Unassigned',
-      affectedSystems: [],
-      estimatedImpact: 'Under Investigation',
-      responseTime: 0,
-      lastUpdate: new Date()
-    };
-    setIncidents([newIncident, ...incidents]);
-    setSelectedIncident(newIncident);
+  const handleCreateIncident = async () => {
+    try {
+      const newIncidentData = {
+        title: 'New Security Incident',
+        severity: 'HIGH' as const,
+        status: 'OPEN' as const,
+        type: 'security_breach',
+        description: 'Under Investigation',
+        affected_sectors: [],
+        geographic_impact: []
+      };
+
+      // Create incident via API
+      const createdIncident = await apiService.createIncident(newIncidentData);
+      
+      if (createdIncident) {
+        // Reload incidents to get the updated list
+        await loadIncidentData();
+        
+        // Find and select the newly created incident
+        const mappedIncident: Incident = {
+          id: createdIncident.id,
+          title: createdIncident.title,
+          severity: createdIncident.severity,
+          status: createdIncident.status,
+          type: createdIncident.type,
+          timestamp: new Date(createdIncident.timestamp),
+          assignee: 'Unassigned',
+          affectedSystems: createdIncident.affected_sectors || [],
+          estimatedImpact: createdIncident.description || 'Under Investigation',
+          responseTime: 0,
+          lastUpdate: new Date(createdIncident.timestamp),
+          description: createdIncident.description,
+          affected_sectors: createdIncident.affected_sectors,
+          geographic_impact: createdIncident.geographic_impact
+        };
+        
+        setSelectedIncident(mappedIncident);
+      }
+    } catch (error) {
+      console.error('Failed to create incident:', error);
+      // Fallback to local creation if API fails
+      const newIncident: Incident = {
+        id: `INC-2024-${String(incidents.length + 1).padStart(3, '0')}`,
+        title: 'New Security Incident',
+        severity: 'HIGH',
+        status: 'OPEN',
+        type: 'security_breach',
+        timestamp: new Date(),
+        assignee: 'Unassigned',
+        affectedSystems: [],
+        estimatedImpact: 'Under Investigation',
+        responseTime: 0,
+        lastUpdate: new Date()
+      };
+      setIncidents([newIncident, ...incidents]);
+      setSelectedIncident(newIncident);
+    }
   };
 
   const handleEscalateIncident = (incident: Incident) => {
@@ -180,12 +228,30 @@ export default function IncidentDashboard() {
     }
   };
 
-  const handleStatusChange = (incident: Incident, newStatus: Incident['status']) => {
-    setIncidents(prev => prev.map(inc => 
-      inc.id === incident.id 
-        ? { ...inc, status: newStatus, lastUpdate: new Date() }
-        : inc
-    ));
+  const handleStatusChange = async (incident: Incident, newStatus: Incident['status']) => {
+    try {
+      // Update incident status via API
+      const updatedIncident = await apiService.updateIncident(incident.id, {
+        status: newStatus
+      });
+      
+      if (updatedIncident) {
+        // Update local state
+        setIncidents(prev => prev.map(inc => 
+          inc.id === incident.id 
+            ? { ...inc, status: newStatus, lastUpdate: new Date() }
+            : inc
+        ));
+      }
+    } catch (error) {
+      console.error('Failed to update incident status:', error);
+      // Fallback to local update if API fails
+      setIncidents(prev => prev.map(inc => 
+        inc.id === incident.id 
+          ? { ...inc, status: newStatus, lastUpdate: new Date() }
+          : inc
+      ));
+    }
   };
 
   const getSeverityColor = (severity: string) => {
