@@ -23,12 +23,24 @@ export default function Home() {
 
   const applyFilter = (type: string, value: string) => {
     try {
-      const f = encodeURIComponent(JSON.stringify({ [type]: [value] }));
+      // Map filter types to navigation parameters
+      const filterMap: Record<string, string> = {
+        'agencies': 'agency',
+        'sectors': 'sector', 
+        'functions': 'function'
+      };
+      
+      const filterKey = filterMap[type] || type;
+      const f = encodeURIComponent(JSON.stringify({ [filterKey]: [value] }));
       navigate(`/browse?f=${f}`);
     } catch (error) {
       console.error('Filter navigation error:', error);
-      // Fallback to basic navigation
-      navigate('/browse');
+      // Fallback to map with query params
+      try {
+        navigate(`/map?${filterKey}=${encodeURIComponent(value)}`);
+      } catch {
+        navigate('/browse');
+      }
     }
   };
 
@@ -122,45 +134,125 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Quick filters */}
-        <div className="w-full max-w-4xl">
-          <h3 className="text-center text-lg font-semibold mb-4 text-gray-300">
-            Quick Filters
+        {/* Enhanced Quick Filters */}
+        <div className="w-full max-w-5xl">
+          <h3 className="text-center text-lg font-semibold mb-6 text-gray-300">
+            Explore Federal Cybersecurity Infrastructure
           </h3>
-          <div className="flex gap-4 flex-wrap justify-center">
-            {/* Agency filters */}
-            <div className="space-y-2">
-              <p className="text-sm text-gray-400 text-center">Agencies</p>
-              <div className="flex gap-2 flex-wrap justify-center">
-                {['CISA', 'FBI', 'NSA', 'DHS', 'DOD', 'Secret Service'].map((agency) => (
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Priority Agencies */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <span className="text-blue-400">🏛️</span>
+                <p className="text-sm font-medium text-gray-300 text-center">Priority Agencies</p>
+              </div>
+              <div className="flex flex-col gap-2">
+                {[
+                  { name: 'CISA', icon: '🛡️', desc: 'Cybersecurity & Infrastructure' },
+                  { name: 'FBI', icon: '🕵️', desc: 'Federal Bureau of Investigation' },
+                  { name: 'SECRET_SERVICE', icon: '⭐', desc: 'US Secret Service' },
+                  { name: 'DHS', icon: '🏠', desc: 'Homeland Security' }
+                ].map((agency) => (
                   <button
-                    key={agency}
-                    onClick={() => applyFilter('agencies', agency)}
-                    className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    key={agency.name}
+                    onClick={() => applyFilter('agencies', agency.name)}
+                    className="group px-4 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50 text-left"
                     disabled={!isOnline}
-                    aria-label={`Filter by ${agency}`}
+                    aria-label={`Filter by ${agency.name}`}
                   >
-                    {agency}
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">{agency.icon}</span>
+                      <div>
+                        <div className="font-medium">{agency.name}</div>
+                        <div className="text-xs text-gray-300 group-hover:text-white">{agency.desc}</div>
+                      </div>
+                    </div>
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Sector filters */}
-            <div className="space-y-2">
-              <p className="text-sm text-gray-400 text-center">Sectors</p>
-              <div className="flex gap-2 flex-wrap justify-center">
-                {['Critical Infrastructure', 'Financial Services', 'Healthcare', 'Energy', 'Defense', 'Communications'].map((sector) => (
+            {/* Critical Infrastructure */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <span className="text-green-400">⚡</span>
+                <p className="text-sm font-medium text-gray-300 text-center">Critical Infrastructure</p>
+              </div>
+              <div className="flex flex-col gap-2">
+                {[
+                  { name: 'energy', icon: '⚡', label: 'Energy Sector' },
+                  { name: 'financial_services', icon: '🏦', label: 'Financial Services' },
+                  { name: 'healthcare_public_health', icon: '🏥', label: 'Healthcare' },
+                  { name: 'communications', icon: '📡', label: 'Communications' }
+                ].map((sector) => (
                   <button
-                    key={sector}
-                    onClick={() => applyFilter('sectors', sector)}
-                    className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-full text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
+                    key={sector.name}
+                    onClick={() => applyFilter('sectors', sector.name)}
+                    className="group px-4 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50 text-left"
                     disabled={!isOnline}
-                    aria-label={`Filter by ${sector} sector`}
+                    aria-label={`Filter by ${sector.label}`}
                   >
-                    {sector}
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">{sector.icon}</span>
+                      <div>
+                        <div className="font-medium">{sector.label}</div>
+                      </div>
+                    </div>
                   </button>
                 ))}
+              </div>
+            </div>
+
+            {/* Operational Functions */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <span className="text-purple-400">🎯</span>
+                <p className="text-sm font-medium text-gray-300 text-center">Key Functions</p>
+              </div>
+              <div className="flex flex-col gap-2">
+                {[
+                  { name: 'incident_response', icon: '🚨', label: 'Incident Response' },
+                  { name: 'cyber_forensics', icon: '🔍', label: 'Cyber Forensics' },
+                  { name: 'threat_hunting', icon: '🎯', label: 'Threat Hunting' },
+                  { name: 'intelligence', icon: '🕵️', label: 'Intelligence' }
+                ].map((func) => (
+                  <button
+                    key={func.name}
+                    onClick={() => applyFilter('functions', func.name)}
+                    className="group px-4 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/50 text-left"
+                    disabled={!isOnline}
+                    aria-label={`Filter by ${func.label}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">{func.icon}</span>
+                      <div>
+                        <div className="font-medium">{func.label}</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          {/* Quick Stats */}
+          <div className="mt-8 text-center">
+            <div className="inline-flex items-center gap-6 px-6 py-3 bg-white/10 backdrop-blur-sm rounded-xl">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-400">2000+</div>
+                <div className="text-xs text-gray-300">Federal Entities</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-400">16</div>
+                <div className="text-xs text-gray-300">CI Sectors</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-400">50+</div>
+                <div className="text-xs text-gray-300">States Covered</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-400">24/7</div>
+                <div className="text-xs text-gray-300">Operations</div>
               </div>
             </div>
           </div>

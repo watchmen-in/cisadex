@@ -10,9 +10,10 @@ import { loadOffices } from "../utils/dataLoader";
 
 function TabBar({ tab, onChange }) {
   const tabs = [
-    { id: "overview", label: "Overview", icon: "📊" },
-    { id: "map", label: "Map", icon: "🗺️" },
-    { id: "intelligence", label: "Intelligence", icon: "🔍" },
+    { id: "overview", label: "Threat Intel", icon: "🚨" },
+    { id: "map", label: "Infrastructure", icon: "🗺️" },
+    { id: "intelligence", label: "Feeds", icon: "🔍" },
+    { id: "emergency", label: "Emergency", icon: "⚡" },
     { id: "resources", label: "Resources", icon: "📚" },
   ];
   
@@ -38,8 +39,235 @@ function TabBar({ tab, onChange }) {
   );
 }
 
+function ThreatLevelIndicator({ level, count }) {
+  const levelConfig = {
+    critical: { color: 'text-red-600 bg-red-100 border-red-300', icon: '🚨', label: 'Critical' },
+    high: { color: 'text-orange-600 bg-orange-100 border-orange-300', icon: '⚠️', label: 'High' },
+    medium: { color: 'text-yellow-600 bg-yellow-100 border-yellow-300', icon: '⚡', label: 'Medium' },
+    low: { color: 'text-green-600 bg-green-100 border-green-300', icon: '✅', label: 'Low' }
+  };
+  
+  const config = levelConfig[level] || levelConfig.low;
+  
+  return (
+    <div className={`rounded-lg p-4 border-2 ${config.color} transition-all hover:shadow-md`}>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-2xl">{config.icon}</span>
+        <div className="text-right">
+          <div className="text-2xl font-bold">{count}</div>
+          <div className="text-xs font-medium uppercase tracking-wide">{config.label}</div>
+        </div>
+      </div>
+      <div className="text-sm font-medium">Threat Level</div>
+    </div>
+  );
+}
+
+function RealTimeThreatFeed() {
+  const [threats, setThreats] = useState([]);
+  const [isLive, setIsLive] = useState(true);
+  
+  useEffect(() => {
+    // Simulate real-time threat feed
+    const generateThreat = () => {
+      const threatTypes = ['Malware', 'Phishing', 'Ransomware', 'DDoS', 'Data Breach', 'APT Activity'];
+      const severities = ['critical', 'high', 'medium', 'low'];
+      const sources = ['CISA', 'FBI IC3', 'DHS', 'NIST', 'Private Sector'];
+      
+      return {
+        id: Date.now() + Math.random(),
+        type: threatTypes[Math.floor(Math.random() * threatTypes.length)],
+        severity: severities[Math.floor(Math.random() * severities.length)],
+        source: sources[Math.floor(Math.random() * sources.length)],
+        description: 'New threat detected in federal infrastructure',
+        timestamp: new Date(),
+        location: 'Washington DC Metro Area'
+      };
+    };
+    
+    // Add initial threats
+    setThreats([
+      {
+        id: 1,
+        type: 'APT Activity',
+        severity: 'critical',
+        source: 'CISA',
+        description: 'Sophisticated persistent threat targeting federal agencies',
+        timestamp: new Date(Date.now() - 300000),
+        location: 'Multiple Locations'
+      },
+      {
+        id: 2,
+        type: 'Ransomware',
+        severity: 'high',
+        source: 'FBI IC3',
+        description: 'New ransomware variant affecting critical infrastructure',
+        timestamp: new Date(Date.now() - 600000),
+        location: 'East Coast'
+      }
+    ]);
+    
+    let interval;
+    if (isLive) {
+      interval = setInterval(() => {
+        setThreats(prev => {
+          const newThreat = generateThreat();
+          return [newThreat, ...prev.slice(0, 9)]; // Keep only 10 most recent
+        });
+      }, 8000); // New threat every 8 seconds
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isLive]);
+  
+  const getSeverityBadge = (severity) => {
+    const badges = {
+      critical: 'bg-red-600 text-white',
+      high: 'bg-orange-500 text-white',
+      medium: 'bg-yellow-500 text-black',
+      low: 'bg-green-500 text-white'
+    };
+    return badges[severity] || badges.low;
+  };
+  
+  return (
+    <div className="border border-b1 rounded-lg overflow-hidden">
+      <div className="bg-bg2 px-4 py-2 border-b border-b1 flex items-center justify-between">
+        <h3 className="font-semibold flex items-center gap-2">
+          <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-red-500 animate-pulse' : 'bg-gray-400'}`}></span>
+          <span>🔴</span>
+          Real-Time Threat Feed
+        </h3>
+        <button
+          onClick={() => setIsLive(!isLive)}
+          className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
+            isLive 
+              ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          {isLive ? 'LIVE' : 'PAUSED'}
+        </button>
+      </div>
+      <div className="max-h-96 overflow-y-auto">
+        {threats.map((threat) => (
+          <div key={threat.id} className="p-4 border-b border-b1 hover:bg-bg2/50 transition-colors">
+            <div className="flex items-start justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${getSeverityBadge(threat.severity)}`}>
+                  {threat.severity.toUpperCase()}
+                </span>
+                <span className="font-medium">{threat.type}</span>
+              </div>
+              <span className="text-xs text-t2">
+                {threat.timestamp.toLocaleTimeString()}
+              </span>
+            </div>
+            <p className="text-sm text-t2 mb-2">{threat.description}</p>
+            <div className="flex items-center justify-between text-xs text-t2">
+              <span>Source: {threat.source}</span>
+              <span>📍 {threat.location}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function IncidentResponseMetrics() {
+  const [metrics, setMetrics] = useState({
+    activeIncidents: 3,
+    avgResponseTime: '14 min',
+    resolvedToday: 8,
+    escalated: 1,
+    mttr: '2.4 hrs',
+    teamUtilization: 78
+  });
+  
+  const [responseTeams, setResponseTeams] = useState([
+    { id: 1, name: 'SOC Team Alpha', status: 'available', incidents: 2, location: 'DC' },
+    { id: 2, name: 'CERT Response', status: 'responding', incidents: 1, location: 'VA' },
+    { id: 3, name: 'IR Team Bravo', status: 'available', incidents: 0, location: 'MD' },
+    { id: 4, name: 'Cyber Defense', status: 'maintenance', incidents: 0, location: 'DC' }
+  ]);
+  
+  const getStatusColor = (status) => {
+    const colors = {
+      available: 'bg-green-500',
+      responding: 'bg-red-500 animate-pulse',
+      maintenance: 'bg-yellow-500'
+    };
+    return colors[status] || 'bg-gray-500';
+  };
+  
+  return (
+    <div className="space-y-6">
+      {/* Metrics Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="bg-bg2 rounded-lg p-4 border border-b1">
+          <div className="text-2xl font-bold text-err">{metrics.activeIncidents}</div>
+          <div className="text-sm text-t2">Active Incidents</div>
+        </div>
+        <div className="bg-bg2 rounded-lg p-4 border border-b1">
+          <div className="text-2xl font-bold text-brand">{metrics.avgResponseTime}</div>
+          <div className="text-sm text-t2">Avg Response Time</div>
+        </div>
+        <div className="bg-bg2 rounded-lg p-4 border border-b1">
+          <div className="text-2xl font-bold text-success">{metrics.resolvedToday}</div>
+          <div className="text-sm text-t2">Resolved Today</div>
+        </div>
+        <div className="bg-bg2 rounded-lg p-4 border border-b1">
+          <div className="text-2xl font-bold text-warn">{metrics.escalated}</div>
+          <div className="text-sm text-t2">Escalated</div>
+        </div>
+        <div className="bg-bg2 rounded-lg p-4 border border-b1">
+          <div className="text-2xl font-bold text-t1">{metrics.mttr}</div>
+          <div className="text-sm text-t2">Mean Time to Resolve</div>
+        </div>
+        <div className="bg-bg2 rounded-lg p-4 border border-b1">
+          <div className="text-2xl font-bold text-t1">{metrics.teamUtilization}%</div>
+          <div className="text-sm text-t2">Team Utilization</div>
+        </div>
+      </div>
+      
+      {/* Response Teams Status */}
+      <div className="border border-b1 rounded-lg overflow-hidden">
+        <div className="bg-bg2 px-4 py-2 border-b border-b1">
+          <h4 className="font-semibold flex items-center gap-2">
+            <span>👥</span>
+            Response Teams Status
+          </h4>
+        </div>
+        <div className="p-4">
+          <div className="grid gap-3">
+            {responseTeams.map((team) => (
+              <div key={team.id} className="flex items-center justify-between p-3 bg-bg1 rounded-lg border border-b1">
+                <div className="flex items-center gap-3">
+                  <div className={`w-3 h-3 rounded-full ${getStatusColor(team.status)}`}></div>
+                  <div>
+                    <div className="font-medium">{team.name}</div>
+                    <div className="text-xs text-t2">📍 {team.location}</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-medium">{team.status.toUpperCase()}</div>
+                  <div className="text-xs text-t2">{team.incidents} active</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function OverviewPanel() {
   const [stats, setStats] = useState({
+    threats: { critical: 2, high: 8, medium: 23, low: 45 },
     alerts: 0,
     vulnerabilities: 0,
     incidents: 0,
@@ -47,22 +275,42 @@ function OverviewPanel() {
   });
 
   useEffect(() => {
-    // Simulate loading stats
-    setTimeout(() => {
-      setStats({
-        alerts: 12,
-        vulnerabilities: 47,
-        incidents: 3,
-        updates: 28
-      });
-    }, 500);
+    // Simulate loading stats with real-time updates
+    const updateStats = () => {
+      setStats(prev => ({
+        ...prev,
+        alerts: 12 + Math.floor(Math.random() * 5),
+        vulnerabilities: 47 + Math.floor(Math.random() * 10),
+        incidents: 3 + Math.floor(Math.random() * 3),
+        updates: 28 + Math.floor(Math.random() * 8)
+      }));
+    };
+    
+    updateStats();
+    const interval = setInterval(updateStats, 30000); // Update every 30 seconds
+    
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-semibold mb-4">Cybersecurity Overview</h2>
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-semibold">Cybersecurity Threat Intelligence Dashboard</h2>
+        <div className="flex items-center gap-2 text-sm text-t2">
+          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          SOC Status: OPERATIONAL
+        </div>
+      </div>
       
-      {/* Stats Grid */}
+      {/* Threat Level Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <ThreatLevelIndicator level="critical" count={stats.threats.critical} />
+        <ThreatLevelIndicator level="high" count={stats.threats.high} />
+        <ThreatLevelIndicator level="medium" count={stats.threats.medium} />
+        <ThreatLevelIndicator level="low" count={stats.threats.low} />
+      </div>
+      
+      {/* Additional Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-bg2 rounded-lg p-4 border border-b1">
           <div className="text-2xl font-bold text-err">{stats.alerts}</div>
@@ -83,6 +331,9 @@ function OverviewPanel() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Real-Time Threat Feed */}
+        <RealTimeThreatFeed />
+
         {/* CISA Advisories */}
         <div className="border border-b1 rounded-lg overflow-hidden">
           <div className="bg-bg2 px-4 py-2 border-b border-b1">
@@ -93,17 +344,15 @@ function OverviewPanel() {
           </div>
           <EnhancedFeedList category="government" />
         </div>
-
-        {/* News & Industry */}
-        <div className="border border-b1 rounded-lg overflow-hidden">
-          <div className="bg-bg2 px-4 py-2 border-b border-b1">
-            <h3 className="font-semibold flex items-center gap-2">
-              <span>📰</span>
-              News & Industry
-            </h3>
-          </div>
-          <EnhancedFeedList category="news" />
-        </div>
+      </div>
+      
+      {/* Incident Response Metrics */}
+      <div className="mt-6">
+        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <span>🚨</span>
+          Incident Response Metrics
+        </h3>
+        <IncidentResponseMetrics />
       </div>
     </div>
   );
@@ -267,6 +516,11 @@ export default function EnhancedDashboard() {
                 {tab === "intelligence" && (
                   <div className="fade-enter">
                     <IntelligencePanel />
+                  </div>
+                )}
+                {tab === "emergency" && (
+                  <div className="fade-enter">
+                    <EmergencyResponsePanel />
                   </div>
                 )}
                 {tab === "resources" && (
