@@ -8,6 +8,11 @@ export interface UrlState {
   f?: Filters;
   s?: string;
   cmp?: string[];
+  threatFilter?: {
+    types?: string[];
+    severity?: string[];
+    timeRange?: string;
+  };
 }
 
 export default function useUrlState(): [UrlState, (s: Partial<UrlState>) => void] {
@@ -30,6 +35,12 @@ export default function useUrlState(): [UrlState, (s: Partial<UrlState>) => void
   if (s) state.s = s;
   const cmp = params.get('cmp');
   if (cmp) state.cmp = cmp.split(',');
+  const tf = params.get('tf');
+  if (tf) {
+    try {
+      state.threatFilter = JSON.parse(tf);
+    } catch {}
+  }
 
   const update = (patch: Partial<UrlState>) => {
     const next = new URLSearchParams(params);
@@ -39,6 +50,15 @@ export default function useUrlState(): [UrlState, (s: Partial<UrlState>) => void
     if (patch.f) next.set('f', JSON.stringify(patch.f));
     if (patch.s !== undefined) next.set('s', patch.s);
     if (patch.cmp) next.set('cmp', patch.cmp.join(','));
+    if (patch.threatFilter) next.set('tf', JSON.stringify(patch.threatFilter));
+    
+    // Remove empty parameters
+    for (const [key, value] of next.entries()) {
+      if (!value || value === '{}' || value === '[]') {
+        next.delete(key);
+      }
+    }
+    
     setParams(next, { replace: true });
   };
 

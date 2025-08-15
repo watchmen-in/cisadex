@@ -21,27 +21,38 @@ export default function Home() {
     };
   }, []);
 
-  const applyFilter = (type: string, value: string) => {
+  const applyFilter = (type: string, value: string, targetPage: string = '/map') => {
     try {
-      // Map filter types to navigation parameters
+      // Create comprehensive filter object
+      const filterObj: Record<string, string[]> = {};
+      
+      // Map filter types to filter object keys
       const filterMap: Record<string, string> = {
-        'agencies': 'agency',
-        'sectors': 'sector', 
-        'functions': 'function'
+        'agencies': 'agencies',
+        'sectors': 'sectors', 
+        'functions': 'functions',
+        'states': 'states',
+        'threatTypes': 'threatTypes',
+        'severityLevels': 'severityLevels'
       };
       
       const filterKey = filterMap[type] || type;
-      const f = encodeURIComponent(JSON.stringify({ [filterKey]: [value] }));
-      navigate(`/browse?f=${f}`);
+      filterObj[filterKey] = [value];
+      
+      // Create URL with comprehensive filter state
+      const f = encodeURIComponent(JSON.stringify(filterObj));
+      const targetUrl = `${targetPage}?f=${f}`;
+      
+      navigate(targetUrl);
     } catch (error) {
       console.error('Filter navigation error:', error);
-      // Fallback to map with query params
-      try {
-        navigate(`/map?${filterKey}=${encodeURIComponent(value)}`);
-      } catch {
-        navigate('/browse');
-      }
+      // Fallback navigation
+      navigate('/map');
     }
+  };
+
+  const applyQuickFilter = (filterType: string, filterValue: string) => {
+    applyFilter(filterType, filterValue, '/dashboard#overview');
   };
 
   const handleBrowseClick = () => {
@@ -135,11 +146,11 @@ export default function Home() {
         </div>
 
         {/* Enhanced Quick Filters */}
-        <div className="w-full max-w-5xl">
+        <div className="w-full max-w-6xl">
           <h3 className="text-center text-lg font-semibold mb-6 text-gray-300">
             Explore Federal Cybersecurity Infrastructure
           </h3>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-6">
             {/* Priority Agencies */}
             <div className="space-y-3">
               <div className="flex items-center justify-center gap-2 mb-3">
@@ -227,6 +238,37 @@ export default function Home() {
                       <span className="text-lg">{func.icon}</span>
                       <div>
                         <div className="font-medium">{func.label}</div>
+                      </div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Threat Intelligence */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <span className="text-red-400">🚨</span>
+                <p className="text-sm font-medium text-gray-300 text-center">Threat Intelligence</p>
+              </div>
+              <div className="flex flex-col gap-2">
+                {[
+                  { name: 'CRITICAL', icon: '🚨', label: 'Critical Threats', type: 'severityLevels' },
+                  { name: 'Ransomware', icon: '🔒', label: 'Ransomware', type: 'threatTypes' },
+                  { name: 'APT Activity', icon: '🕵️', label: 'APT Activity', type: 'threatTypes' },
+                  { name: 'Data Breach', icon: '💾', label: 'Data Breaches', type: 'threatTypes' }
+                ].map((threat) => (
+                  <button
+                    key={threat.name}
+                    onClick={() => applyQuickFilter(threat.type, threat.name)}
+                    className="group px-4 py-3 bg-red-600/20 hover:bg-red-600/30 backdrop-blur-sm text-white rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500/50 text-left border border-red-500/30"
+                    disabled={!isOnline}
+                    aria-label={`View ${threat.label}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">{threat.icon}</span>
+                      <div>
+                        <div className="font-medium">{threat.label}</div>
                       </div>
                     </div>
                   </button>

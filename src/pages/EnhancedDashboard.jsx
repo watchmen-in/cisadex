@@ -3,10 +3,26 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import FilterPanel from "../components/FilterPanel";
+import AdvancedFilterPanel from "../components/filters/AdvancedFilterPanel";
 import MapView from "../components/MapView";
 import ResourcePanel from "../components/ResourcePanel";
 import EnhancedFeedList from "../components/Feeds/EnhancedFeedList";
+import EmergencyAccessibilityToolbar from "../components/accessibility/EmergencyAccessibilityToolbar";
 import { loadOffices } from "../utils/dataLoader";
+import useUrlState from "../hooks/useUrlState";
+import { Filters } from "../constants/taxonomy";
+import { 
+  useThreatIntelligence, 
+  useInfrastructureData, 
+  usePerformanceMonitor,
+  useMemoryOptimization 
+} from "../hooks/usePerformanceOptimized";
+import { 
+  useAccessibility, 
+  useLiveRegion, 
+  useSkipLinks 
+} from "../hooks/useAccessibility";
+import { ARIA_ROLES } from "../utils/accessibility";
 
 function TabBar({ tab, onChange }) {
   const tabs = [
@@ -274,8 +290,45 @@ function OverviewPanel() {
     updates: 0
   });
 
+  // Use performance-optimized threat intelligence
+  const {
+    data: threatData,
+    loading: threatLoading,
+    progress: threatProgress,
+    error: threatError,
+    lastUpdated: threatLastUpdated
+  } = useThreatIntelligence({
+    autoLoad: true,
+    batchSize: 50,
+    refreshInterval: 300000 // 5 minutes
+  });
+
+  // Performance monitoring
+  const { startTimer, endTimer } = usePerformanceMonitor('OverviewPanel');
+
   useEffect(() => {
-    // Simulate loading stats with real-time updates
+    const timerId = startTimer('calculateStats');
+    
+    // Calculate threat statistics from loaded data
+    if (threatData.length > 0) {
+      const threatCounts = threatData.reduce((acc, threat) => {
+        const severity = threat.severity?.toLowerCase() || 'low';
+        acc[severity] = (acc[severity] || 0) + 1;
+        return acc;
+      }, {});
+
+      setStats(prev => ({
+        ...prev,
+        threats: {
+          critical: threatCounts.critical || 0,
+          high: threatCounts.high || 0,
+          medium: threatCounts.medium || 0,
+          low: threatCounts.low || 0
+        }
+      }));
+    }
+
+    // Simulate other stats with real-time updates
     const updateStats = () => {
       setStats(prev => ({
         ...prev,
@@ -289,16 +342,31 @@ function OverviewPanel() {
     updateStats();
     const interval = setInterval(updateStats, 30000); // Update every 30 seconds
     
+    endTimer(timerId);
+    
     return () => clearInterval(interval);
-  }, []);
+  }, [threatData, startTimer, endTimer]);
 
   return (
     <div className="p-6 space-y-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold">Cybersecurity Threat Intelligence Dashboard</h2>
-        <div className="flex items-center gap-2 text-sm text-t2">
-          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-          SOC Status: OPERATIONAL
+        <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-2 text-t2">
+            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            SOC Status: OPERATIONAL
+          </div>
+          {threatLoading && (
+            <div className="flex items-center gap-2 text-t2">
+              <div className="w-4 h-4 border-2 border-brand border-t-transparent rounded-full animate-spin"></div>
+              Loading threats... ({threatProgress.loaded}/{threatProgress.total})
+            </div>
+          )}
+          {threatLastUpdated && (
+            <div className="text-xs text-t2">
+              Last updated: {threatLastUpdated.toLocaleTimeString()}
+            </div>
+          )}
         </div>
       </div>
       
@@ -593,14 +661,50 @@ function EmergencyResponsePanel() {
   );
 }
 
-function IntelligencePanel() {
+function IntelligencePanel({ advancedFilters = {} }) {
   const [feedCategory, setFeedCategory] = useState("all");
-  const [filters, setFilters] = useState({});
+  const [localFilters, setLocalFilters] = useState({});
+
+  // Combine advanced filters with local filters
+  const combinedFilters = useMemo(() => {
+    const combined = { ...localFilters };
+    
+    // Map advanced filters to feed filters
+    if (advancedFilters.severityLevels?.length > 0) {
+      combined.severity = advancedFilters.severityLevels[0]; // Use first severity for now
+    }
+    if (advancedFilters.threatTypes?.length > 0) {
+      combined.threatType = advancedFilters.threatTypes;
+    }
+    if (advancedFilters.timeRange) {
+      combined.timeRange = advancedFilters.timeRange;
+    }
+    
+    return combined;
+  }, [localFilters, advancedFilters]);
 
   return (
     <div className="p-6">
       <div className="mb-4">
         <h2 className="text-xl font-semibold mb-4">Threat Intelligence Feeds</h2>
+        
+        {/* Active Filter Summary */}
+        {Object.keys(advancedFilters).length > 0 && (
+          <div className="mb-4 p-3 bg-brand/10 border border-brand/30 rounded-lg">
+            <div className="text-sm font-medium text-brand mb-2">Applied Advanced Filters:</div>
+            <div className="text-xs text-t2 space-y-1">
+              {advancedFilters.severityLevels?.length > 0 && (
+                <div>Severity: {advancedFilters.severityLevels.join(', ')}</div>
+              )}
+              {advancedFilters.threatTypes?.length > 0 && (
+                <div>Threat Types: {advancedFilters.threatTypes.join(', ')}</div>
+              )}
+              {advancedFilters.timeRange && (
+                <div>Time Range: {advancedFilters.timeRange}</div>
+              )}
+            </div>
+          </div>
+        )}
         
         {/* Category Selector */}
         <div className="flex flex-wrap gap-2 mb-4">
@@ -626,13 +730,13 @@ function IntelligencePanel() {
           ))}
         </div>
 
-        {/* Filters */}
+        {/* Quick Filters */}
         <div className="flex flex-wrap gap-2 mb-4">
           <label className="flex items-center gap-2 px-3 py-1 bg-bg2 rounded-lg border border-b1">
             <input
               type="checkbox"
-              checked={filters.exploited || false}
-              onChange={(e) => setFilters({...filters, exploited: e.target.checked})}
+              checked={localFilters.exploited || false}
+              onChange={(e) => setLocalFilters({...localFilters, exploited: e.target.checked})}
               className="rounded"
             />
             <span className="text-sm">Actively Exploited</span>
@@ -640,28 +744,26 @@ function IntelligencePanel() {
           <label className="flex items-center gap-2 px-3 py-1 bg-bg2 rounded-lg border border-b1">
             <input
               type="checkbox"
-              checked={filters.has_cve || false}
-              onChange={(e) => setFilters({...filters, has_cve: e.target.checked})}
+              checked={localFilters.has_cve || false}
+              onChange={(e) => setLocalFilters({...localFilters, has_cve: e.target.checked})}
               className="rounded"
             />
             <span className="text-sm">Has CVE</span>
           </label>
-          <select
-            value={filters.severity || ""}
-            onChange={(e) => setFilters({...filters, severity: e.target.value || undefined})}
-            className="px-3 py-1 bg-bg2 rounded-lg border border-b1 text-sm"
-          >
-            <option value="">All Severities</option>
-            <option value="CRITICAL">Critical</option>
-            <option value="HIGH">High</option>
-            <option value="MEDIUM">Medium</option>
-            <option value="LOW">Low</option>
-          </select>
+          <label className="flex items-center gap-2 px-3 py-1 bg-bg2 rounded-lg border border-b1">
+            <input
+              type="checkbox"
+              checked={localFilters.high_priority || false}
+              onChange={(e) => setLocalFilters({...localFilters, high_priority: e.target.checked})}
+              className="rounded"
+            />
+            <span className="text-sm">High Priority</span>
+          </label>
         </div>
       </div>
 
       <div className="border border-b1 rounded-lg overflow-hidden">
-        <EnhancedFeedList category={feedCategory} filters={filters} />
+        <EnhancedFeedList category={feedCategory} filters={combinedFilters} />
       </div>
     </div>
   );
@@ -674,17 +776,78 @@ export default function EnhancedDashboard() {
   const hashTab = location.hash.replace("#", "");
   const [tab, setTab] = useState(hashTab || "overview");
   
+  // Enhanced URL state management
+  const [urlState, updateUrlState] = useUrlState();
+  const [advancedFilters, setAdvancedFilters] = useState(urlState.f || {});
+  
+  // Performance monitoring and optimization
+  const { startTimer, endTimer, getMetrics } = usePerformanceMonitor('EnhancedDashboard');
+  const { memoryUsage, forceGarbageCollection } = useMemoryOptimization();
+  
+  // Accessibility features
+  const { isHighContrast, isScreenReaderActive, announce } = useAccessibility();
+  const { announceDataLoad, announceFilterChange } = useLiveRegion();
+  const { addSkipLink } = useSkipLinks();
+  
+  // Performance-optimized infrastructure data
+  const {
+    data: infrastructureData,
+    loading: infrastructureLoading,
+    progress: infrastructureProgress
+  } = useInfrastructureData({
+    filters: advancedFilters,
+    virtualizedView: true,
+    viewportSize: 100,
+    autoLoad: true
+  });
+  
   useEffect(() => {
     if (hashTab && hashTab !== tab) setTab(hashTab);
   }, [hashTab]);
+  
+  useEffect(() => {
+    // Update advanced filters when URL state changes
+    if (urlState.f) {
+      setAdvancedFilters(urlState.f);
+    }
+  }, [urlState.f]);
   
   const changeTab = (t) => {
     setTab(t);
     navigate({ pathname: "/dashboard", hash: t });
   };
 
+  const handleAdvancedFiltersChange = (newFilters) => {
+    setAdvancedFilters(newFilters);
+    updateUrlState({ f: newFilters });
+    
+    // Announce filter changes for accessibility
+    const filterCount = Object.keys(newFilters).length;
+    announceFilterChange('Advanced Filters', `${filterCount} filter categories applied`);
+  };
+
+  // Set up skip links for accessibility
+  useEffect(() => {
+    const removeSkipLinks = [
+      addSkipLink('main-content', 'Skip to main dashboard content'),
+      addSkipLink('filter-panel', 'Skip to filter panel'),
+      addSkipLink('threat-overview', 'Skip to threat overview')
+    ];
+
+    return () => {
+      removeSkipLinks.forEach(remove => remove());
+    };
+  }, [addSkipLink]);
+
+  // Announce data loading for screen readers
+  useEffect(() => {
+    if (infrastructureData.length > 0) {
+      announceDataLoad(infrastructureData.length, 'infrastructure');
+    }
+  }, [infrastructureData, announceDataLoad]);
+
   const [offices, setOffices] = useState([]);
-  const [filters, setFilters] = useState({ agency: [], role_type: [] });
+  const [legacyFilters, setLegacyFilters] = useState({ agency: [], role_type: [] });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -707,28 +870,85 @@ export default function EnhancedDashboard() {
   );
 
   const filteredData = useMemo(() => {
-    const agencyActive = filters.agency.length > 0;
-    const roleActive = filters.role_type.length > 0;
+    const agencyActive = legacyFilters.agency.length > 0;
+    const roleActive = legacyFilters.role_type.length > 0;
     return offices.filter((o) => {
-      const okAgency = !agencyActive || filters.agency.includes(o.agency);
-      const okRole = !roleActive || filters.role_type.includes(o.role_type);
+      const okAgency = !agencyActive || legacyFilters.agency.includes(o.agency);
+      const okRole = !roleActive || legacyFilters.role_type.includes(o.role_type);
       return okAgency && okRole;
     });
-  }, [offices, filters]);
+  }, [offices, legacyFilters]);
 
   return (
     <div className="min-h-screen bg-bg0 text-t1">
+      {/* Emergency Accessibility Toolbar */}
+      <EmergencyAccessibilityToolbar position="top" />
+      
       <Header />
-      <main className="mx-auto max-w-[1600px] px-2 sm:px-4">
+      <main 
+        id="main-content"
+        className="mx-auto max-w-[1600px] px-2 sm:px-4"
+        role={ARIA_ROLES.MAIN}
+        aria-label="Cybersecurity Dashboard Main Content"
+      >
+        {/* Performance Status Bar (Dev Mode) */}
+        {import.meta.env.DEV && memoryUsage && (
+          <div className="mb-4 p-2 bg-yellow-100 border border-yellow-300 rounded text-xs text-yellow-800">
+            <div className="flex items-center justify-between">
+              <span>
+                Memory: {Math.round(memoryUsage.usedJSHeapSize / 1024 / 1024)}MB / 
+                {Math.round(memoryUsage.jsHeapSizeLimit / 1024 / 1024)}MB
+              </span>
+              <div className="flex gap-2">
+                <span>Infrastructure: {infrastructureData.length} items</span>
+                {infrastructureLoading && <span>Loading...</span>}
+                <button 
+                  onClick={forceGarbageCollection}
+                  className="px-2 py-1 bg-yellow-600 text-white rounded text-xs"
+                >
+                  Clear Cache
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-12 gap-2 sm:gap-4">
           <div className="col-span-12 md:col-span-3 lg:col-span-3 xl:col-span-2">
             <Sidebar open={open} onClose={() => setOpen(false)}>
-              <FilterPanel
-                agencies={agencies}
-                roles={roles}
-                filters={filters}
-                onChange={setFilters}
-              />
+              <div 
+                id="filter-panel"
+                role={ARIA_ROLES.FILTER_PANEL}
+                aria-label="Advanced Threat Intelligence Filters"
+              >
+                <AdvancedFilterPanel
+                  filters={advancedFilters}
+                  onChange={handleAdvancedFiltersChange}
+                  showThreatFilters={true}
+                  showTimeRange={true}
+                />
+              </div>
+              <div className="mt-6 pt-6 border-t border-b1">
+                <h4 className="font-medium text-t1 mb-4">Legacy Filters</h4>
+                <FilterPanel
+                  agencies={agencies}
+                  roles={roles}
+                  filters={legacyFilters}
+                  onChange={setLegacyFilters}
+                />
+              </div>
+              
+              {/* Performance Metrics (Dev Mode) */}
+              {import.meta.env.DEV && (
+                <div className="mt-6 pt-6 border-t border-b1">
+                  <h4 className="font-medium text-t1 mb-4 text-xs">Performance Metrics</h4>
+                  <div className="space-y-2 text-xs text-t2">
+                    <div>Infrastructure Load: {infrastructureProgress.loaded}/{infrastructureProgress.total}</div>
+                    <div>Cache Status: Active</div>
+                    <div>Render Mode: Optimized</div>
+                  </div>
+                </div>
+              )}
             </Sidebar>
           </div>
           <div className="col-span-12 md:col-span-9 lg:col-span-9 xl:col-span-10">
@@ -736,7 +956,12 @@ export default function EnhancedDashboard() {
               <TabBar tab={tab} onChange={changeTab} />
               <div className="h-full">
                 {tab === "overview" && (
-                  <div className="fade-enter">
+                  <div 
+                    id="threat-overview"
+                    className="fade-enter"
+                    role={ARIA_ROLES.THREAT_MONITOR}
+                    aria-label="Real-time threat intelligence overview"
+                  >
                     <OverviewPanel />
                   </div>
                 )}
@@ -750,7 +975,7 @@ export default function EnhancedDashboard() {
                 )}
                 {tab === "intelligence" && (
                   <div className="fade-enter">
-                    <IntelligencePanel />
+                    <IntelligencePanel advancedFilters={advancedFilters} />
                   </div>
                 )}
                 {tab === "emergency" && (
