@@ -16,6 +16,7 @@ import EnhancedDashboard from "./pages/EnhancedDashboard";
 import Splash from "./pages/Splash";
 import IncidentReport from "./pages/IncidentReport";
 import FederalInfrastructureMap from "./pages/FederalInfrastructureMap.tsx";
+import FeedDashboard from "./components/FeedDashboard";
 import "./styles/tailwind.css";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
@@ -62,7 +63,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/advisories" element={<Navigate to="/dashboard#overview" replace />} />
             <Route path="/research" element={<Navigate to="/dashboard#intelligence" replace />} />
             <Route path="/data" element={<Navigate to="/dashboard#intelligence" replace />} />
-            <Route path="/feeds" element={<Navigate to="/dashboard#intelligence" replace />} />
+            <Route path="/feeds" element={<FeedDashboard />} />
+            <Route path="/threat-intelligence" element={<FeedDashboard />} />
             <Route path="/federal-infrastructure" element={<FederalInfrastructureMap />} />
             <Route path="/report-incident" element={<IncidentReport />} />
             <Route path="/about" element={<AboutData />} />

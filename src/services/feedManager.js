@@ -5,6 +5,7 @@ import { cveEnrichmentService } from './cveEnrichmentService';
 import { stixTaxiiService } from './stixTaxiiService';
 import { emergencyResponseService } from './emergencyResponseService';
 import { federalDataRetentionService } from './federalDataRetentionService';
+import { topicDetectionService } from './topicDetectionService';
 
 export class CyberFeedManager {
   constructor() {
@@ -845,6 +846,378 @@ export class CyberFeedManager {
     }
     
     return results.sort((a, b) => b.date - a.date);
+  }
+
+  /**
+   * Enhanced feed processing with topic detection and clustering
+   */
+  async fetchAllFeedsWithClustering() {
+    try {
+      // Fetch feeds by category in parallel
+      const [
+        priorityFeeds,
+        govFeeds,
+        vendorFeeds,
+        researchFeeds,
+        intelFeeds,
+        vulnerabilityFeeds,
+        malwareFeeds
+      ] = await Promise.allSettled([
+        this.fetchPriorityFeeds(),
+        this.fetchAllByCategory('government'),
+        this.fetchAllByCategory('vendor_intel'),
+        this.fetchAllByCategory('threat_research'),
+        this.fetchAllByCategory('ioc_intel'),
+        this.fetchAllByCategory('vulnerability_intel'),
+        this.fetchAllByCategory('malware_intel')
+      ]);
+
+      // Combine successful results
+      const allItems = [
+        ...(priorityFeeds.status === 'fulfilled' ? priorityFeeds.value : []),
+        ...(govFeeds.status === 'fulfilled' ? govFeeds.value : []),
+        ...(vendorFeeds.status === 'fulfilled' ? vendorFeeds.value : []),
+        ...(researchFeeds.status === 'fulfilled' ? researchFeeds.value : []),
+        ...(intelFeeds.status === 'fulfilled' ? intelFeeds.value : []),
+        ...(vulnerabilityFeeds.status === 'fulfilled' ? vulnerabilityFeeds.value : []),
+        ...(malwareFeeds.status === 'fulfilled' ? malwareFeeds.value : [])
+      ];
+
+      // Remove duplicates and enrich items
+      const uniqueItems = this.deduplicateItems(allItems);
+      const enrichedItems = await this.enrichFeedItems(uniqueItems);
+
+      // Cluster by topics
+      const clusters = topicDetectionService.clusterFeedsByTopics(enrichedItems);
+
+      return {
+        clusters,
+        allItems: enrichedItems,
+        stats: this.calculateFeedStats(enrichedItems),
+        healthStatus: this.getHealthStatus()
+      };
+
+    } catch (error) {
+      console.error('Error fetching feeds with clustering:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Remove duplicate feed items based on title, link, and source
+   */
+  deduplicateItems(items) {
+    const seen = new Set();
+    return items.filter(item => {
+      const key = `${item.title}-${item.link}-${item.source}`.toLowerCase();
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+  }
+
+  /**
+   * Enrich feed items with additional metadata and analysis
+   */
+  async enrichFeedItems(items) {
+    const enrichedItems = [];
+
+    for (const item of items) {
+      try {
+        const enrichedItem = {
+          ...item,
+          id: item.id || `item-${Date.now()}-${Math.random()}`,
+          date: item.date ? new Date(item.date) : new Date(),
+          description: item.description || item.contentSnippet || '',
+        };
+
+        // Detect topics and calculate scores
+        enrichedItem.topics = topicDetectionService.detectTopics(enrichedItem);
+        enrichedItem.topicScores = topicDetectionService.calculateTopicScores(enrichedItem);
+
+        // Enhance CVE information
+        if (enrichedItem.cve) {
+          enrichedItem.cveDetails = await this.enrichCVEData(enrichedItem.cve);
+        }
+
+        // Extract additional threat indicators
+        enrichedItem.threats = this.extractThreatIndicators(enrichedItem);
+
+        // Calculate content quality score
+        enrichedItem.qualityScore = this.calculateContentQuality(enrichedItem);
+
+        enrichedItems.push(enrichedItem);
+
+      } catch (error) {
+        console.error('Error enriching feed item:', error);
+        // Add item without enrichment if processing fails
+        enrichedItems.push({
+          ...item,
+          id: item.id || `item-${Date.now()}-${Math.random()}`,
+          date: item.date ? new Date(item.date) : new Date(),
+          topics: [],
+          topicScores: {},
+          threats: []
+        });
+      }
+    }
+
+    return enrichedItems;
+  }
+
+  /**
+   * Enrich CVE data with additional details
+   */
+  async enrichCVEData(cveId) {
+    try {
+      // Try to get enriched CVE data from service
+      if (cveEnrichmentService && cveEnrichmentService.getCVEDetails) {
+        return await cveEnrichmentService.getCVEDetails(cveId);
+      }
+
+      // Fallback to basic CVE info
+      return {
+        id: cveId,
+        nvdUrl: `https://nvd.nist.gov/vuln/detail/${cveId}`,
+        cisaKevStatus: await this.checkCISAKEVStatus(cveId)
+      };
+    } catch (error) {
+      console.error(`Error enriching CVE ${cveId}:`, error);
+      return null;
+    }
+  }
+
+  /**
+   * Check if CVE is in CISA KEV catalog
+   */
+  async checkCISAKEVStatus(cveId) {
+    try {
+      if (cisaKevService && cisaKevService.isKnownExploited) {
+        return await cisaKevService.isKnownExploited(cveId);
+      }
+      return false;
+    } catch (error) {
+      console.error(`Error checking CISA KEV status for ${cveId}:`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Extract threat indicators from feed content
+   */
+  extractThreatIndicators(item) {
+    const content = `${item.title} ${item.description}`.toLowerCase();
+    const threats = [];
+
+    // Common threat indicators
+    const threatPatterns = [
+      { pattern: /ransomware/i, type: 'ransomware' },
+      { pattern: /malware/i, type: 'malware' },
+      { pattern: /phishing/i, type: 'phishing' },
+      { pattern: /apt[\s-]?\d*/i, type: 'apt' },
+      { pattern: /zero[\s-]?day/i, type: 'zero-day' },
+      { pattern: /data[\s-]?breach/i, type: 'data-breach' },
+      { pattern: /supply[\s-]?chain/i, type: 'supply-chain' },
+      { pattern: /ddos/i, type: 'ddos' },
+      { pattern: /botnet/i, type: 'botnet' },
+      { pattern: /cryptocurrency/i, type: 'crypto' }
+    ];
+
+    for (const { pattern, type } of threatPatterns) {
+      if (pattern.test(content)) {
+        threats.push(type);
+      }
+    }
+
+    return threats;
+  }
+
+  /**
+   * Calculate content quality score (0-100)
+   */
+  calculateContentQuality(item) {
+    let score = 50; // Base score
+
+    // Title quality
+    if (item.title && item.title.length > 10) score += 10;
+    if (item.title && item.title.length > 50) score += 5;
+
+    // Description quality
+    if (item.description && item.description.length > 50) score += 10;
+    if (item.description && item.description.length > 200) score += 10;
+
+    // Has CVE reference
+    if (item.cve) score += 15;
+
+    // Has severity
+    if (item.severity) score += 10;
+
+    // Recent content (last 7 days)
+    const daysSincePublished = (new Date() - new Date(item.date)) / (1000 * 60 * 60 * 24);
+    if (daysSincePublished <= 7) score += 10;
+
+    // Government/authoritative source
+    if (item.source && (
+      item.source.toLowerCase().includes('cisa') ||
+      item.source.toLowerCase().includes('fbi') ||
+      item.source.toLowerCase().includes('nist')
+    )) {
+      score += 15;
+    }
+
+    return Math.min(100, Math.max(0, score));
+  }
+
+  /**
+   * Calculate comprehensive feed statistics
+   */
+  calculateFeedStats(items) {
+    const now = new Date();
+    const last24h = items.filter(item => 
+      (now - new Date(item.date)) <= 24 * 60 * 60 * 1000
+    );
+    const lastWeek = items.filter(item => 
+      (now - new Date(item.date)) <= 7 * 24 * 60 * 60 * 1000
+    );
+
+    const severityCounts = items.reduce((acc, item) => {
+      if (item.severity) {
+        acc[item.severity] = (acc[item.severity] || 0) + 1;
+      }
+      return acc;
+    }, {});
+
+    const topicCounts = items.reduce((acc, item) => {
+      item.topics?.forEach(topic => {
+        acc[topic] = (acc[topic] || 0) + 1;
+      });
+      return acc;
+    }, {});
+
+    const sourceCounts = items.reduce((acc, item) => {
+      acc[item.source] = (acc[item.source] || 0) + 1;
+      return acc;
+    }, {});
+
+    return {
+      totalItems: items.length,
+      last24h: last24h.length,
+      lastWeek: lastWeek.length,
+      uniqueSources: Object.keys(sourceCounts).length,
+      severityBreakdown: severityCounts,
+      topicBreakdown: topicCounts,
+      sourceBreakdown: sourceCounts,
+      averageQuality: items.reduce((sum, item) => sum + (item.qualityScore || 0), 0) / items.length,
+      cveCount: items.filter(item => item.cve).length,
+      threatIndicators: items.reduce((acc, item) => {
+        item.threats?.forEach(threat => {
+          acc[threat] = (acc[threat] || 0) + 1;
+        });
+        return acc;
+      }, {})
+    };
+  }
+
+  /**
+   * Search feeds with advanced filtering and scoring
+   */
+  async searchFeeds(query, filters = {}) {
+    try {
+      const { clusters, allItems } = await this.fetchAllFeedsWithClustering();
+      
+      if (!query && Object.keys(filters).length === 0) {
+        return { clusters, allItems, matchCount: allItems.length };
+      }
+
+      let filteredItems = allItems;
+
+      // Apply text search
+      if (query) {
+        const lowerQuery = query.toLowerCase();
+        filteredItems = filteredItems.filter(item => {
+          const searchText = `${item.title} ${item.description} ${item.source}`.toLowerCase();
+          return searchText.includes(lowerQuery) ||
+                 item.cve?.toLowerCase().includes(lowerQuery) ||
+                 item.topics?.some(topic => topic.toLowerCase().includes(lowerQuery));
+        });
+      }
+
+      // Apply filters
+      if (filters.topics?.length) {
+        filteredItems = filteredItems.filter(item =>
+          item.topics?.some(topic => filters.topics.includes(topic))
+        );
+      }
+
+      if (filters.sources?.length) {
+        filteredItems = filteredItems.filter(item =>
+          filters.sources.includes(item.source)
+        );
+      }
+
+      if (filters.severities?.length) {
+        filteredItems = filteredItems.filter(item =>
+          item.severity && filters.severities.includes(item.severity)
+        );
+      }
+
+      if (filters.dateRange?.start || filters.dateRange?.end) {
+        filteredItems = filteredItems.filter(item => {
+          const itemDate = new Date(item.date);
+          if (filters.dateRange.start && itemDate < filters.dateRange.start) return false;
+          if (filters.dateRange.end && itemDate > filters.dateRange.end) return false;
+          return true;
+        });
+      }
+
+      // Re-cluster filtered results
+      const filteredClusters = topicDetectionService.clusterFeedsByTopics(filteredItems);
+
+      return {
+        clusters: filteredClusters,
+        allItems: filteredItems,
+        matchCount: filteredItems.length,
+        stats: this.calculateFeedStats(filteredItems)
+      };
+
+    } catch (error) {
+      console.error('Error searching feeds:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get trending topics based on recent activity
+   */
+  getTrendingTopics(timeWindow = 24) {
+    try {
+      const cutoffTime = new Date(Date.now() - timeWindow * 60 * 60 * 1000);
+      const recentItems = this.cache.get('recent_items') || [];
+      
+      const topicCounts = recentItems
+        .filter(item => new Date(item.date) > cutoffTime)
+        .reduce((acc, item) => {
+          item.topics?.forEach(topic => {
+            acc[topic] = (acc[topic] || 0) + 1;
+          });
+          return acc;
+        }, {});
+
+      return Object.entries(topicCounts)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 10)
+        .map(([topicId, count]) => ({
+          topic: topicDetectionService.getTopic(topicId),
+          count,
+          trend: 'up' // Could be enhanced with historical comparison
+        }));
+
+    } catch (error) {
+      console.error('Error getting trending topics:', error);
+      return [];
+    }
   }
 }
 
