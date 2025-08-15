@@ -45,6 +45,19 @@ export const onRequest: PagesFunction = async (ctx) => {
     headers.set("X-XSS-Protection", "1; mode=block");
     headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
     
+    // Permissions Policy (restrict potentially dangerous features)
+    const permissionsPolicy = [
+      "accelerometer=()",
+      "camera=()",
+      "geolocation=()",
+      "gyroscope=()",
+      "magnetometer=()",
+      "microphone=()",
+      "payment=()",
+      "usb=()"
+    ].join(", ");
+    headers.set("Permissions-Policy", permissionsPolicy);
+    
     return new Response(res.body, { headers, status: res.status, statusText: res.statusText });
   }
   return res;
