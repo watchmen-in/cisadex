@@ -10,6 +10,7 @@ export default function Header({ onSearch }) {
 
   const navItems = [
     { label: "Home", href: "/" },
+    { label: "Dashboard", href: "/dashboard" },
     { label: "Map", href: "/map" },
     { label: "Catalog", href: "/catalog" },
     { label: "Advisories", href: "/advisories" },

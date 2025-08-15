@@ -12,6 +12,8 @@ import Advisories from "./pages/Advisories";
 import Research from "./pages/Research";
 import DataPortal from "./pages/DataPortal";
 import Feeds from "./pages/Feeds";
+import Dashboard from "./pages/Dashboard";
+import Splash from "./pages/Splash";
 import "./styles/tailwind.css";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
@@ -41,6 +43,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <BrowserRouter basename="/">
       <ErrorBoundary>
         <Routes>
+          <Route path="/splash" element={<Splash />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/map" element={<Map />} />
