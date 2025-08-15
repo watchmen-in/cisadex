@@ -358,6 +358,241 @@ function OverviewPanel() {
   );
 }
 
+function EmergencyResponsePanel() {
+  const [alertLevel, setAlertLevel] = useState('normal');
+  const [emergencyContacts, setEmergencyContacts] = useState([
+    { id: 1, name: 'CISA NCCIC', phone: '1-888-282-0870', type: 'primary', status: 'available' },
+    { id: 2, name: 'FBI IC3', phone: '1-855-292-3937', type: 'primary', status: 'available' },
+    { id: 3, name: 'US-CERT', phone: '1-888-282-0870', type: 'secondary', status: 'available' },
+    { id: 4, name: 'DHS SOC', phone: '202-282-8000', type: 'primary', status: 'busy' }
+  ]);
+  
+  const [activeIncidents, setActiveIncidents] = useState([
+    {
+      id: 'INC-2025-001',
+      title: 'Suspected APT Activity',
+      severity: 'critical',
+      status: 'investigating',
+      assignee: 'SOC Team Alpha',
+      created: new Date(Date.now() - 1800000),
+      location: 'Federal Agency Network'
+    },
+    {
+      id: 'INC-2025-002', 
+      title: 'Ransomware Detection',
+      severity: 'high',
+      status: 'contained',
+      assignee: 'CERT Response',
+      created: new Date(Date.now() - 3600000),
+      location: 'Critical Infrastructure'
+    }
+  ]);
+  
+  const [escalationChain, setEscalationChain] = useState([
+    { level: 1, role: 'SOC Analyst', contact: 'soc-l1@agency.gov', escalateAfter: '15 min' },
+    { level: 2, role: 'SOC Senior Analyst', contact: 'soc-l2@agency.gov', escalateAfter: '30 min' },
+    { level: 3, role: 'SOC Manager', contact: 'soc-mgr@agency.gov', escalateAfter: '45 min' },
+    { level: 4, role: 'CISO', contact: 'ciso@agency.gov', escalateAfter: 'Manual' }
+  ]);
+  
+  const getAlertLevelConfig = (level) => {
+    const configs = {
+      normal: { color: 'bg-green-100 text-green-800 border-green-300', icon: '✅', label: 'NORMAL' },
+      elevated: { color: 'bg-yellow-100 text-yellow-800 border-yellow-300', icon: '⚠️', label: 'ELEVATED' },
+      high: { color: 'bg-orange-100 text-orange-800 border-orange-300', icon: '🚨', label: 'HIGH' },
+      critical: { color: 'bg-red-100 text-red-800 border-red-300', icon: '🚨', label: 'CRITICAL' }
+    };
+    return configs[level] || configs.normal;
+  };
+  
+  const getSeverityBadge = (severity) => {
+    const badges = {
+      critical: 'bg-red-600 text-white',
+      high: 'bg-orange-500 text-white', 
+      medium: 'bg-yellow-500 text-black',
+      low: 'bg-green-500 text-white'
+    };
+    return badges[severity] || badges.low;
+  };
+  
+  const alertConfig = getAlertLevelConfig(alertLevel);
+  
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-semibold">Emergency Response Command Center</h2>
+        <div className={`px-4 py-2 rounded-lg border-2 ${alertConfig.color} font-bold flex items-center gap-2`}>
+          <span>{alertConfig.icon}</span>
+          <span>THREAT LEVEL: {alertConfig.label}</span>
+        </div>
+      </div>
+      
+      {/* Quick Action Buttons */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <button className="p-4 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+          <div className="text-2xl mb-2">🚨</div>
+          <div>Declare Incident</div>
+        </button>
+        <button className="p-4 bg-orange-600 hover:bg-orange-700 text-white rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+          <div className="text-2xl mb-2">📞</div>
+          <div>Contact CISA</div>
+        </button>
+        <button className="p-4 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          <div className="text-2xl mb-2">🔒</div>
+          <div>Isolate Systems</div>
+        </button>
+        <button className="p-4 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+          <div className="text-2xl mb-2">📋</div>
+          <div>Run Playbook</div>
+        </button>
+      </div>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Active Incidents */}
+        <div className="border border-b1 rounded-lg overflow-hidden">
+          <div className="bg-bg2 px-4 py-2 border-b border-b1">
+            <h3 className="font-semibold flex items-center gap-2">
+              <span>🚨</span>
+              Active Incidents
+            </h3>
+          </div>
+          <div className="p-4 space-y-4">
+            {activeIncidents.map((incident) => (
+              <div key={incident.id} className="p-4 bg-bg1 rounded-lg border border-b1">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getSeverityBadge(incident.severity)}`}>
+                      {incident.severity.toUpperCase()}
+                    </span>
+                    <span className="font-medium">{incident.id}</span>
+                  </div>
+                  <span className="text-xs text-t2">
+                    {incident.created.toLocaleTimeString()}
+                  </span>
+                </div>
+                <h4 className="font-medium mb-2">{incident.title}</h4>
+                <div className="text-sm text-t2 space-y-1">
+                  <div>📍 {incident.location}</div>
+                  <div>👤 Assigned: {incident.assignee}</div>
+                  <div>Status: <span className="font-medium">{incident.status.toUpperCase()}</span></div>
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <button className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors">
+                    View Details
+                  </button>
+                  <button className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors">
+                    Update Status
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Emergency Contacts */}
+        <div className="border border-b1 rounded-lg overflow-hidden">
+          <div className="bg-bg2 px-4 py-2 border-b border-b1">
+            <h3 className="font-semibold flex items-center gap-2">
+              <span>📞</span>
+              Emergency Contacts
+            </h3>
+          </div>
+          <div className="p-4 space-y-3">
+            {emergencyContacts.map((contact) => (
+              <div key={contact.id} className="flex items-center justify-between p-3 bg-bg1 rounded-lg border border-b1">
+                <div className="flex items-center gap-3">
+                  <div className={`w-3 h-3 rounded-full ${
+                    contact.status === 'available' ? 'bg-green-500' : 
+                    contact.status === 'busy' ? 'bg-red-500' : 'bg-yellow-500'
+                  }`}></div>
+                  <div>
+                    <div className="font-medium">{contact.name}</div>
+                    <div className="text-sm text-t2">{contact.phone}</div>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors">
+                    Call
+                  </button>
+                  {contact.type === 'primary' && (
+                    <button className="px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">
+                      Emergency
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {/* Escalation Chain */}
+      <div className="border border-b1 rounded-lg overflow-hidden">
+        <div className="bg-bg2 px-4 py-2 border-b border-b1">
+          <h3 className="font-semibold flex items-center gap-2">
+            <span>⬆️</span>
+            Escalation Chain
+          </h3>
+        </div>
+        <div className="p-4">
+          <div className="grid gap-3">
+            {escalationChain.map((level, index) => (
+              <div key={level.level} className="flex items-center p-3 bg-bg1 rounded-lg border border-b1">
+                <div className="flex items-center gap-4 flex-1">
+                  <div className="w-8 h-8 bg-brand text-black rounded-full flex items-center justify-center font-bold text-sm">
+                    {level.level}
+                  </div>
+                  <div className="flex-1">
+                    <div className="font-medium">{level.role}</div>
+                    <div className="text-sm text-t2">{level.contact}</div>
+                  </div>
+                  <div className="text-sm text-t2">
+                    Escalate after: {level.escalateAfter}
+                  </div>
+                </div>
+                {index < escalationChain.length - 1 && (
+                  <div className="ml-4 text-t2">→</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      
+      {/* Threat Level Controls */}
+      <div className="border border-b1 rounded-lg overflow-hidden">
+        <div className="bg-bg2 px-4 py-2 border-b border-b1">
+          <h3 className="font-semibold flex items-center gap-2">
+            <span>🎯</span>
+            Threat Level Management
+          </h3>
+        </div>
+        <div className="p-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {['normal', 'elevated', 'high', 'critical'].map((level) => {
+              const config = getAlertLevelConfig(level);
+              return (
+                <button
+                  key={level}
+                  onClick={() => setAlertLevel(level)}
+                  className={`p-3 rounded-lg border-2 transition-all ${
+                    alertLevel === level 
+                      ? config.color 
+                      : 'bg-bg1 border-b1 hover:border-brand/50'
+                  }`}
+                >
+                  <div className="text-lg">{config.icon}</div>
+                  <div className="text-sm font-medium">{config.label}</div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function IntelligencePanel() {
   const [feedCategory, setFeedCategory] = useState("all");
   const [filters, setFilters] = useState({});
