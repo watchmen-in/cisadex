@@ -3,8 +3,10 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { federalEntitiesDatabase } from '../data/federalEntities';
 import { determineEntityIcon, getIconInfo, getIconSize } from '../utils/federalEntityIcons';
+import { getStyleUrl } from '../lib/mapStyle';
+import { debugMapInstance, debugFederalEntities } from '../utils/mapDebug';
 
-const STYLE_URL = "/styles/dark.json";
+const STYLE_URL = getStyleUrl();
 const SRC_ID = "offices";
 const LAYER_ID = "offices-circles";
 
@@ -34,12 +36,15 @@ export default function MapView({
     if (!elRef.current) return;
     
     console.log('Initializing MapLibre GL map...');
+    console.log('Style URL:', STYLE_URL);
     
     const map = new maplibregl.Map({
       container: elRef.current,
       style: STYLE_URL,
       center: [-98.5795, 39.8283],
-      zoom: 3
+      zoom: 3,
+      maxZoom: 18,
+      minZoom: 1
     });
     
     mapRef.current = map;
@@ -47,11 +52,15 @@ export default function MapView({
     // Add event listeners for debugging
     map.on('load', () => {
       console.log('Map loaded successfully');
+      debugMapInstance(map);
       map.resize();
       
-      // Initialize federal entities if enabled
+      // Initialize federal entities if enabled with a slight delay
       if (showFederalEntities) {
-        initializeFederalEntities();
+        debugFederalEntities(federalEntitiesDatabase);
+        setTimeout(() => {
+          initializeFederalEntities();
+        }, 100);
       }
     });
     
@@ -179,6 +188,9 @@ export default function MapView({
   const initializeFederalEntities = useCallback(() => {
     if (!mapRef.current || loading) return;
 
+    console.log('Initializing federal entities...');
+    console.log('Federal entities database size:', federalEntitiesDatabase.length);
+    
     const map = mapRef.current;
     let entitiesToShow = federalEntitiesDatabase;
 
@@ -204,18 +216,30 @@ export default function MapView({
     // Create markers for federal entities
     const newFederalMarkers = new Map();
     
+    console.log('Creating markers for', entitiesToShow.length, 'entities');
+    
     entitiesToShow.forEach(entity => {
-      const markerElement = createFederalEntityMarker(entity);
-      
-      const marker = new maplibregl.Marker({ element: markerElement })
-        .setLngLat([entity.location.coordinates.lng, entity.location.coordinates.lat])
-        .addTo(map);
+      try {
+        // Validate entity has required location data
+        if (!entity.location?.coordinates?.lat || !entity.location?.coordinates?.lng) {
+          console.warn('Entity missing coordinates:', entity.id, entity.name);
+          return;
+        }
+        
+        const markerElement = createFederalEntityMarker(entity);
+        
+        const marker = new maplibregl.Marker({ element: markerElement })
+          .setLngLat([entity.location.coordinates.lng, entity.location.coordinates.lat])
+          .addTo(map);
 
-      newFederalMarkers.set(entity.id, {
-        entity,
-        element: markerElement,
-        marker
-      });
+        newFederalMarkers.set(entity.id, {
+          entity,
+          element: markerElement,
+          marker
+        });
+      } catch (error) {
+        console.error('Error creating marker for entity:', entity.id, error);
+      }
     });
 
     setFederalMarkers(newFederalMarkers);
@@ -223,9 +247,10 @@ export default function MapView({
 
   // Create marker element for federal entity
   const createFederalEntityMarker = (entity) => {
-    const iconConfig = determineEntityIcon(entity);
-    const iconInfo = getIconInfo(iconConfig);
-    const iconSize = getIconSize(currentZoom, iconConfig.priority);
+    try {
+      const iconConfig = determineEntityIcon(entity);
+      const iconInfo = getIconInfo(iconConfig);
+      const iconSize = getIconSize(currentZoom, iconConfig.priority);
 
     const element = document.createElement('div');
     element.className = `federal-entity-marker ${iconConfig.iconSet}-marker priority-${iconConfig.priority}`;
@@ -282,6 +307,22 @@ export default function MapView({
     });
 
     return element;
+    } catch (error) {
+      console.error('Error creating marker element for entity:', entity.id, error);
+      // Return a simple fallback element
+      const fallback = document.createElement('div');
+      fallback.className = 'federal-entity-marker fallback';
+      fallback.style.cssText = `
+        width: 16px;
+        height: 16px;
+        background: #6b7280;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        cursor: pointer;
+      `;
+      fallback.textContent = '🏛️';
+      return fallback;
+    }
   };
 
   // Show enhanced tooltip for federal entity
