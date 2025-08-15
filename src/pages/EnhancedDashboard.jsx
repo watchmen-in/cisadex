@@ -11,7 +11,6 @@ import IntelligencePanelReplacement from "../components/IntelligencePanelReplace
 import EmergencyAccessibilityToolbar from "../components/accessibility/EmergencyAccessibilityToolbar";
 import { loadOffices } from "../utils/dataLoader";
 import useUrlState from "../hooks/useUrlState";
-import { Filters } from "../constants/taxonomy";
 import { 
   useThreatIntelligence, 
   useInfrastructureData, 
