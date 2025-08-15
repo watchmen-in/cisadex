@@ -1,16 +1,11 @@
-import { useEffect, useState } from "react";
-
-export default function FeedList({ filters }) {
-  const [items, setItems] = useState([]);
-  const qs = new URLSearchParams();
-  if (filters.source_type) qs.set("source_type", filters.source_type);
-  if (filters.exploited !== undefined) qs.set("exploited", filters.exploited ? "1" : "0");
-  if (filters.has_cve !== undefined) qs.set("has_cve", filters.has_cve ? "1" : "0");
-  const url = `/api/items?limit=50&${qs.toString()}`;
-
-  useEffect(() => {
-    fetch(url).then(r => r.json()).then(setItems).catch(() => setItems([]));
-  }, [url]);
+export default function FeedList({ items, loading }) {
+  if (loading) {
+    return (
+      <div className="p-6 text-center text-t2">
+        <div className="animate-pulse">Loading threat intelligence feeds...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="divide-y divide-b1">
@@ -32,7 +27,7 @@ export default function FeedList({ filters }) {
           </div>
         </article>
       ))}
-      {items.length === 0 && <div className="p-6 text-t2">No items yet. The worker will populate within minutes.</div>}
+      {items.length === 0 && <div className="p-6 text-t2">No threat intelligence feeds available. Check back later for updates.</div>}
     </div>
   );
 }
