@@ -1,0 +1,57 @@
+name: Deploy CISAdx to Cloudflare Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Cloudflare Pages
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Run tests
+        run: npm test
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: cisadx
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create deployment summary
+        run: |
+          echo "## 🚀 CISAdx Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Build Status:** Success" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Tests:** Passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Deployment:** Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Features Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "- 🛡️ Advanced RSS feed dashboard with intelligent clustering" >> $GITHUB_STEP_SUMMARY
+          echo "- 🗺️ Federal cybersecurity entity mapping" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 Threat intelligence dashboard" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔍 Enhanced search and filtering capabilities" >> $GITHUB_STEP_SUMMARY
+          echo "- ♿ Accessibility compliance features" >> $GITHUB_STEP_SUMMARY
+          echo "- 🔒 Federal security standards compliance" >> $GITHUB_STEP_SUMMARY
