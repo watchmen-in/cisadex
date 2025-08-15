@@ -51,7 +51,7 @@ export default function Feeds() {
   return (
     <div className="min-h-screen bg-bg0 text-t1">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8">
+        <div className="mb-8 slide-enter">
           <h1 className="text-3xl font-bold mb-4">Threat Intelligence Feeds</h1>
           <p className="text-t2 mb-6">
             Real-time cybersecurity alerts, advisories, and threat intelligence from government agencies, security vendors, and research organizations.
@@ -62,7 +62,7 @@ export default function Feeds() {
               <input
                 type="text"
                 placeholder="Search threat intelligence..."
-                className="w-full px-4 py-3 bg-bg1 border border-b1 rounded-lg text-t1 placeholder-t2 focus:outline-none focus:ring-2 focus:ring-focus"
+                className="w-full px-4 py-3 bg-bg1 border border-b1 rounded-lg text-t1 placeholder-t2 focus:outline-none focus:ring-2 focus:ring-focus transition-smooth"
                 value={filters.q}
                 onChange={(e) => handleSearch(e.target.value)}
               />

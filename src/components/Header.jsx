@@ -26,36 +26,36 @@ export default function Header({ onSearch }) {
         <a href="/" className="text-t1 font-semibold tracking-wide focus-ring">CISAdex</a>
         <nav className="hidden lg:flex items-center gap-6 text-sm text-t2">
           {navItems.map((n) => (
-            <a key={n.href} href={n.href} className="hover:text-t1 focus-ring">
+            <a key={n.href} href={n.href} className="hover:text-t1 focus-ring transition-smooth">
               {n.label}
             </a>
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <button onClick={onSearch} className="focus-ring text-t2 hover:text-t1" aria-label="Search">
+          <button onClick={onSearch} className="focus-ring text-t2 hover:text-t1 transition-smooth" aria-label="Search">
             🔍
           </button>
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="focus-ring text-t2 hover:text-t1"
+            className="focus-ring text-t2 hover:text-t1 transition-smooth"
             aria-label="Toggle theme"
           >
             🌓
           </button>
-          <a href="/status" className="hidden sm:inline focus-ring text-t2 hover:text-t1">
+          <a href="/status" className="hidden sm:inline focus-ring text-t2 hover:text-t1 transition-smooth">
             Status
           </a>
-          <a href="/rss.xml" className="hidden sm:inline focus-ring text-t2 hover:text-t1">
+          <a href="/rss.xml" className="hidden sm:inline focus-ring text-t2 hover:text-t1 transition-smooth">
             RSS
           </a>
           <a
             href="https://github.com/"
-            className="ml-2 px-2 py-1 text-sm bg-a1 text-bg0 rounded focus-ring hover:brightness-110"
+            className="ml-2 px-2 py-1 text-sm bg-a1 text-bg0 rounded focus-ring hover:brightness-110 transition-smooth"
           >
             Contribute
           </a>
           <button
-            className="lg:hidden focus-ring text-t2 hover:text-t1"
+            className="lg:hidden focus-ring text-t2 hover:text-t1 transition-smooth"
             onClick={() => setOpen(!open)}
             aria-label="Menu"
           >

@@ -23,7 +23,7 @@ function TabBar({ tab, onChange }) {
           <button
             key={t.id}
             onClick={() => onChange(t.id)}
-            className={`flex-1 px-4 py-2 text-sm focus-ring ${
+            className={`flex-1 px-4 py-2 text-sm focus-ring tab-transition ${
               tab === t.id
                 ? "text-brand border-b-2 border-brand"
                 : "text-t2 hover:text-t1"
@@ -102,16 +102,16 @@ export default function Dashboard() {
               <TabBar tab={tab} onChange={changeTab} />
               <div className="h-full">
                 {tab === "map" && (
-                  <div className="relative">
+                  <div className="relative fade-enter">
                     <MapView data={filteredData} loading={loading} />
-                    <div className="absolute bottom-4 left-4 bg-bg2 border border-b1 text-xs px-2 py-1 rounded">
+                    <div className="absolute bottom-4 left-4 bg-bg2 border border-b1 text-xs px-2 py-1 rounded transition-smooth">
                       CISA offices
                     </div>
                   </div>
                 )}
-                {tab === "rss" && <RssPanel />}
-                {tab === "feeds" && <FeedList filters={{}} />}
-                {tab === "resources" && <ResourcePanel />}
+                {tab === "rss" && <div className="fade-enter"><RssPanel /></div>}
+                {tab === "feeds" && <div className="fade-enter"><FeedList filters={{}} /></div>}
+                {tab === "resources" && <div className="fade-enter"><ResourcePanel /></div>}
               </div>
             </div>
           </div>

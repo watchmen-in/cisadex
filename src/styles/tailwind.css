@@ -47,3 +47,33 @@ a { color: var(--brand); }
   --step-0: clamp(14px, 1.2vw, 16px);
   --step-1: clamp(18px, 1.6vw, 20px);
 }
+
+/* Enhanced transitions and animations */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover {
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-e2);
+}
+
+.tab-transition {
+  transition: color 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+.slide-enter {
+  animation: slideIn 0.3s ease-out;
+}
+
+.fade-enter {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.scale-enter {
+  animation: scaleIn 0.2s ease-out;
+}
