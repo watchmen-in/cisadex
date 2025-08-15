@@ -11,6 +11,7 @@ import Catalog from "./pages/Catalog";
 import Advisories from "./pages/Advisories";
 import Research from "./pages/Research";
 import DataPortal from "./pages/DataPortal";
+import Feeds from "./pages/Feeds";
 import "./styles/tailwind.css";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
@@ -47,6 +48,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="/advisories" element={<Advisories />} />
             <Route path="/research" element={<Research />} />
             <Route path="/data" element={<DataPortal />} />
+            <Route path="/feeds" element={<Feeds />} />
             <Route path="/about" element={<AboutData />} />
             <Route path="/browse" element={<Browse />} />
             <Route path="/entity/:id" element={<EntityPage />} />
