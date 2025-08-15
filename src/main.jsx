@@ -19,9 +19,22 @@ import "./styles/tailwind.css";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Layout from "./components/Layout";
 import { setupCSPReporting } from "./utils/security";
+import { useSecurityInit } from "./hooks/useSecurityInit";
+import { monitoring } from "./utils/monitoring";
 
-// Initialize security features
+// Initialize security features globally
 setupCSPReporting();
+
+// Expose monitoring globally for error boundary
+if (typeof window !== 'undefined') {
+  window.monitoring = monitoring;
+}
+
+// Security component wrapper
+function SecurityWrapper({ children }) {
+  useSecurityInit();
+  return children;
+}
 
 // Performance monitoring
 if (typeof window !== 'undefined' && 'performance' in window) {
@@ -43,7 +56,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter basename="/">
       <ErrorBoundary>
-        <Routes>
+        <SecurityWrapper>
+          <Routes>
           <Route path="/splash" element={<Splash />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route element={<Layout />}>
@@ -76,6 +90,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             } />
           </Route>
         </Routes>
+        </SecurityWrapper>
       </ErrorBoundary>
     </BrowserRouter>
   </React.StrictMode>

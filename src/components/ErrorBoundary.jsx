@@ -19,6 +19,28 @@ export default class ErrorBoundary extends React.Component {
     console.error("[ErrorBoundary]", error, info);
     this.setState({ info });
     
+    // Track error with monitoring system
+    try {
+      if (typeof window !== 'undefined' && window.monitoring) {
+        window.monitoring.trackError({
+          message: error.message,
+          stack: error.stack,
+          componentStack: info.componentStack,
+          url: window.location.href,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+          sessionId: window.monitoring.getMetrics().sessionId,
+          userId: window.monitoring.getMetrics().userId,
+          context: {
+            errorBoundary: true,
+            errorInfo: info
+          }
+        });
+      }
+    } catch (monitoringError) {
+      console.warn('Failed to track error:', monitoringError);
+    }
+    
     // Log to external service in production
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'exception', {

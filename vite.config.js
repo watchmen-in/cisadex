@@ -15,12 +15,13 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Vendor chunks
+          // Vendor chunks - separate major dependencies
           'react-vendor': ['react', 'react-dom'],
           'router-vendor': ['react-router-dom'],
           'map-vendor': ['maplibre-gl'],
+          'xml-vendor': ['fast-xml-parser'],
           
-          // App chunks
+          // App chunks - group related functionality
           'map-components': [
             './src/components/map/AtlasMap.tsx',
             './src/components/map/DetailDrawer.tsx',
@@ -31,7 +32,16 @@ export default defineConfig({
             './src/utils/cache.ts',
             './src/utils/security.ts',
             './src/utils/validateEntity.ts',
-            './src/utils/debounce.ts'
+            './src/utils/debounce.ts',
+            './src/utils/performance.ts'
+          ],
+          'pages': [
+            './src/pages/Splash.jsx',
+            './src/pages/Advisories.tsx'
+          ],
+          'feed-components': [
+            './src/components/RssPanel.jsx',
+            './src/utils/rssFetcher.js'
           ]
         }
       }
@@ -40,11 +50,33 @@ export default defineConfig({
     sourcemap: false,
     // Optimize CSS
     cssCodeSplit: true,
-    // Enable minification (use default esbuild)
-    minify: 'esbuild'
+    // Enable minification with optimizations
+    minify: 'esbuild',
+    // Additional optimizations
+    target: 'esnext',
+    assetsInlineLimit: 4096, // Inline assets smaller than 4KB
+    reportCompressedSize: false // Faster builds
   },
-  // Optimize dependencies
+  // Optimize dependencies - prebundle during development
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-router-dom', 'maplibre-gl']
+    include: ['react', 'react-dom', 'react-router-dom', 'maplibre-gl', 'fast-xml-parser'],
+    exclude: [] // Force optimization of all dependencies
+  },
+  // Performance optimizations
+  server: {
+    warmup: {
+      // Warm up frequently used files
+      clientFiles: [
+        './src/App.tsx',
+        './src/pages/*.{tsx,jsx}',
+        './src/components/**/*.{tsx,jsx}',
+        './src/utils/*.{ts,js}'
+      ]
+    }
+  },
+  // Enable experimental features for better performance
+  esbuild: {
+    // Drop console.log in production
+    drop: process.env.NODE_ENV === 'production' ? ['console', 'debugger'] : []
   }
 });
